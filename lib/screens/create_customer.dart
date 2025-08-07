@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:optician_desktop_app/data/app_database.dart';
 import 'package:optician_desktop_app/widgets/custom_dd.dart';
 import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
 import 'package:optician_desktop_app/widgets/custom_textField.dart';
+import 'package:drift/drift.dart' as drift;
 
 class CustomerCreateScreen extends StatefulWidget {
   const CustomerCreateScreen({super.key});
@@ -11,6 +13,8 @@ class CustomerCreateScreen extends StatefulWidget {
 }
 
 class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
+  final AppDatabase db = AppDatabase();
+
   // Controllers
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _middleNameController = TextEditingController();
@@ -186,15 +190,25 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
     );
   }
 
-  void _submitForm() {
-    print("First Name: ${_firstNameController.text}");
-    print("Middle Name: ${_middleNameController.text}");
-    print("Last Name: ${_lastNameController.text}");
-    print("Phone: ${_phoneController.text}");
-    print("Email: ${_emailController.text}");
-    print("Gender: $selectedGender");
-    print("DOB: ${_dobController.text}");
-    print("Customer Type: $selectedCustomerType");
-    print("Address: ${_addressController.text}");
+  void _submitForm() async {
+    final customer = CustomerCompanion(
+      firstName: drift.Value(_firstNameController.text),
+      middleName: drift.Value(_middleNameController.text),
+      lastName: drift.Value(_lastNameController.text),
+      mobile: drift.Value(_phoneController.text),
+      email: drift.Value(_emailController.text),
+      address: drift.Value(_addressController.text),
+      // Add more fields if needed
+      createdDate: drift.Value(DateTime.now()),
+    );
+
+    await db.insertCustomer(customer);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Customer saved successfully")),
+      );
+      Navigator.pop(context);
+    }
   }
 }

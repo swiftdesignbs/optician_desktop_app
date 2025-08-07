@@ -5,13 +5,12 @@ import 'package:optician_desktop_app/data/tables/customer_table.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
-// Import your table definition
 import 'tables/product_master.dart';
 
 part 'app_database.g.dart'; // generated file
 
 @DriftDatabase(
-  tables: [ProductMaster, Customers], // Add Customers here
+  tables: [ProductMaster, Customer], // Add Customers here
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -47,19 +46,17 @@ class AppDatabase extends _$AppDatabase {
 // -------------------------
 // CRUD: Customers
 // -------------------------
+  // CRUD functions
+  Future<List<CustomerData>> getAllCustomers() => select(customer).get();
 
-  Future<int> insertCustomer(CustomersCompanion customer) =>
-      into(customers).insert(customer);
+  Future<int> insertCustomer(CustomerCompanion entry) =>
+      into(customer).insert(entry);
 
-  Future<List<Customer>> getAllCustomers() => select(customers).get();
-
-  Stream<List<Customer>> watchAllCustomers() => select(customers).watch();
-
-  Future<bool> updateCustomer(Customer customer) =>
-      update(customers).replace(customer);
+  Future<void> updateCustomer(CustomerCompanion entry) =>
+      update(customer).replace(entry);
 
   Future<int> deleteCustomer(int id) =>
-      (delete(customers)..where((tbl) => tbl.id.equals(id))).go();
+      (delete(customer)..where((tbl) => tbl.id.equals(id))).go();
 }
 
 LazyDatabase _openConnection() {

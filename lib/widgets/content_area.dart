@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:optician_desktop_app/controllers/navigation_controller.dart';
 import 'package:optician_desktop_app/screens/category_screen.dart';
 import 'package:optician_desktop_app/screens/create_customer.dart';
+import 'package:optician_desktop_app/screens/customer_list.dart';
 import 'package:optician_desktop_app/screens/customer_segment.dart';
 import 'package:optician_desktop_app/screens/dashboard.dart';
 import 'package:optician_desktop_app/screens/delivery_slip.dart';
@@ -35,7 +36,7 @@ class ContentArea extends StatelessWidget {
           screen = DashboardScreen();
           break;
         case "Customer":
-          screen = SegmentCustomer();
+          screen = CustomerListScreen();
           break;
         case "Add Customer":
           screen = CustomerCreateScreen();
