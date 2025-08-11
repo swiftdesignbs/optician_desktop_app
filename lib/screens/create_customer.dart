@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:optician_desktop_app/data/app_database.dart';
+import 'package:optician_desktop_app/screens/customer_list.dart';
+import 'package:optician_desktop_app/widgets/buttons.dart';
 import 'package:optician_desktop_app/widgets/custom_dd.dart';
 import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
 import 'package:optician_desktop_app/widgets/custom_textField.dart';
@@ -40,7 +43,7 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
     {'id': '1', 'name': 'VIP'},
     {'id': '2', 'name': 'New'},
   ];
-
+  DateTime? pickedDate;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,10 +134,72 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        CustomTextField(
-                          controller: _dobController,
-                          ddName: "Date of Birth",
-                        ),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2),
+                                child: Text(
+                                  'Created Date',
+                                  style: TextStyle(
+                                      fontFamily: 'FontMain',
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 30,
+                                // width: 170,
+                                child: TextFormField(
+                                  textAlignVertical: TextAlignVertical.center,
+                                  textAlign:
+                                      TextAlign.left, // Align text to the left
+                                  style: const TextStyle(
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                  controller: _dobController,
+                                  onTap: () async {
+                                    pickedDate = await showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1900),
+                                        lastDate: DateTime(2900));
+                                    if (pickedDate != null) {
+                                      setState(() {
+                                        _dobController.text =
+                                            DateFormat('dd-MM-yyyy')
+                                                .format(pickedDate!);
+                                      });
+                                    }
+                                  },
+                                  decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8,
+                                        horizontal:
+                                            8), // Adjust padding for better vertical centering
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 217, 215, 215),
+                                          width: 1),
+                                      borderRadius: BorderRadius
+                                          .zero, // Remove border radius
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius
+                                          .zero, // Remove border radius
+                                    ),
+                                    hintStyle: TextStyle(
+                                      fontFamily: 'FontMain',
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ])
                       ],
                     ),
                   ),
@@ -174,15 +239,22 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
               const SizedBox(height: 32),
 
               // Save Button
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
+              // SizedBox(
+              //   width: 200,
+              //   child: ElevatedButton(
+              //     onPressed: _submitForm,
+              //     child: const Text("Save",
+              //         style: TextStyle(
+              //             fontWeight: FontWeight.bold, fontFamily: 'FontMain')),
+              //   ),
+              // )
+
+              Buttons(
                   onPressed: _submitForm,
-                  child: const Text("Save",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontFamily: 'FontMain')),
-                ),
-              )
+                  ddName: 'Save',
+                  height: 40,
+                  width: 150,
+                  colors: const Color(0xff5793CE))
             ],
           ),
         ),
@@ -191,14 +263,43 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
   }
 
   void _submitForm() async {
+    // Check for empty fields
+    if (_firstNameController.text.trim().isEmpty ||
+        _middleNameController.text.trim().isEmpty ||
+        _lastNameController.text.trim().isEmpty ||
+        _phoneController.text.trim().isEmpty ||
+        _emailController.text.trim().isEmpty ||
+        _addressController.text.trim().isEmpty ||
+        selectedGender?.trim().isEmpty == true ||
+        selectedCustomerType?.trim().isEmpty == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    // Check for duplicate mobile number
+    final existingCustomer = await db.customSelect(
+      'SELECT * FROM customer WHERE mobile = ?',
+      variables: [drift.Variable<String>(_phoneController.text.trim())],
+    ).get();
+
+    if (existingCustomer.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Mobile number already exists")),
+      );
+      return;
+    }
+
     final customer = CustomerCompanion(
-      firstName: drift.Value(_firstNameController.text),
-      middleName: drift.Value(_middleNameController.text),
-      lastName: drift.Value(_lastNameController.text),
-      mobile: drift.Value(_phoneController.text),
-      email: drift.Value(_emailController.text),
-      address: drift.Value(_addressController.text),
-      // Add more fields if needed
+      firstName: drift.Value(_firstNameController.text.trim()),
+      middleName: drift.Value(_middleNameController.text.trim()),
+      lastName: drift.Value(_lastNameController.text.trim()),
+      mobile: drift.Value(_phoneController.text.trim()),
+      email: drift.Value(_emailController.text.trim()),
+      address: drift.Value(_addressController.text.trim()),
+      gender: drift.Value(selectedGender!.trim()),
+      customerType: drift.Value(selectedCustomerType!.trim()),
       createdDate: drift.Value(DateTime.now()),
     );
 
@@ -208,7 +309,21 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Customer saved successfully")),
       );
-      Navigator.pop(context);
     }
+
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CustomerListScreen()));
+    // Clear the form
+    _firstNameController.clear();
+    _middleNameController.clear();
+    _lastNameController.clear();
+    _phoneController.clear();
+    _emailController.clear();
+    _dobController.clear();
+    _addressController.clear();
+    setState(() {
+      selectedGender = null;
+      selectedCustomerType = null;
+    });
   }
 }

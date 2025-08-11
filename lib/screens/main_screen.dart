@@ -11,112 +11,115 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          // Full-width AppBar
-          Obx(() {
-            return Container(
-              height: 60,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            // Full-width AppBar
+            Obx(() {
+              return Container(
+                color: Colors.white,
+                height: 60,
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    // Logo (Left)
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/images/logo.png',
+                          height: 40,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          navController.currentTitle,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.white,
+                            fontFamily: 'FontMain',
+                          ),
+                        ),
+                      ],
+                    ),
+      
+                    const Spacer(),
+      
+                    // // Center (Search + Dropdown)
+                    // Expanded(
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       border: Border.all(color: Colors.black), // Black border
+                    //       borderRadius: BorderRadius.circular(8),
+                    //     ),
+                    //     child: const TextField(
+                    //       decoration: InputDecoration(
+                    //         contentPadding:
+                    //             EdgeInsets.symmetric(horizontal: 12),
+                    //         hintText: 'Search...',
+                    //         border: InputBorder.none, // Remove default border
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(width: 10),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 12),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     border: Border.all(color: Colors.black), // Black border
+                    //     borderRadius: BorderRadius.circular(8),
+                    //   ),
+                    //   child: DropdownButtonHideUnderline(
+                    //     child: DropdownButton<String>(
+                    //       value: 'Today',
+                    //       dropdownColor: Colors.white,
+                    //       iconEnabledColor: Colors.black,
+                    //       items: ['Today', 'This Week', 'This Month']
+                    //           .map((e) => DropdownMenuItem(
+                    //                 value: e,
+                    //                 child: Text(e),
+                    //               ))
+                    //           .toList(),
+                    //       onChanged: (value) {},
+                    //     ),
+                    //   ),
+                    // ),
+      
+                    const Spacer(),
+      
+                    // Icon Buttons (Right)
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.notifications,
+                              color: Colors.black),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.account_circle,
+                              color: Colors.black),
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }),
+      
+            // Sidebar + Content
+            Expanded(
               child: Row(
                 children: [
-                  // Logo (Left)
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/images/logo.png',
-                        height: 40,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        navController.currentTitle,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontFamily: 'FontMain',
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const Spacer(),
-
-                  // Center (Search + Dropdown)
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.black), // Black border
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 12),
-                          hintText: 'Search...',
-                          border: InputBorder.none, // Remove default border
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.black), // Black border
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: 'Today',
-                        dropdownColor: Colors.white,
-                        iconEnabledColor: Colors.black,
-                        items: ['Today', 'This Week', 'This Month']
-                            .map((e) => DropdownMenuItem(
-                                  value: e,
-                                  child: Text(e),
-                                ))
-                            .toList(),
-                        onChanged: (value) {},
-                      ),
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // Icon Buttons (Right)
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.notifications,
-                            color: Colors.black),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.account_circle,
-                            color: Colors.black),
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                  buildSidebar(),
+                  const Expanded(child: ContentArea()),
                 ],
               ),
-            );
-          }),
-
-          // Sidebar + Content
-          Expanded(
-            child: Row(
-              children: [
-                buildSidebar(),
-                Expanded(child: ContentArea()),
-              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -126,13 +129,13 @@ class MainScreen extends StatelessWidget {
       "Master": [
         "Dashboard",
         "Customer",
-        "Add Customer",
+      "Product Form",
         "Category",
         "Fitter",
         "Supplier",
         "Products",
       ],
-      "Sales": ["Sales", "Tax"],
+      "Sales": ["Sales","POS", "Tax"],
       "Purchase": [
         "Purchase Invoice Form",
         "Purchase Invoice",
@@ -206,14 +209,14 @@ class MainScreen extends StatelessWidget {
           ),
 
           // Footer section
-          const Divider(),
+       //   const Divider(),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             color: Colors.grey[200],
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Version 1.0.0',
                   style: TextStyle(fontSize: 12, color: Colors.grey),

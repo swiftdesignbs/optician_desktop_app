@@ -10,6 +10,8 @@ import 'package:optician_desktop_app/screens/delivery_slip.dart';
 import 'package:optician_desktop_app/screens/fitter.dart';
 import 'package:optician_desktop_app/screens/fitter_slip.dart';
 import 'package:optician_desktop_app/screens/order_status.dart';
+import 'package:optician_desktop_app/screens/pos_screen.dart';
+import 'package:optician_desktop_app/screens/product_form.dart';
 import 'package:optician_desktop_app/screens/product_screen.dart';
 import 'package:optician_desktop_app/screens/purchase_invoice_print.dart';
 import 'package:optician_desktop_app/screens/puurchase_invoice.dart';
@@ -38,11 +40,13 @@ class ContentArea extends StatelessWidget {
         case "Customer":
           screen = CustomerListScreen();
           break;
-        case "Add Customer":
-          screen = CustomerCreateScreen();
+        case "Product Form":
+          screen = ProductFormScreen();
           break;
         case "Supplier":
           screen = const SupplierScreen();
+        case "POS":
+          screen = PosScreen();
         case "Order Status":
           screen = const OrderStatus();
         case "Products":
@@ -94,7 +98,7 @@ class ContentArea extends StatelessWidget {
       }
 
       return Container(
-        color: Colors.grey[100],
+        color: Colors.white,
         padding: const EdgeInsets.all(24),
         child: screen,
       );

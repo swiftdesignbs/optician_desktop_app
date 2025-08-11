@@ -933,6 +933,17 @@ class $CustomerTable extends Customer
   late final GeneratedColumn<String> address = GeneratedColumn<String>(
       'address', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _genderMeta = const VerificationMeta('gender');
+  @override
+  late final GeneratedColumn<String> gender = GeneratedColumn<String>(
+      'gender', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _customerTypeMeta =
+      const VerificationMeta('customerType');
+  @override
+  late final GeneratedColumn<String> customerType = GeneratedColumn<String>(
+      'customer_type', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _cityMeta = const VerificationMeta('city');
   @override
   late final GeneratedColumn<String> city = GeneratedColumn<String>(
@@ -976,6 +987,8 @@ class $CustomerTable extends Customer
         mobile,
         email,
         address,
+        gender,
+        customerType,
         city,
         state,
         country,
@@ -1023,6 +1036,16 @@ class $CustomerTable extends Customer
     if (data.containsKey('address')) {
       context.handle(_addressMeta,
           address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    }
+    if (data.containsKey('gender')) {
+      context.handle(_genderMeta,
+          gender.isAcceptableOrUnknown(data['gender']!, _genderMeta));
+    }
+    if (data.containsKey('customer_type')) {
+      context.handle(
+          _customerTypeMeta,
+          customerType.isAcceptableOrUnknown(
+              data['customer_type']!, _customerTypeMeta));
     }
     if (data.containsKey('city')) {
       context.handle(
@@ -1073,6 +1096,10 @@ class $CustomerTable extends Customer
           .read(DriftSqlType.string, data['${effectivePrefix}email']),
       address: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}address']),
+      gender: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}gender']),
+      customerType: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}customer_type']),
       city: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}city']),
       state: attachedDatabase.typeMapping
@@ -1102,6 +1129,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
   final String? mobile;
   final String? email;
   final String? address;
+  final String? gender;
+  final String? customerType;
   final String? city;
   final String? state;
   final String? country;
@@ -1116,6 +1145,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
       this.mobile,
       this.email,
       this.address,
+      this.gender,
+      this.customerType,
       this.city,
       this.state,
       this.country,
@@ -1141,6 +1172,12 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
     }
     if (!nullToAbsent || address != null) {
       map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || gender != null) {
+      map['gender'] = Variable<String>(gender);
+    }
+    if (!nullToAbsent || customerType != null) {
+      map['customer_type'] = Variable<String>(customerType);
     }
     if (!nullToAbsent || city != null) {
       map['city'] = Variable<String>(city);
@@ -1180,6 +1217,11 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
       address: address == null && nullToAbsent
           ? const Value.absent()
           : Value(address),
+      gender:
+          gender == null && nullToAbsent ? const Value.absent() : Value(gender),
+      customerType: customerType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customerType),
       city: city == null && nullToAbsent ? const Value.absent() : Value(city),
       state:
           state == null && nullToAbsent ? const Value.absent() : Value(state),
@@ -1209,6 +1251,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
       mobile: serializer.fromJson<String?>(json['mobile']),
       email: serializer.fromJson<String?>(json['email']),
       address: serializer.fromJson<String?>(json['address']),
+      gender: serializer.fromJson<String?>(json['gender']),
+      customerType: serializer.fromJson<String?>(json['customerType']),
       city: serializer.fromJson<String?>(json['city']),
       state: serializer.fromJson<String?>(json['state']),
       country: serializer.fromJson<String?>(json['country']),
@@ -1228,6 +1272,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
       'mobile': serializer.toJson<String?>(mobile),
       'email': serializer.toJson<String?>(email),
       'address': serializer.toJson<String?>(address),
+      'gender': serializer.toJson<String?>(gender),
+      'customerType': serializer.toJson<String?>(customerType),
       'city': serializer.toJson<String?>(city),
       'state': serializer.toJson<String?>(state),
       'country': serializer.toJson<String?>(country),
@@ -1245,6 +1291,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
           Value<String?> mobile = const Value.absent(),
           Value<String?> email = const Value.absent(),
           Value<String?> address = const Value.absent(),
+          Value<String?> gender = const Value.absent(),
+          Value<String?> customerType = const Value.absent(),
           Value<String?> city = const Value.absent(),
           Value<String?> state = const Value.absent(),
           Value<String?> country = const Value.absent(),
@@ -1259,6 +1307,9 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
         mobile: mobile.present ? mobile.value : this.mobile,
         email: email.present ? email.value : this.email,
         address: address.present ? address.value : this.address,
+        gender: gender.present ? gender.value : this.gender,
+        customerType:
+            customerType.present ? customerType.value : this.customerType,
         city: city.present ? city.value : this.city,
         state: state.present ? state.value : this.state,
         country: country.present ? country.value : this.country,
@@ -1276,6 +1327,10 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
       mobile: data.mobile.present ? data.mobile.value : this.mobile,
       email: data.email.present ? data.email.value : this.email,
       address: data.address.present ? data.address.value : this.address,
+      gender: data.gender.present ? data.gender.value : this.gender,
+      customerType: data.customerType.present
+          ? data.customerType.value
+          : this.customerType,
       city: data.city.present ? data.city.value : this.city,
       state: data.state.present ? data.state.value : this.state,
       country: data.country.present ? data.country.value : this.country,
@@ -1296,6 +1351,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
           ..write('mobile: $mobile, ')
           ..write('email: $email, ')
           ..write('address: $address, ')
+          ..write('gender: $gender, ')
+          ..write('customerType: $customerType, ')
           ..write('city: $city, ')
           ..write('state: $state, ')
           ..write('country: $country, ')
@@ -1307,8 +1364,22 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
   }
 
   @override
-  int get hashCode => Object.hash(id, firstName, middleName, lastName, mobile,
-      email, address, city, state, country, pincode, createdBy, createdDate);
+  int get hashCode => Object.hash(
+      id,
+      firstName,
+      middleName,
+      lastName,
+      mobile,
+      email,
+      address,
+      gender,
+      customerType,
+      city,
+      state,
+      country,
+      pincode,
+      createdBy,
+      createdDate);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1320,6 +1391,8 @@ class CustomerData extends DataClass implements Insertable<CustomerData> {
           other.mobile == this.mobile &&
           other.email == this.email &&
           other.address == this.address &&
+          other.gender == this.gender &&
+          other.customerType == this.customerType &&
           other.city == this.city &&
           other.state == this.state &&
           other.country == this.country &&
@@ -1336,6 +1409,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
   final Value<String?> mobile;
   final Value<String?> email;
   final Value<String?> address;
+  final Value<String?> gender;
+  final Value<String?> customerType;
   final Value<String?> city;
   final Value<String?> state;
   final Value<String?> country;
@@ -1350,6 +1425,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
     this.mobile = const Value.absent(),
     this.email = const Value.absent(),
     this.address = const Value.absent(),
+    this.gender = const Value.absent(),
+    this.customerType = const Value.absent(),
     this.city = const Value.absent(),
     this.state = const Value.absent(),
     this.country = const Value.absent(),
@@ -1365,6 +1442,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
     this.mobile = const Value.absent(),
     this.email = const Value.absent(),
     this.address = const Value.absent(),
+    this.gender = const Value.absent(),
+    this.customerType = const Value.absent(),
     this.city = const Value.absent(),
     this.state = const Value.absent(),
     this.country = const Value.absent(),
@@ -1380,6 +1459,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
     Expression<String>? mobile,
     Expression<String>? email,
     Expression<String>? address,
+    Expression<String>? gender,
+    Expression<String>? customerType,
     Expression<String>? city,
     Expression<String>? state,
     Expression<String>? country,
@@ -1395,6 +1476,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
       if (mobile != null) 'mobile': mobile,
       if (email != null) 'email': email,
       if (address != null) 'address': address,
+      if (gender != null) 'gender': gender,
+      if (customerType != null) 'customer_type': customerType,
       if (city != null) 'city': city,
       if (state != null) 'state': state,
       if (country != null) 'country': country,
@@ -1412,6 +1495,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
       Value<String?>? mobile,
       Value<String?>? email,
       Value<String?>? address,
+      Value<String?>? gender,
+      Value<String?>? customerType,
       Value<String?>? city,
       Value<String?>? state,
       Value<String?>? country,
@@ -1426,6 +1511,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
       mobile: mobile ?? this.mobile,
       email: email ?? this.email,
       address: address ?? this.address,
+      gender: gender ?? this.gender,
+      customerType: customerType ?? this.customerType,
       city: city ?? this.city,
       state: state ?? this.state,
       country: country ?? this.country,
@@ -1459,6 +1546,12 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (gender.present) {
+      map['gender'] = Variable<String>(gender.value);
+    }
+    if (customerType.present) {
+      map['customer_type'] = Variable<String>(customerType.value);
+    }
     if (city.present) {
       map['city'] = Variable<String>(city.value);
     }
@@ -1490,6 +1583,8 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
           ..write('mobile: $mobile, ')
           ..write('email: $email, ')
           ..write('address: $address, ')
+          ..write('gender: $gender, ')
+          ..write('customerType: $customerType, ')
           ..write('city: $city, ')
           ..write('state: $state, ')
           ..write('country: $country, ')
@@ -1501,16 +1596,632 @@ class CustomerCompanion extends UpdateCompanion<CustomerData> {
   }
 }
 
+class $OpticProductsTable extends OpticProducts
+    with TableInfo<$OpticProductsTable, OpticProduct> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $OpticProductsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
+  @override
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _hsnCodeMeta =
+      const VerificationMeta('hsnCode');
+  @override
+  late final GeneratedColumn<String> hsnCode = GeneratedColumn<String>(
+      'hsn_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+      'price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _descriptionMeta =
+      const VerificationMeta('description');
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _stockMeta = const VerificationMeta('stock');
+  @override
+  late final GeneratedColumn<int> stock = GeneratedColumn<int>(
+      'stock', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
+  static const VerificationMeta _igstMeta = const VerificationMeta('igst');
+  @override
+  late final GeneratedColumn<double> igst = GeneratedColumn<double>(
+      'igst', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _sgstMeta = const VerificationMeta('sgst');
+  @override
+  late final GeneratedColumn<double> sgst = GeneratedColumn<double>(
+      'sgst', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _cgstMeta = const VerificationMeta('cgst');
+  @override
+  late final GeneratedColumn<double> cgst = GeneratedColumn<double>(
+      'cgst', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _discountMeta =
+      const VerificationMeta('discount');
+  @override
+  late final GeneratedColumn<double> discount = GeneratedColumn<double>(
+      'discount', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  @override
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+      'unit', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _discountPriceMeta =
+      const VerificationMeta('discountPrice');
+  @override
+  late final GeneratedColumn<double> discountPrice = GeneratedColumn<double>(
+      'discount_price', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        productName,
+        hsnCode,
+        price,
+        description,
+        stock,
+        igst,
+        sgst,
+        cgst,
+        discount,
+        unit,
+        category,
+        discountPrice
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'optic_products';
+  @override
+  VerificationContext validateIntegrity(Insertable<OpticProduct> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('product_name')) {
+      context.handle(
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
+    } else if (isInserting) {
+      context.missing(_productNameMeta);
+    }
+    if (data.containsKey('hsn_code')) {
+      context.handle(_hsnCodeMeta,
+          hsnCode.isAcceptableOrUnknown(data['hsn_code']!, _hsnCodeMeta));
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+          _descriptionMeta,
+          description.isAcceptableOrUnknown(
+              data['description']!, _descriptionMeta));
+    }
+    if (data.containsKey('stock')) {
+      context.handle(
+          _stockMeta, stock.isAcceptableOrUnknown(data['stock']!, _stockMeta));
+    }
+    if (data.containsKey('igst')) {
+      context.handle(
+          _igstMeta, igst.isAcceptableOrUnknown(data['igst']!, _igstMeta));
+    }
+    if (data.containsKey('sgst')) {
+      context.handle(
+          _sgstMeta, sgst.isAcceptableOrUnknown(data['sgst']!, _sgstMeta));
+    }
+    if (data.containsKey('cgst')) {
+      context.handle(
+          _cgstMeta, cgst.isAcceptableOrUnknown(data['cgst']!, _cgstMeta));
+    }
+    if (data.containsKey('discount')) {
+      context.handle(_discountMeta,
+          discount.isAcceptableOrUnknown(data['discount']!, _discountMeta));
+    }
+    if (data.containsKey('unit')) {
+      context.handle(
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+    }
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
+    }
+    if (data.containsKey('discount_price')) {
+      context.handle(
+          _discountPriceMeta,
+          discountPrice.isAcceptableOrUnknown(
+              data['discount_price']!, _discountPriceMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  OpticProduct map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return OpticProduct(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
+      hsnCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}hsn_code']),
+      price: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
+      description: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
+      stock: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}stock'])!,
+      igst: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}igst']),
+      sgst: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}sgst']),
+      cgst: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}cgst']),
+      discount: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}discount']),
+      unit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}unit']),
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category']),
+      discountPrice: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}discount_price']),
+    );
+  }
+
+  @override
+  $OpticProductsTable createAlias(String alias) {
+    return $OpticProductsTable(attachedDatabase, alias);
+  }
+}
+
+class OpticProduct extends DataClass implements Insertable<OpticProduct> {
+  final int id;
+  final String productName;
+  final String? hsnCode;
+  final double price;
+  final String? description;
+  final int stock;
+  final double? igst;
+  final double? sgst;
+  final double? cgst;
+  final double? discount;
+  final String? unit;
+  final String? category;
+  final double? discountPrice;
+  const OpticProduct(
+      {required this.id,
+      required this.productName,
+      this.hsnCode,
+      required this.price,
+      this.description,
+      required this.stock,
+      this.igst,
+      this.sgst,
+      this.cgst,
+      this.discount,
+      this.unit,
+      this.category,
+      this.discountPrice});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['product_name'] = Variable<String>(productName);
+    if (!nullToAbsent || hsnCode != null) {
+      map['hsn_code'] = Variable<String>(hsnCode);
+    }
+    map['price'] = Variable<double>(price);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['stock'] = Variable<int>(stock);
+    if (!nullToAbsent || igst != null) {
+      map['igst'] = Variable<double>(igst);
+    }
+    if (!nullToAbsent || sgst != null) {
+      map['sgst'] = Variable<double>(sgst);
+    }
+    if (!nullToAbsent || cgst != null) {
+      map['cgst'] = Variable<double>(cgst);
+    }
+    if (!nullToAbsent || discount != null) {
+      map['discount'] = Variable<double>(discount);
+    }
+    if (!nullToAbsent || unit != null) {
+      map['unit'] = Variable<String>(unit);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
+    if (!nullToAbsent || discountPrice != null) {
+      map['discount_price'] = Variable<double>(discountPrice);
+    }
+    return map;
+  }
+
+  OpticProductsCompanion toCompanion(bool nullToAbsent) {
+    return OpticProductsCompanion(
+      id: Value(id),
+      productName: Value(productName),
+      hsnCode: hsnCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hsnCode),
+      price: Value(price),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      stock: Value(stock),
+      igst: igst == null && nullToAbsent ? const Value.absent() : Value(igst),
+      sgst: sgst == null && nullToAbsent ? const Value.absent() : Value(sgst),
+      cgst: cgst == null && nullToAbsent ? const Value.absent() : Value(cgst),
+      discount: discount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discount),
+      unit: unit == null && nullToAbsent ? const Value.absent() : Value(unit),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+      discountPrice: discountPrice == null && nullToAbsent
+          ? const Value.absent()
+          : Value(discountPrice),
+    );
+  }
+
+  factory OpticProduct.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return OpticProduct(
+      id: serializer.fromJson<int>(json['id']),
+      productName: serializer.fromJson<String>(json['productName']),
+      hsnCode: serializer.fromJson<String?>(json['hsnCode']),
+      price: serializer.fromJson<double>(json['price']),
+      description: serializer.fromJson<String?>(json['description']),
+      stock: serializer.fromJson<int>(json['stock']),
+      igst: serializer.fromJson<double?>(json['igst']),
+      sgst: serializer.fromJson<double?>(json['sgst']),
+      cgst: serializer.fromJson<double?>(json['cgst']),
+      discount: serializer.fromJson<double?>(json['discount']),
+      unit: serializer.fromJson<String?>(json['unit']),
+      category: serializer.fromJson<String?>(json['category']),
+      discountPrice: serializer.fromJson<double?>(json['discountPrice']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'productName': serializer.toJson<String>(productName),
+      'hsnCode': serializer.toJson<String?>(hsnCode),
+      'price': serializer.toJson<double>(price),
+      'description': serializer.toJson<String?>(description),
+      'stock': serializer.toJson<int>(stock),
+      'igst': serializer.toJson<double?>(igst),
+      'sgst': serializer.toJson<double?>(sgst),
+      'cgst': serializer.toJson<double?>(cgst),
+      'discount': serializer.toJson<double?>(discount),
+      'unit': serializer.toJson<String?>(unit),
+      'category': serializer.toJson<String?>(category),
+      'discountPrice': serializer.toJson<double?>(discountPrice),
+    };
+  }
+
+  OpticProduct copyWith(
+          {int? id,
+          String? productName,
+          Value<String?> hsnCode = const Value.absent(),
+          double? price,
+          Value<String?> description = const Value.absent(),
+          int? stock,
+          Value<double?> igst = const Value.absent(),
+          Value<double?> sgst = const Value.absent(),
+          Value<double?> cgst = const Value.absent(),
+          Value<double?> discount = const Value.absent(),
+          Value<String?> unit = const Value.absent(),
+          Value<String?> category = const Value.absent(),
+          Value<double?> discountPrice = const Value.absent()}) =>
+      OpticProduct(
+        id: id ?? this.id,
+        productName: productName ?? this.productName,
+        hsnCode: hsnCode.present ? hsnCode.value : this.hsnCode,
+        price: price ?? this.price,
+        description: description.present ? description.value : this.description,
+        stock: stock ?? this.stock,
+        igst: igst.present ? igst.value : this.igst,
+        sgst: sgst.present ? sgst.value : this.sgst,
+        cgst: cgst.present ? cgst.value : this.cgst,
+        discount: discount.present ? discount.value : this.discount,
+        unit: unit.present ? unit.value : this.unit,
+        category: category.present ? category.value : this.category,
+        discountPrice:
+            discountPrice.present ? discountPrice.value : this.discountPrice,
+      );
+  OpticProduct copyWithCompanion(OpticProductsCompanion data) {
+    return OpticProduct(
+      id: data.id.present ? data.id.value : this.id,
+      productName:
+          data.productName.present ? data.productName.value : this.productName,
+      hsnCode: data.hsnCode.present ? data.hsnCode.value : this.hsnCode,
+      price: data.price.present ? data.price.value : this.price,
+      description:
+          data.description.present ? data.description.value : this.description,
+      stock: data.stock.present ? data.stock.value : this.stock,
+      igst: data.igst.present ? data.igst.value : this.igst,
+      sgst: data.sgst.present ? data.sgst.value : this.sgst,
+      cgst: data.cgst.present ? data.cgst.value : this.cgst,
+      discount: data.discount.present ? data.discount.value : this.discount,
+      unit: data.unit.present ? data.unit.value : this.unit,
+      category: data.category.present ? data.category.value : this.category,
+      discountPrice: data.discountPrice.present
+          ? data.discountPrice.value
+          : this.discountPrice,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OpticProduct(')
+          ..write('id: $id, ')
+          ..write('productName: $productName, ')
+          ..write('hsnCode: $hsnCode, ')
+          ..write('price: $price, ')
+          ..write('description: $description, ')
+          ..write('stock: $stock, ')
+          ..write('igst: $igst, ')
+          ..write('sgst: $sgst, ')
+          ..write('cgst: $cgst, ')
+          ..write('discount: $discount, ')
+          ..write('unit: $unit, ')
+          ..write('category: $category, ')
+          ..write('discountPrice: $discountPrice')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, productName, hsnCode, price, description,
+      stock, igst, sgst, cgst, discount, unit, category, discountPrice);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OpticProduct &&
+          other.id == this.id &&
+          other.productName == this.productName &&
+          other.hsnCode == this.hsnCode &&
+          other.price == this.price &&
+          other.description == this.description &&
+          other.stock == this.stock &&
+          other.igst == this.igst &&
+          other.sgst == this.sgst &&
+          other.cgst == this.cgst &&
+          other.discount == this.discount &&
+          other.unit == this.unit &&
+          other.category == this.category &&
+          other.discountPrice == this.discountPrice);
+}
+
+class OpticProductsCompanion extends UpdateCompanion<OpticProduct> {
+  final Value<int> id;
+  final Value<String> productName;
+  final Value<String?> hsnCode;
+  final Value<double> price;
+  final Value<String?> description;
+  final Value<int> stock;
+  final Value<double?> igst;
+  final Value<double?> sgst;
+  final Value<double?> cgst;
+  final Value<double?> discount;
+  final Value<String?> unit;
+  final Value<String?> category;
+  final Value<double?> discountPrice;
+  const OpticProductsCompanion({
+    this.id = const Value.absent(),
+    this.productName = const Value.absent(),
+    this.hsnCode = const Value.absent(),
+    this.price = const Value.absent(),
+    this.description = const Value.absent(),
+    this.stock = const Value.absent(),
+    this.igst = const Value.absent(),
+    this.sgst = const Value.absent(),
+    this.cgst = const Value.absent(),
+    this.discount = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.category = const Value.absent(),
+    this.discountPrice = const Value.absent(),
+  });
+  OpticProductsCompanion.insert({
+    this.id = const Value.absent(),
+    required String productName,
+    this.hsnCode = const Value.absent(),
+    required double price,
+    this.description = const Value.absent(),
+    this.stock = const Value.absent(),
+    this.igst = const Value.absent(),
+    this.sgst = const Value.absent(),
+    this.cgst = const Value.absent(),
+    this.discount = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.category = const Value.absent(),
+    this.discountPrice = const Value.absent(),
+  })  : productName = Value(productName),
+        price = Value(price);
+  static Insertable<OpticProduct> custom({
+    Expression<int>? id,
+    Expression<String>? productName,
+    Expression<String>? hsnCode,
+    Expression<double>? price,
+    Expression<String>? description,
+    Expression<int>? stock,
+    Expression<double>? igst,
+    Expression<double>? sgst,
+    Expression<double>? cgst,
+    Expression<double>? discount,
+    Expression<String>? unit,
+    Expression<String>? category,
+    Expression<double>? discountPrice,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (productName != null) 'product_name': productName,
+      if (hsnCode != null) 'hsn_code': hsnCode,
+      if (price != null) 'price': price,
+      if (description != null) 'description': description,
+      if (stock != null) 'stock': stock,
+      if (igst != null) 'igst': igst,
+      if (sgst != null) 'sgst': sgst,
+      if (cgst != null) 'cgst': cgst,
+      if (discount != null) 'discount': discount,
+      if (unit != null) 'unit': unit,
+      if (category != null) 'category': category,
+      if (discountPrice != null) 'discount_price': discountPrice,
+    });
+  }
+
+  OpticProductsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? productName,
+      Value<String?>? hsnCode,
+      Value<double>? price,
+      Value<String?>? description,
+      Value<int>? stock,
+      Value<double?>? igst,
+      Value<double?>? sgst,
+      Value<double?>? cgst,
+      Value<double?>? discount,
+      Value<String?>? unit,
+      Value<String?>? category,
+      Value<double?>? discountPrice}) {
+    return OpticProductsCompanion(
+      id: id ?? this.id,
+      productName: productName ?? this.productName,
+      hsnCode: hsnCode ?? this.hsnCode,
+      price: price ?? this.price,
+      description: description ?? this.description,
+      stock: stock ?? this.stock,
+      igst: igst ?? this.igst,
+      sgst: sgst ?? this.sgst,
+      cgst: cgst ?? this.cgst,
+      discount: discount ?? this.discount,
+      unit: unit ?? this.unit,
+      category: category ?? this.category,
+      discountPrice: discountPrice ?? this.discountPrice,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
+    }
+    if (hsnCode.present) {
+      map['hsn_code'] = Variable<String>(hsnCode.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (stock.present) {
+      map['stock'] = Variable<int>(stock.value);
+    }
+    if (igst.present) {
+      map['igst'] = Variable<double>(igst.value);
+    }
+    if (sgst.present) {
+      map['sgst'] = Variable<double>(sgst.value);
+    }
+    if (cgst.present) {
+      map['cgst'] = Variable<double>(cgst.value);
+    }
+    if (discount.present) {
+      map['discount'] = Variable<double>(discount.value);
+    }
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (discountPrice.present) {
+      map['discount_price'] = Variable<double>(discountPrice.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OpticProductsCompanion(')
+          ..write('id: $id, ')
+          ..write('productName: $productName, ')
+          ..write('hsnCode: $hsnCode, ')
+          ..write('price: $price, ')
+          ..write('description: $description, ')
+          ..write('stock: $stock, ')
+          ..write('igst: $igst, ')
+          ..write('sgst: $sgst, ')
+          ..write('cgst: $cgst, ')
+          ..write('discount: $discount, ')
+          ..write('unit: $unit, ')
+          ..write('category: $category, ')
+          ..write('discountPrice: $discountPrice')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $ProductMasterTable productMaster = $ProductMasterTable(this);
   late final $CustomerTable customer = $CustomerTable(this);
+  late final $OpticProductsTable opticProducts = $OpticProductsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [productMaster, customer];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [productMaster, customer, opticProducts];
 }
 
 typedef $$ProductMasterTableCreateCompanionBuilder = ProductMasterCompanion
@@ -1900,6 +2611,8 @@ typedef $$CustomerTableCreateCompanionBuilder = CustomerCompanion Function({
   Value<String?> mobile,
   Value<String?> email,
   Value<String?> address,
+  Value<String?> gender,
+  Value<String?> customerType,
   Value<String?> city,
   Value<String?> state,
   Value<String?> country,
@@ -1915,6 +2628,8 @@ typedef $$CustomerTableUpdateCompanionBuilder = CustomerCompanion Function({
   Value<String?> mobile,
   Value<String?> email,
   Value<String?> address,
+  Value<String?> gender,
+  Value<String?> customerType,
   Value<String?> city,
   Value<String?> state,
   Value<String?> country,
@@ -1952,6 +2667,12 @@ class $$CustomerTableFilterComposer
 
   ColumnFilters<String> get address => $composableBuilder(
       column: $table.address, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gender => $composableBuilder(
+      column: $table.gender, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get customerType => $composableBuilder(
+      column: $table.customerType, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get city => $composableBuilder(
       column: $table.city, builder: (column) => ColumnFilters(column));
@@ -2002,6 +2723,13 @@ class $$CustomerTableOrderingComposer
   ColumnOrderings<String> get address => $composableBuilder(
       column: $table.address, builder: (column) => ColumnOrderings(column));
 
+  ColumnOrderings<String> get gender => $composableBuilder(
+      column: $table.gender, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get customerType => $composableBuilder(
+      column: $table.customerType,
+      builder: (column) => ColumnOrderings(column));
+
   ColumnOrderings<String> get city => $composableBuilder(
       column: $table.city, builder: (column) => ColumnOrderings(column));
 
@@ -2050,6 +2778,12 @@ class $$CustomerTableAnnotationComposer
 
   GeneratedColumn<String> get address =>
       $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get gender =>
+      $composableBuilder(column: $table.gender, builder: (column) => column);
+
+  GeneratedColumn<String> get customerType => $composableBuilder(
+      column: $table.customerType, builder: (column) => column);
 
   GeneratedColumn<String> get city =>
       $composableBuilder(column: $table.city, builder: (column) => column);
@@ -2100,6 +2834,8 @@ class $$CustomerTableTableManager extends RootTableManager<
             Value<String?> mobile = const Value.absent(),
             Value<String?> email = const Value.absent(),
             Value<String?> address = const Value.absent(),
+            Value<String?> gender = const Value.absent(),
+            Value<String?> customerType = const Value.absent(),
             Value<String?> city = const Value.absent(),
             Value<String?> state = const Value.absent(),
             Value<String?> country = const Value.absent(),
@@ -2115,6 +2851,8 @@ class $$CustomerTableTableManager extends RootTableManager<
             mobile: mobile,
             email: email,
             address: address,
+            gender: gender,
+            customerType: customerType,
             city: city,
             state: state,
             country: country,
@@ -2130,6 +2868,8 @@ class $$CustomerTableTableManager extends RootTableManager<
             Value<String?> mobile = const Value.absent(),
             Value<String?> email = const Value.absent(),
             Value<String?> address = const Value.absent(),
+            Value<String?> gender = const Value.absent(),
+            Value<String?> customerType = const Value.absent(),
             Value<String?> city = const Value.absent(),
             Value<String?> state = const Value.absent(),
             Value<String?> country = const Value.absent(),
@@ -2145,6 +2885,8 @@ class $$CustomerTableTableManager extends RootTableManager<
             mobile: mobile,
             email: email,
             address: address,
+            gender: gender,
+            customerType: customerType,
             city: city,
             state: state,
             country: country,
@@ -2171,6 +2913,294 @@ typedef $$CustomerTableProcessedTableManager = ProcessedTableManager<
     (CustomerData, BaseReferences<_$AppDatabase, $CustomerTable, CustomerData>),
     CustomerData,
     PrefetchHooks Function()>;
+typedef $$OpticProductsTableCreateCompanionBuilder = OpticProductsCompanion
+    Function({
+  Value<int> id,
+  required String productName,
+  Value<String?> hsnCode,
+  required double price,
+  Value<String?> description,
+  Value<int> stock,
+  Value<double?> igst,
+  Value<double?> sgst,
+  Value<double?> cgst,
+  Value<double?> discount,
+  Value<String?> unit,
+  Value<String?> category,
+  Value<double?> discountPrice,
+});
+typedef $$OpticProductsTableUpdateCompanionBuilder = OpticProductsCompanion
+    Function({
+  Value<int> id,
+  Value<String> productName,
+  Value<String?> hsnCode,
+  Value<double> price,
+  Value<String?> description,
+  Value<int> stock,
+  Value<double?> igst,
+  Value<double?> sgst,
+  Value<double?> cgst,
+  Value<double?> discount,
+  Value<String?> unit,
+  Value<String?> category,
+  Value<double?> discountPrice,
+});
+
+class $$OpticProductsTableFilterComposer
+    extends Composer<_$AppDatabase, $OpticProductsTable> {
+  $$OpticProductsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get hsnCode => $composableBuilder(
+      column: $table.hsnCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get stock => $composableBuilder(
+      column: $table.stock, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get igst => $composableBuilder(
+      column: $table.igst, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get sgst => $composableBuilder(
+      column: $table.sgst, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get cgst => $composableBuilder(
+      column: $table.cgst, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get discount => $composableBuilder(
+      column: $table.discount, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get discountPrice => $composableBuilder(
+      column: $table.discountPrice, builder: (column) => ColumnFilters(column));
+}
+
+class $$OpticProductsTableOrderingComposer
+    extends Composer<_$AppDatabase, $OpticProductsTable> {
+  $$OpticProductsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get hsnCode => $composableBuilder(
+      column: $table.hsnCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get price => $composableBuilder(
+      column: $table.price, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get stock => $composableBuilder(
+      column: $table.stock, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get igst => $composableBuilder(
+      column: $table.igst, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get sgst => $composableBuilder(
+      column: $table.sgst, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get cgst => $composableBuilder(
+      column: $table.cgst, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get discount => $composableBuilder(
+      column: $table.discount, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get unit => $composableBuilder(
+      column: $table.unit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get category => $composableBuilder(
+      column: $table.category, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get discountPrice => $composableBuilder(
+      column: $table.discountPrice,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$OpticProductsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $OpticProductsTable> {
+  $$OpticProductsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => column);
+
+  GeneratedColumn<String> get hsnCode =>
+      $composableBuilder(column: $table.hsnCode, builder: (column) => column);
+
+  GeneratedColumn<double> get price =>
+      $composableBuilder(column: $table.price, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+      column: $table.description, builder: (column) => column);
+
+  GeneratedColumn<int> get stock =>
+      $composableBuilder(column: $table.stock, builder: (column) => column);
+
+  GeneratedColumn<double> get igst =>
+      $composableBuilder(column: $table.igst, builder: (column) => column);
+
+  GeneratedColumn<double> get sgst =>
+      $composableBuilder(column: $table.sgst, builder: (column) => column);
+
+  GeneratedColumn<double> get cgst =>
+      $composableBuilder(column: $table.cgst, builder: (column) => column);
+
+  GeneratedColumn<double> get discount =>
+      $composableBuilder(column: $table.discount, builder: (column) => column);
+
+  GeneratedColumn<String> get unit =>
+      $composableBuilder(column: $table.unit, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<double> get discountPrice => $composableBuilder(
+      column: $table.discountPrice, builder: (column) => column);
+}
+
+class $$OpticProductsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $OpticProductsTable,
+    OpticProduct,
+    $$OpticProductsTableFilterComposer,
+    $$OpticProductsTableOrderingComposer,
+    $$OpticProductsTableAnnotationComposer,
+    $$OpticProductsTableCreateCompanionBuilder,
+    $$OpticProductsTableUpdateCompanionBuilder,
+    (
+      OpticProduct,
+      BaseReferences<_$AppDatabase, $OpticProductsTable, OpticProduct>
+    ),
+    OpticProduct,
+    PrefetchHooks Function()> {
+  $$OpticProductsTableTableManager(_$AppDatabase db, $OpticProductsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$OpticProductsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$OpticProductsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$OpticProductsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> productName = const Value.absent(),
+            Value<String?> hsnCode = const Value.absent(),
+            Value<double> price = const Value.absent(),
+            Value<String?> description = const Value.absent(),
+            Value<int> stock = const Value.absent(),
+            Value<double?> igst = const Value.absent(),
+            Value<double?> sgst = const Value.absent(),
+            Value<double?> cgst = const Value.absent(),
+            Value<double?> discount = const Value.absent(),
+            Value<String?> unit = const Value.absent(),
+            Value<String?> category = const Value.absent(),
+            Value<double?> discountPrice = const Value.absent(),
+          }) =>
+              OpticProductsCompanion(
+            id: id,
+            productName: productName,
+            hsnCode: hsnCode,
+            price: price,
+            description: description,
+            stock: stock,
+            igst: igst,
+            sgst: sgst,
+            cgst: cgst,
+            discount: discount,
+            unit: unit,
+            category: category,
+            discountPrice: discountPrice,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String productName,
+            Value<String?> hsnCode = const Value.absent(),
+            required double price,
+            Value<String?> description = const Value.absent(),
+            Value<int> stock = const Value.absent(),
+            Value<double?> igst = const Value.absent(),
+            Value<double?> sgst = const Value.absent(),
+            Value<double?> cgst = const Value.absent(),
+            Value<double?> discount = const Value.absent(),
+            Value<String?> unit = const Value.absent(),
+            Value<String?> category = const Value.absent(),
+            Value<double?> discountPrice = const Value.absent(),
+          }) =>
+              OpticProductsCompanion.insert(
+            id: id,
+            productName: productName,
+            hsnCode: hsnCode,
+            price: price,
+            description: description,
+            stock: stock,
+            igst: igst,
+            sgst: sgst,
+            cgst: cgst,
+            discount: discount,
+            unit: unit,
+            category: category,
+            discountPrice: discountPrice,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$OpticProductsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $OpticProductsTable,
+    OpticProduct,
+    $$OpticProductsTableFilterComposer,
+    $$OpticProductsTableOrderingComposer,
+    $$OpticProductsTableAnnotationComposer,
+    $$OpticProductsTableCreateCompanionBuilder,
+    $$OpticProductsTableUpdateCompanionBuilder,
+    (
+      OpticProduct,
+      BaseReferences<_$AppDatabase, $OpticProductsTable, OpticProduct>
+    ),
+    OpticProduct,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2179,4 +3209,6 @@ class $AppDatabaseManager {
       $$ProductMasterTableTableManager(_db, _db.productMaster);
   $$CustomerTableTableManager get customer =>
       $$CustomerTableTableManager(_db, _db.customer);
+  $$OpticProductsTableTableManager get opticProducts =>
+      $$OpticProductsTableTableManager(_db, _db.opticProducts);
 }

@@ -674,6 +674,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         child: IconButton(
                           icon: FaIcon(FontAwesomeIcons.pen, size: 9),
                           onPressed: () {
+                            print("Editing product: ${item}");
                             setState(() {
                               // Populate text fields
                               productCode.text = item.productCode;

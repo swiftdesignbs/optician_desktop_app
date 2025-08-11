@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CustomDropdown extends StatelessWidget {
   final String ddName;
@@ -40,7 +39,7 @@ class CustomDropdown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8),
             isExpanded: true,
             underline: const SizedBox(),
-            value: items.any((item) => item['id'] == value) ? value : null,
+            value: items.any((item) => item['name'] == value) ? value : null,
             icon: const Icon(Icons.arrow_drop_down_outlined),
             style: const TextStyle(
               color: Colors.black,
@@ -60,7 +59,7 @@ class CustomDropdown extends StatelessWidget {
             onChanged: onChanged,
             items: items.map((item) {
               return DropdownMenuItem<String>(
-                value: item['id'],
+                value: item['name'],
                 child: SizedBox(
                   height: 30,
                   child: Align(

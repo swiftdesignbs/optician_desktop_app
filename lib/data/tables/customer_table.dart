@@ -11,6 +11,8 @@ class Customer extends Table {
   TextColumn get mobile => text().nullable()();
   TextColumn get email => text().nullable()();
   TextColumn get address => text().nullable()();
+  TextColumn get gender => text().nullable()();
+  TextColumn get customerType => text().nullable()();
 
   TextColumn get city => text().nullable()();
   TextColumn get state => text().nullable()();
