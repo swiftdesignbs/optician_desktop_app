@@ -213,19 +213,18 @@ class MainScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
-            color: Colors.grey[200],
+            color: Colors.white,
             child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Version 1.0.0',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle( fontFamily: 'FontMain',fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
                   '© 2025 Optician App',
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
+ style: TextStyle( fontFamily: 'FontMain',fontSize: 12, fontWeight: FontWeight.bold),                ),
               ],
             ),
           ),
