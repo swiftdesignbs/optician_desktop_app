@@ -33,8 +33,14 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 5),
-        SizedBox(
-          height: 30,
+        Container(
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              border: Border.all(
+                color: const Color.fromARGB(255, 217, 215, 215),
+              ),
+              borderRadius: BorderRadius.circular(8)),
           child: TextFormField(
             validator: validator,
             textAlignVertical: TextAlignVertical.center,

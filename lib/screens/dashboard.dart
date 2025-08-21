@@ -103,8 +103,8 @@ class DashboardScreen extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(5),
+                    //   border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
@@ -131,7 +131,7 @@ class DashboardScreen extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 13,
                           fontFamily: 'FontMain',
-                          fontWeight: FontWeight.w600,
+                          //     fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],

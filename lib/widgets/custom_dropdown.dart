@@ -29,12 +29,13 @@ class CustomDropdown extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         Container(
-          height: 30,
+          height: 40,
           decoration: BoxDecoration(
-            border: Border.all(
-              color: const Color.fromARGB(255, 217, 215, 215),
-            ),
-          ),
+              color: Colors.grey.shade100,
+              border: Border.all(
+                color: const Color.fromARGB(255, 217, 215, 215),
+              ),
+              borderRadius: BorderRadius.circular(8)),
           child: DropdownButton<String>(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             isExpanded: true,
@@ -52,8 +53,8 @@ class CustomDropdown extends StatelessWidget {
               style: TextStyle(
                 fontFamily: 'FontMain',
                 fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
+                //   fontWeight: FontWeight.w600,
+                // color: Colors.black,
               ),
             ),
             onChanged: onChanged,

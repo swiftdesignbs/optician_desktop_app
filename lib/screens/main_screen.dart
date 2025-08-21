@@ -13,6 +13,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey.shade300,
         body: Column(
           children: [
             // Full-width AppBar
@@ -44,48 +45,6 @@ class MainScreen extends StatelessWidget {
                     ),
 
                     const Spacer(),
-
-                    // // Center (Search + Dropdown)
-                    // Expanded(
-                    //   child: Container(
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white,
-                    //       border: Border.all(color: Colors.black), // Black border
-                    //       borderRadius: BorderRadius.circular(8),
-                    //     ),
-                    //     child: const TextField(
-                    //       decoration: InputDecoration(
-                    //         contentPadding:
-                    //             EdgeInsets.symmetric(horizontal: 12),
-                    //         hintText: 'Search...',
-                    //         border: InputBorder.none, // Remove default border
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(width: 10),
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 12),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     border: Border.all(color: Colors.black), // Black border
-                    //     borderRadius: BorderRadius.circular(8),
-                    //   ),
-                    //   child: DropdownButtonHideUnderline(
-                    //     child: DropdownButton<String>(
-                    //       value: 'Today',
-                    //       dropdownColor: Colors.white,
-                    //       iconEnabledColor: Colors.black,
-                    //       items: ['Today', 'This Week', 'This Month']
-                    //           .map((e) => DropdownMenuItem(
-                    //                 value: e,
-                    //                 child: Text(e),
-                    //               ))
-                    //           .toList(),
-                    //       onChanged: (value) {},
-                    //     ),
-                    //   ),
-                    // ),
 
                     const Spacer(),
 
@@ -147,14 +106,21 @@ class MainScreen extends StatelessWidget {
         "Retail Invoice Slip",
         "Retail Information",
       ],
-      // "Stock": ["Stock Entry", "Stock Report"],
       "Reports": [
         "Order Status",
         "Report Module",
       ],
-      // "Petty": ["Petty Cash Entry", "Petty Cash Report"],
-      // "Cash": ["Cash Book"],
       "Utility": ["Settings"],
+    };
+
+    // Define icons for parent menus
+    final Map<String, IconData> parentIcons = {
+      "Master": Icons.dashboard,
+      "Sales": Icons.shopping_cart,
+      "Purchase": Icons.receipt_long,
+      "Accounts Invoice": Icons.description,
+      "Reports": Icons.bar_chart,
+      "Utility": Icons.settings,
     };
 
     return Container(
@@ -172,44 +138,56 @@ class MainScreen extends StatelessWidget {
                 return Obx(() {
                   final isExpanded = navController.selectedGroup.value == group;
 
-                  return ExpansionTile(
-                    title: Text(
-                      group,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'FontMain',
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    initiallyExpanded: isExpanded,
-                    onExpansionChanged: (expanded) {
-                      if (expanded) {
-                        navController.selectedGroup.value = group;
-                      }
-                    },
-                    children: subItems.map((subItem) {
-                      final isSelected =
-                          navController.selectedSubItem.value == subItem;
-                      return ListTile(
+                  return Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          border: Border.all(color: Colors.grey.shade400),
+                          borderRadius: BorderRadius.circular(8)),
+                      child: ExpansionTile(
+                        leading: Icon(
+                          parentIcons[group] ?? Icons.menu,
+                          color: Colors.black,
+                        ),
                         title: Text(
-                          subItem,
-                          style: TextStyle(
+                          group,
+                          style: const TextStyle(
+                            color: Colors.black,
                             fontFamily: 'FontMain',
-                            fontWeight: FontWeight.w600,
-                            color: isSelected ? Colors.blue : Colors.black,
                           ),
                         ),
-                        dense: true,
-                        onTap: () => navController.selectMenu(group, subItem),
-                      );
-                    }).toList(),
+                        initiallyExpanded: isExpanded,
+                        onExpansionChanged: (expanded) {
+                          if (expanded) {
+                            navController.selectedGroup.value = group;
+                          }
+                        },
+                        children: subItems.map((subItem) {
+                          final isSelected =
+                              navController.selectedSubItem.value == subItem;
+                          return ListTile(
+                            title: Text(
+                              subItem,
+                              style: TextStyle(
+                                fontFamily: 'FontMain',
+                                color: isSelected ? Colors.blue : Colors.black,
+                              ),
+                            ),
+                            dense: true,
+                            onTap: () =>
+                                navController.selectMenu(group, subItem),
+                          );
+                        }).toList(),
+                      ),
+                    ),
                   );
                 });
               }).toList(),
             ),
           ),
 
-          //   const Divider(),
+          // Footer
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),

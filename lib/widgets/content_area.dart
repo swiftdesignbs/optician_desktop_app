@@ -104,7 +104,7 @@ class ContentArea extends StatelessWidget {
       }
 
       return Container(
-        color: Colors.white,
+        // color: Colors.grey,
         padding: const EdgeInsets.all(24),
         child: screen,
       );
