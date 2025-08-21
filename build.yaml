@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          databases:
+            AppDatabase: lib/data/app_database.dart
+          data_class_to_companions: true
+          generate_connect_constructor: true
+          store_date_time_values_as_text: true

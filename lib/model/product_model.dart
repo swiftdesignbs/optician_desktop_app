@@ -7,12 +7,13 @@ class Product {
   final String name;
   final double price;
   final String thumbnail;
-
+  final double? gst; // <-- add this
   Product({
     required this.id,
     required this.name,
     required this.price,
     required this.thumbnail,
+    this.gst,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
@@ -20,6 +21,7 @@ class Product {
         name: json['title'] ?? json['name'] ?? '',
         price: (json['price'] ?? 0).toDouble(),
         thumbnail: json['thumbnail'] ?? '',
+        gst: (json['gst'] ?? 0).toDouble(),
       );
 }
 
@@ -36,6 +38,9 @@ class CartItem {
   /// explicit discounted price (if available). If set, used as effective price.
   final double? discountPrice;
 
+  /// GST for this product (unit)
+  final double? gst;
+
   final String thumbnail;
   final RxInt qty; // observable quantity
 
@@ -45,6 +50,7 @@ class CartItem {
     required this.price,
     this.discount,
     this.discountPrice,
+    this.gst,
     this.thumbnail = '',
     int quantity = 1,
   }) : qty = quantity.obs;
@@ -59,6 +65,9 @@ class CartItem {
     return price;
   }
 
+  /// price + GST per unit
+  double get priceWithGST => effectivePrice + (gst ?? 0);
+
   bool get hasDiscount {
     final d = discount ?? 0;
     return (discountPrice != null && discountPrice! > 0) || d > 0;
@@ -71,6 +80,7 @@ class CartItem {
         price: p.price,
         discount: 0,
         discountPrice: null,
+        gst: p.gst ?? 0,
         thumbnail: p.thumbnail,
         quantity: 1,
       );
@@ -79,7 +89,6 @@ class CartItem {
   factory CartItem.fromOpticProduct(OpticProduct p) {
     final orig = p.price ?? 0.0;
     final disc = p.discount ?? 0.0;
-    // If DB contains discountPrice explicitly (nullable), prefer it; otherwise compute from discount if present.
     final dp = (p.discountPrice != null && p.discountPrice! > 0)
         ? p.discountPrice
         : (disc > 0 ? orig * (1 - disc / 100) : null);
@@ -90,6 +99,7 @@ class CartItem {
       price: orig,
       discount: disc > 0 ? disc : null,
       discountPrice: dp,
+      gst: p.gst ?? 0,
       thumbnail: '', // add path if you store images
       quantity: 1,
     );

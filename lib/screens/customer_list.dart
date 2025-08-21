@@ -21,6 +21,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
   void initState() {
     super.initState();
     _fetchCustomers();
+    print(
+      'Error: ${_customerFuture}',
+    );
   }
 
   void _fetchCustomers() {
@@ -41,7 +44,8 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
         ),
         content: Text(
           'Are you sure you want to delete ${customer.firstName}?',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'FontMain'),
         ),
         actions: [
           OutLineBtn(
@@ -202,7 +206,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
           final result = await showDialog<bool>(
             context: context,
             builder: (BuildContext context) {
-              return const CustomerFormDialog(
+              return CustomerFormDialog(
                 customer: CustomerData(
                   id: 0,
                   firstName: '',
@@ -213,6 +217,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   address: '',
                   gender: '',
                   customerType: '',
+                  createdDate: DateTime.now(),
                 ),
               );
             },

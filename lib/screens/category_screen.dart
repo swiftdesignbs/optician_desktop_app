@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:optician_desktop_app/data/app_database.dart';
 import 'package:optician_desktop_app/widgets/buttons.dart';
 import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
 import 'package:optician_desktop_app/widgets/custom_textField.dart';
 import 'package:optician_desktop_app/widgets/outline_btn.dart';
+import 'package:drift/drift.dart' as drift;
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -14,7 +16,10 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  TextEditingController productCode = TextEditingController();
+  final AppDatabase db = AppDatabase();
+  List<Category> _savedcategory = [];
+
+  TextEditingController categoryCode = TextEditingController();
   TextEditingController descrption = TextEditingController();
   TextEditingController commission = TextEditingController();
   TextEditingController classification = TextEditingController();
@@ -49,24 +54,101 @@ class _CategoryScreenState extends State<CategoryScreen> {
       "billing": "Yes"
     },
   ];
-
-  final List<Map<String, String>> biilingAllowd = [
-    {"id": "", "name": "Select Number"},
-    {"id": "1", "name": " 1"},
-    {"id": "2", "name": " 2"},
-    {"id": "3", "name": " 3"},
-    {"id": "4", "name": " 4"},
+  final List<Map<String, String>> allowBilling = [
+    {"id": "", "name": "Select"},
+    {"id": "1", "name": "Yes"},
+    {"id": "2", "name": "No"},
   ];
-  var selectedNumber;
+
   final List<Map<String, String>> maintainQty = [
     {"id": "", "name": "Select"},
     {"id": "1", "name": "Yes"},
-    {"id": "2", "name": "  No"},
+    {"id": "2", "name": "No"},
   ];
-  var selectedQty;
+
+  String? selectedBilling;
+  String? selectedQty;
+  int? _editingId;
   @override
   void initState() {
     super.initState();
+    _loadCategories();
+  }
+
+  void _resetForm() {
+    categoryCode.clear();
+    descrption.clear();
+    commission.clear();
+    classification.clear();
+    dpt.clear();
+    dst.clear();
+    createdBy.clear();
+
+    selectedBilling = null;
+    selectedQty = null;
+  }
+
+  Future<void> _loadCategories() async {
+    final categoryList = await db.getAllCategories();
+    setState(() {
+      _savedcategory = categoryList;
+    });
+  }
+
+  Future<void> _saveOrUpdateCategory() async {
+    if (categoryCode.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Category code is required')),
+      );
+      return;
+    }
+
+    final categoryCompanion = CategoriesCompanion(
+      categoryCode: drift.Value(categoryCode.text.trim()),
+      description: drift.Value(descrption.text.trim()),
+      commission: drift.Value(commission.text.trim()),
+      classification: drift.Value(classification.text.trim()),
+      allowBilling: drift.Value(selectedBilling ?? ''),
+      maintainSingleQty: drift.Value(selectedQty ?? ''),
+      defaultPurchaseTax: drift.Value(dpt.text.trim()),
+      defaultSalesTax: drift.Value(dst.text.trim()),
+      createdBy: drift.Value(createdBy.text.trim()),
+    );
+
+    if (_editingId == null) {
+      await db.insertCategory(categoryCompanion);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Category added successfully!')),
+      );
+    } else {
+      await db.updateCategory(Category(
+        id: _editingId!,
+        categoryCode: categoryCompanion.categoryCode.value,
+        description: categoryCompanion.description.value,
+        commission: categoryCompanion.commission.value,
+        classification: categoryCompanion.classification.value,
+        allowBilling: categoryCompanion.allowBilling.value,
+        maintainSingleQty: categoryCompanion.maintainSingleQty.value,
+        defaultPurchaseTax: categoryCompanion.defaultPurchaseTax.value,
+        defaultSalesTax: categoryCompanion.defaultSalesTax.value,
+        createdBy: categoryCompanion.createdBy.value,
+        createdDate: DateTime.now(),
+      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Category updated successfully!')),
+      );
+    }
+
+    _resetForm();
+    await _loadCategories();
+  }
+
+  Future<void> _deleteCategory(int id) async {
+    await db.deleteCategory(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Category deleted successfully!')),
+    );
+    await _loadCategories();
   }
 
   @override
@@ -94,7 +176,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       children: [
                         // Form Section (2 columns)
                         Expanded(
-                          flex: 2,
+                          flex: 3,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -109,11 +191,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       children: [
                                         Expanded(
                                           child: CustomTextField(
-                                            controller: productCode,
+                                            controller: categoryCode,
                                             ddName: 'Category Code',
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: CustomTextField(
                                             controller: descrption,
@@ -122,7 +204,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Column(
@@ -140,6 +222,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         TextField(
                                           controller: commission,
                                           maxLines: 3,
+                                          style: TextStyle(
+                                            fontFamily: 'FontMain',
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           decoration: const InputDecoration(
                                             hintText: ' ',
                                             hintStyle: TextStyle(
@@ -162,7 +248,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -173,24 +259,24 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                             ddName: 'Classification',
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: CustomDropdown(
                                             ddName: 'Allow Billing',
-                                            items: biilingAllowd,
-                                            value: selectedQty,
+                                            items: allowBilling,
+                                            value: selectedBilling,
                                             onChanged: (newValue) {
                                               setState(() {
-                                                selectedQty = newValue;
+                                                selectedBilling = newValue;
                                                 print(
-                                                    " Selected Qty :$selectedQty");
+                                                    "Selected Billing: $selectedBilling");
                                               });
                                             },
                                           ),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -198,27 +284,27 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         Expanded(
                                           child: CustomDropdown(
                                             ddName: 'Maintain Single Qty',
-                                            items: biilingAllowd,
-                                            value: selectedNumber,
+                                            items: maintainQty,
+                                            value: selectedQty,
                                             onChanged: (newValue) {
                                               setState(() {
-                                                selectedNumber = newValue;
+                                                selectedQty = newValue;
                                                 print(
-                                                    " Selected Number :$selectedNumber");
+                                                    "Selected Qty: $selectedQty");
                                               });
                                             },
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: CustomTextField(
                                             controller: dpt,
-                                            ddName: 'Default Sales Tax',
+                                            ddName: 'Default Purchase Tax',
                                           ),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -231,7 +317,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                             ddName: 'Default Sales Tax',
                                           ),
                                         ),
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                           child: CustomTextField(
                                             controller: createdBy,
@@ -240,24 +326,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    CustomTextField(
-                                      controller: createdDate,
-                                      ddName: 'Created Date',
-                                    ),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: 16),
                               // Right Column
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Column(
                                   children: [
                                     const Text(
-                                      'Product Table',
+                                      'Category Table',
                                       style: TextStyle(
                                           fontFamily: 'FontMain',
                                           fontWeight: FontWeight.bold),
@@ -267,142 +346,88 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                       border: TableBorder.all(
                                           color: Colors.black45),
                                       columnSpacing: 15,
-                                      columns: const <DataColumn>[
+                                      columns: const [
                                         DataColumn(
-                                          label: Text(
-                                            'Edits',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
+                                            label: Text('Edit',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontFamily: 'FontMain',
+                                                    fontWeight:
+                                                        FontWeight.w600))),
                                         DataColumn(
-                                          label: Text(
-                                            'Delete',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
+                                            label: Text('Delete',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontFamily: 'FontMain',
+                                                    fontWeight:
+                                                        FontWeight.w600))),
                                         DataColumn(
-                                          label: Text(
-                                            'ProductCatCode',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
+                                            label: Text('Category Code',
+                                                style: TextStyle(
+                                                    fontSize: 9,
+                                                    fontFamily: 'FontMain',
+                                                    fontWeight:
+                                                        FontWeight.w600))),
                                         DataColumn(
-                                          label: Text(
-                                            'Description',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Comm',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                        DataColumn(
-                                          label: Text(
-                                            'Billing',
-                                            style: TextStyle(
-                                              fontFamily: 'FontMain',
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
+                                            label: Text('Billing',
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontFamily: 'FontMain',
+                                                    fontWeight:
+                                                        FontWeight.w600))),
                                       ],
-                                      rows: data
-                                          .map(
-                                            (item) => DataRow(
-                                              cells: <DataCell>[
-                                                DataCell(
-                                                  IconButton(
-                                                    icon: const FaIcon(
-                                                      FontAwesomeIcons.pen,
-                                                      size: 9,
-                                                    ),
-                                                    onPressed: () {
-                                                      // Add edit functionality here
-                                                    },
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  IconButton(
-                                                    icon: const FaIcon(
-                                                      FontAwesomeIcons.xmark,
-                                                      size: 11,
-                                                    ),
-                                                    onPressed: () {
-                                                      // Add delete functionality here
-                                                    },
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Text(
-                                                    item['prodCode']!,
-                                                    style: const TextStyle(
-                                                      fontFamily: 'FontMain',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Text(
-                                                    item['description']!,
-                                                    style: const TextStyle(
-                                                      fontFamily: 'FontMain',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Text(
-                                                    item['comm']!,
-                                                    style: const TextStyle(
-                                                      fontFamily: 'FontMain',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                                DataCell(
-                                                  Text(
-                                                    item['billing']!,
-                                                    style: const TextStyle(
-                                                      fontFamily: 'FontMain',
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                      rows: _savedcategory.map((cat) {
+                                        return DataRow(
+                                          cells: [
+                                            DataCell(IconButton(
+                                              icon: const Icon(Icons.edit,
+                                                  size: 12),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _editingId = cat.id;
+                                                  categoryCode.text =
+                                                      cat.categoryCode;
+                                                  descrption.text =
+                                                      cat.description!;
+                                                  commission.text =
+                                                      cat.commission ?? '';
+                                                  classification.text =
+                                                      cat.classification ?? '';
+                                                  selectedBilling =
+                                                      cat.allowBilling;
+                                                  selectedQty =
+                                                      cat.maintainSingleQty;
+                                                  dpt.text =
+                                                      cat.defaultPurchaseTax ??
+                                                          '';
+                                                  dst.text =
+                                                      cat.defaultSalesTax ?? '';
+                                                  createdBy.text =
+                                                      cat.createdBy ?? '';
+                                                });
+                                              },
+                                            )),
+                                            DataCell(
+                                              IconButton(
+                                                icon: const FaIcon(
+                                                    FontAwesomeIcons.xmark,
+                                                    size: 11),
+                                                onPressed: () {
+                                                  _showDeleteConfirmationDialog(
+                                                      cat.id);
+                                                },
+                                              ),
                                             ),
-                                          )
-                                          .toList(),
+                                            DataCell(Text(cat.categoryCode,
+                                                style: const TextStyle(
+                                                    fontSize: 10))),
+                                            DataCell(Text(
+                                                cat.allowBilling ?? '',
+                                                style: const TextStyle(
+                                                    fontSize: 10))),
+                                          ],
+                                        );
+                                      }).toList(),
                                     ),
                                     const SizedBox(height: 10),
                                     Row(
@@ -410,7 +435,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Buttons(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              _saveOrUpdateCategory();
+                                            },
                                             ddName: 'Save',
                                             height: 40,
                                             width: 70,
@@ -447,121 +474,46 @@ class _CategoryScreenState extends State<CategoryScreen> {
     );
   }
 
-  // Widget buildTextField(String label, TextEditingController controller) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       TextFormField(
-  //         controller: controller,
-  //         style: const TextStyle(fontSize: 12),
-  //         decoration: const InputDecoration(
-  //           isDense: true,
-  //           contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDateField(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Text("Date",
-  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       SizedBox(
-  //         width: double.infinity,
-  //         child: TextFormField(
-  //           controller: dateinput,
-  //           readOnly: true,
-  //           onTap: () async {
-  //             DateTime? pickedDate = await showDatePicker(
-  //               context: context,
-  //               initialDate: DateTime.now(),
-  //               firstDate: DateTime(2000),
-  //               lastDate: DateTime(2101),
-  //             );
-  //             if (pickedDate != null) {
-  //               setState(() {
-  //                 dateinput.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-  //               });
-  //             }
-  //           },
-  //           style: const TextStyle(fontSize: 12),
-  //           decoration: const InputDecoration(
-  //             isDense: true,
-  //             contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-  //             border: OutlineInputBorder(),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDropdown(String label, List<String> items, String? value,
-  //     void Function(String?) onChanged) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       DropdownButtonFormField<String>(
-  //         value: value,
-  //         onChanged: onChanged,
-  //         isDense: true,
-  //         style: const TextStyle(fontSize: 12, color: Colors.black),
-  //         decoration: const InputDecoration(
-  //           contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //         items: items
-  //             .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-  //             .toList(),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Widget buildProductTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columnSpacing: 15,
-        border: TableBorder.all(color: Colors.black45),
-        columns: const [
-          DataColumn(label: Text("Edit", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("Delete", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdCode", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdName", style: TextStyle(fontSize: 10))),
-        ],
-        rows: data
-            .map(
-              (item) => DataRow(
-                cells: [
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.pen, size: 10),
-                    onPressed: () {},
-                  )),
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.xmark, size: 12),
-                    onPressed: () {},
-                  )),
-                  DataCell(Text(item["prodCode"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                  DataCell(Text(item["prodName"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                ],
-              ),
-            )
-            .toList(),
-      ),
+  void _showDeleteConfirmationDialog(int categoryId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
+          ),
+          title: const Text("Confirm Delete",
+              style: TextStyle(
+                fontFamily: 'FontMain',
+                fontWeight: FontWeight.bold,
+              )),
+          content: const Text("Are you sure you want to delete this category?",
+              style: TextStyle(
+                fontFamily: 'FontMain',
+                fontWeight: FontWeight.bold,
+              )),
+          actions: [
+            OutLineBtn(
+              onPressed: () {
+                Navigator.of(context).pop(); // close dialog
+              },
+              ddName: 'Cancel',
+              height: 40,
+              width: 70,
+              colors: const Color(0xff5793CE),
+            ),
+            Buttons(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _deleteCategory(categoryId);
+                },
+                ddName: 'Delete',
+                height: 40,
+                width: 70,
+                colors: const Color(0xff5793CE)),
+          ],
+        );
+      },
     );
   }
 }

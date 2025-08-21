@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:optician_desktop_app/data/app_database.dart';
 import 'package:optician_desktop_app/widgets/buttons.dart';
 import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
 import 'package:optician_desktop_app/widgets/custom_textField.dart';
 import 'package:optician_desktop_app/widgets/outline_btn.dart';
+import 'package:drift/drift.dart' as drift;
 
 class FitterScreen extends StatefulWidget {
   const FitterScreen({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class FitterScreen extends StatefulWidget {
 }
 
 class _FitterScreenState extends State<FitterScreen> {
+  final AppDatabase db = AppDatabase();
+  List<Fitter> _savedFitter = [];
   TextEditingController fitterCode = TextEditingController();
   TextEditingController fitterName = TextEditingController();
   TextEditingController address1 = TextEditingController();
@@ -24,7 +28,6 @@ class _FitterScreenState extends State<FitterScreen> {
   TextEditingController days = TextEditingController();
   TextEditingController fees = TextEditingController();
   TextEditingController createdBy = TextEditingController();
-  TextEditingController dateinput = TextEditingController();
 
   final List<Map<String, String>> data = [
     {
@@ -42,25 +45,112 @@ class _FitterScreenState extends State<FitterScreen> {
     {"id": "1", "name": "Maharashtra"},
     {"id": "2", "name": "Haryana"},
   ];
-  var selectedState;
+  String? selectedState;
   final List<Map<String, String>> cityType = [
     {"id": "", "name": "Select City"},
     {"id": "1", "name": "Mumbai"},
     {"id": "2", "name": "New Delhi"},
   ];
-  var selectedCity;
+  String? selectedCity;
 
   DateTime? pickedDate;
+  int? _editingId;
   @override
   void initState() {
-    dateinput.text = "";
     super.initState();
+    _loadFitters();
+  }
+
+  void _resetForm() {
+    fitterName.clear();
+    fitterCode.clear();
+    address1.clear();
+    email.clear();
+    pincode.clear();
+    fees.clear();
+    telephone.clear();
+    landline.clear();
+    days.clear();
+    createdBy.clear();
+
+    selectedCity = null;
+    selectedState = null;
+  }
+
+  Future<void> _loadFitters() async {
+    final fitterList = await db.getAllFitters();
+    setState(() {
+      _savedFitter = fitterList;
+    });
+  }
+
+  Future<void> _saveOrUpdateFitter() async {
+    if (fitterCode.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fitter code is required')),
+      );
+      return;
+    }
+
+    final fitterCompanion = FittersCompanion(
+      fitterName: drift.Value(fitterName.text.trim()),
+      fitterCode: drift.Value(fitterCode.text.trim()),
+      address1: drift.Value(address1.text.trim()),
+      state: drift.Value(selectedState?.trim() ?? ''),
+      city: drift.Value(selectedCity?.trim() ?? ''),
+      telephone: drift.Value(telephone.text ?? ''),
+      landline: drift.Value(landline.text.trim()),
+      email: drift.Value(email.text.trim()),
+      createdBy: drift.Value(createdBy.text.trim()),
+      pincode: drift.Value(pincode.text.trim()),
+      days: drift.Value(int.tryParse(days.text.trim()) ?? 0),
+      fees: drift.Value(double.tryParse(fees.text.trim()) ?? 0.0),
+      createdDate: drift.Value(DateTime.now()),
+    );
+
+    if (_editingId == null) {
+      await db.insertFitter(fitterCompanion);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fitter added successfully!')),
+      );
+    } else {
+      await db.updateFitter(Fitter(
+        id: _editingId!,
+        fitterName: fitterCompanion.fitterName.value,
+        fitterCode: fitterCompanion.fitterCode.value,
+        address1: fitterCompanion.address1.value,
+        state: fitterCompanion.state.value,
+        city: fitterCompanion.city.value,
+        telephone: fitterCompanion.telephone.value,
+        landline: fitterCompanion.landline.value,
+        email: fitterCompanion.email.value,
+        pincode: fitterCompanion.pincode.value,
+        days: fitterCompanion.days.value,
+        fees: fitterCompanion.fees.value,
+        createdBy: fitterCompanion.createdBy.value,
+        // Assuming createdDate is not editable
+        createdDate: DateTime.now(),
+      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fitter updated successfully!')),
+      );
+    }
+
+    _resetForm();
+    await _loadFitters();
+  }
+
+  Future<void> _deleteFitter(int id) async {
+    await db.deleteFitter(id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Fitter deleted successfully!')),
+    );
+    await _loadFitters();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //   appBar: AppBar(title: const Text("Fitter")),
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -247,90 +337,6 @@ class _FitterScreenState extends State<FitterScreen> {
                                         ),
                                         const SizedBox(width: 10),
                                         Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                'Created Date',
-                                                style: TextStyle(
-                                                  fontFamily: 'FontMain',
-                                                  fontSize: 12,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 5),
-                                              SizedBox(
-                                                height: 30,
-                                                child: TextFormField(
-                                                  style: const TextStyle(
-                                                    fontFamily: 'FontMain',
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  controller: dateinput,
-                                                  readOnly: true,
-                                                  onTap: () async {
-                                                    pickedDate =
-                                                        await showDatePicker(
-                                                      context: context,
-                                                      initialDate:
-                                                          DateTime.now(),
-                                                      firstDate: DateTime(1900),
-                                                      lastDate: DateTime(2900),
-                                                    );
-                                                    if (pickedDate != null) {
-                                                      setState(() {
-                                                        dateinput
-                                                            .text = DateFormat(
-                                                                'dd-MM-yyyy')
-                                                            .format(
-                                                                pickedDate!);
-                                                      });
-                                                    }
-                                                  },
-                                                  decoration:
-                                                      const InputDecoration(
-                                                    suffixIcon: Icon(
-                                                      Icons
-                                                          .calendar_month_rounded,
-                                                      color: Colors.grey,
-                                                    ),
-                                                    alignLabelWithHint: true,
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Color.fromARGB(
-                                                            255, 217, 215, 215),
-                                                        width: 0,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.zero,
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.zero,
-                                                    ),
-                                                    hintStyle: TextStyle(
-                                                      fontFamily: 'FontMain',
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 400,
                                           child: CustomTextField(
                                             controller: createdBy,
                                             ddName: 'Created By',
@@ -350,153 +356,134 @@ class _FitterScreenState extends State<FitterScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       DataTable(
-                        border: TableBorder.all(),
-                        columnSpacing: 30,
+                        border: TableBorder.all(color: Colors.black45),
+                        columnSpacing: 15,
                         columns: const [
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'Edit',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Edit',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Delete',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'First Name',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Fitter Name',
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'Telephone No',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Telephone No',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'Basic Fees',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Basic Fees',
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                           DataColumn(
-                            label: Center(
-                              child: Text(
-                                'Landline No',
-                                style: TextStyle(
-                                  fontFamily: 'FontMain',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
+                              label: Text('Landline No',
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
                         ],
-                        rows: data.map((item) {
-                          return DataRow(cells: [
-                            DataCell(
-                              Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.pen,
-                                  size: 9,
+                        rows: _savedFitter.map((fit) {
+                          return DataRow(
+                            cells: [
+                              DataCell(IconButton(
+                                icon: const Icon(Icons.edit, size: 12),
+                                onPressed: () {
+                                  setState(() {
+                                    _editingId = fit.id;
+                                    fitterName.text = fit.fitterName;
+                                    fitterCode.text = fit.fitterCode;
+                                    address1.text = fit.address1 ?? '';
+                                    selectedState = fit.state;
+                                    selectedCity = fit.city;
+                                    telephone.text = fit.telephone ?? '';
+                                    landline.text = fit.landline ?? '';
+                                    email.text = fit.email ?? '';
+                                    pincode.text = fit.pincode ?? '';
+                                    days.text = fit.days?.toString() ?? '';
+                                    fees.text = fit.fees.toString();
+                                    createdBy.text = fit.createdBy ?? '';
+                                  });
+                                },
+                              )),
+                              DataCell(
+                                IconButton(
+                                  icon: const FaIcon(FontAwesomeIcons.xmark,
+                                      size: 11),
+                                  onPressed: () {
+                                    _showDeleteConfirmationDialog(fit.id);
+                                  },
                                 ),
                               ),
-                            ),
-                            DataCell(
-                              Center(
-                                child: FaIcon(
-                                  FontAwesomeIcons.times,
-                                  size: 9,
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Center(
-                                child: Text(
-                                  item['First Name'] ?? '',
+                              DataCell(Text(fit.fitterName,
                                   style: const TextStyle(
-                                    fontFamily: 'FontMain',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Center(
-                                child: Text(
-                                  item['Telephone No'] ?? '',
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
+                              DataCell(Text(fit.telephone ?? '',
                                   style: const TextStyle(
-                                    fontFamily: 'FontMain',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Center(
-                                child: Text(
-                                  item['Basic Fees'] ?? '',
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
+                              DataCell(Text(fit.fees.toString(),
                                   style: const TextStyle(
-                                    fontFamily: 'FontMain',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Center(
-                                child: Text(
-                                  item['Landline No'] ?? '',
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
+                              DataCell(Text(fit.landline ?? '',
                                   style: const TextStyle(
-                                    fontFamily: 'FontMain',
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ]);
+                                      fontSize: 10,
+                                      fontFamily: 'FontMain',
+                                      fontWeight: FontWeight.w600))),
+                            ],
+                          );
                         }).toList(),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Buttons(
+                          onPressed: () {
+                            _saveOrUpdateFitter();
+                          },
+                          ddName: 'Save',
+                          height: 40,
+                          width: 70,
+                          colors: const Color(0xff5793CE)),
+                      const SizedBox(width: 5),
+                      OutLineBtn(
+                        onPressed: () {},
+                        ddName: 'Add New',
+                        height: 40,
+                        width: 70,
+                        colors: const Color(0xff5793CE),
+                      ),
+                      const SizedBox(width: 5),
+                      OutLineBtn(
+                        onPressed: () {},
+                        ddName: 'Cancel',
+                        height: 40,
+                        width: 70,
+                        colors: const Color(0xff5793CE),
+                      ),
+                    ],
+                  )
                 ],
               ));
         },
@@ -504,121 +491,46 @@ class _FitterScreenState extends State<FitterScreen> {
     );
   }
 
-  // Widget buildTextField(String label, TextEditingController controller) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       TextFormField(
-  //         controller: controller,
-  //         style: const TextStyle(fontSize: 12),
-  //         decoration: const InputDecoration(
-  //           isDense: true,
-  //           contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDateField(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Text("Date",
-  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       SizedBox(
-  //         width: double.infinity,
-  //         child: TextFormField(
-  //           controller: dateinput,
-  //           readOnly: true,
-  //           onTap: () async {
-  //             DateTime? pickedDate = await showDatePicker(
-  //               context: context,
-  //               initialDate: DateTime.now(),
-  //               firstDate: DateTime(2000),
-  //               lastDate: DateTime(2101),
-  //             );
-  //             if (pickedDate != null) {
-  //               setState(() {
-  //                 dateinput.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-  //               });
-  //             }
-  //           },
-  //           style: const TextStyle(fontSize: 12),
-  //           decoration: const InputDecoration(
-  //             isDense: true,
-  //             contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-  //             border: OutlineInputBorder(),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDropdown(String label, List<String> items, String? value,
-  //     void Function(String?) onChanged) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       DropdownButtonFormField<String>(
-  //         value: value,
-  //         onChanged: onChanged,
-  //         isDense: true,
-  //         style: const TextStyle(fontSize: 12, color: Colors.black),
-  //         decoration: const InputDecoration(
-  //           contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //         items: items
-  //             .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-  //             .toList(),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Widget buildProductTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columnSpacing: 15,
-        border: TableBorder.all(color: Colors.black45),
-        columns: const [
-          DataColumn(label: Text("Edit", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("Delete", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdCode", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdName", style: TextStyle(fontSize: 10))),
-        ],
-        rows: data
-            .map(
-              (item) => DataRow(
-                cells: [
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.pen, size: 10),
-                    onPressed: () {},
-                  )),
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.xmark, size: 12),
-                    onPressed: () {},
-                  )),
-                  DataCell(Text(item["prodCode"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                  DataCell(Text(item["prodName"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                ],
-              ),
-            )
-            .toList(),
-      ),
+  void _showDeleteConfirmationDialog(int fitegoryId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
+          ),
+          title: const Text("Confirm Delete",
+              style: TextStyle(
+                fontFamily: 'FontMain',
+                fontWeight: FontWeight.bold,
+              )),
+          content: const Text("Are you sure you want to delete this Fitter?",
+              style: TextStyle(
+                fontFamily: 'FontMain',
+                fontWeight: FontWeight.bold,
+              )),
+          actions: [
+            OutLineBtn(
+              onPressed: () {
+                Navigator.of(context).pop(); // close dialog
+              },
+              ddName: 'Cancel',
+              height: 40,
+              width: 70,
+              colors: const Color(0xff5793CE),
+            ),
+            Buttons(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _deleteFitter(fitegoryId);
+                },
+                ddName: 'Delete',
+                height: 40,
+                width: 70,
+                colors: const Color(0xff5793CE)),
+          ],
+        );
+      },
     );
   }
 }

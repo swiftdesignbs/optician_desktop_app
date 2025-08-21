@@ -1,11 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:optician_desktop_app/widgets/buttons.dart';
-import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
-import 'package:optician_desktop_app/widgets/custom_textField.dart';
+import 'package:optician_desktop_app/controllers/navigation_controller.dart';
+import 'package:optician_desktop_app/data/app_database.dart';
 
 class OrderStatus extends StatefulWidget {
   const OrderStatus({super.key});
@@ -15,257 +13,162 @@ class OrderStatus extends StatefulWidget {
 }
 
 class _OrderStatusState extends State<OrderStatus> {
-  TextEditingController mobileNo = TextEditingController();
+  final AppDatabase db = AppDatabase();
+  List<Order> orders = [];
 
-  List<Map<String, String>> categoryTypes = [
-    {"id": "", "name": "Select Category"},
-    {"id": "1", "name": "Category 1"},
-    {"id": "2", "name": "Category 2"},
-  ];
-  String? selectedCategory;
+  @override
+  void initState() {
+    super.initState();
+    _loadOrders();
+  }
 
-  final List<Map<String, String>> data = [
-    {
-      "x": "Delete",
-      "Order No": "12345",
-      "pen": "Edit",
-      "Order Date": "09/09/20202",
-      "Customer Name": "Roder Daim",
-      "Telephone": "9988776655",
-      "Email": "abcdefgh@gmail.com",
-      "OrderStatus": "Yet to Proceed",
-      "Slip": "Slip",
-      "Bill": "Bill",
-      "Slip": "Slip"
-    },
-    {
-      "x": "Delete",
-      "Order No": "12345",
-      "pen": "Edit",
-      "Order Date": "09/09/20202",
-      "Customer Name": "Roder Daim",
-      "Telephone": "9988776655",
-      "Email": "abcdefgh@gmail.com",
-      "OrderStatus": "Yet to Proceed",
-      "Slip": "Slip",
-      "Bill": "Bill",
-      "Slip": "Slip"
-    },
-    {
-      "x": "Delete",
-      "Order No": "12345",
-      "pen": "Edit",
-      "Order Date": "09/09/20202",
-      "Customer Name": "Roder Daim",
-      "Telephone": "9988776655",
-      "Email": "abcdefgh@gmail.com",
-      "OrderStatus": "Yet to Proceed",
-      "Slip": "Slip",
-      "Bill": "Bill",
-      "Slip": "Slip"
-    },
-  ];
+  Future<void> _loadOrders() async {
+    final dbOrders = await db.getAllOrders();
+    setState(() {
+      orders = dbOrders;
+    });
+  }
+final NavigationController navController = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    RichText(
-                      textAlign: TextAlign.left,
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Order Status \n',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'FontMain',
-                            ),
-                          ),
-                          WidgetSpan(
-                            child: SizedBox(
-                              height:
-                                  38, // Adjust the height for the desired space
-                            ),
-                          ),
-                          TextSpan(
-                            text: "Master    ",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Color(0xff1F3F7A),
-                              fontFamily: 'FontMain',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextSpan(
-                            text: ">  Order Status",
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontFamily: 'FontMain',
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                        height: 16), // Add spacing between header and content
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Expanded(child: OrderStatusWidget(context))],
-                    ),
-                  ],
+                    Obx(() => Text(
+      "${navController.selectedGroup.value} > ${navController.selectedSubItem.value}",
+      style: const TextStyle(
+        fontSize: 16,
+        fontFamily: 'FontMain',
+        fontWeight: FontWeight.w600,
+        color: Colors.grey,
+      ),
+    )),
+    const SizedBox(height: 8),
+    const Text(
+      'Orders',
+      style: TextStyle(
+        fontSize: 22,
+        fontFamily: 'FontMain',
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+                    const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: DataTable(
+                  border: TableBorder.all(width: 0.1),
+                  columnSpacing: 20,
+                  columns: _getColumns(),
+                  rows: _getRows(),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<DataColumn> _getColumns() {
+    return const [
+      DataColumn(label: Text("Delete", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("View", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("Order No", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("Order Date", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("Amount", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("Telephone", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+      DataColumn(label: Text("Email", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+    ];
+  }
+
+  List<DataRow> _getRows() {
+    return orders.map((order) {
+      return DataRow(
+        cells: [
+          DataCell(
+            IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () async {
+                await db.deleteOrder(order.id);
+                _loadOrders();
+              },
             ),
           ),
+          DataCell(
+            IconButton(
+              icon: const Icon(Icons.visibility, color: Colors.green),
+              onPressed: () => _viewOrderDialog(order),
+            ),
+          ),
+          DataCell(Text(order.id.toString(), style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+          DataCell(Text(DateFormat('dd/MM/yyyy').format(order.orderDate), style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+          DataCell(Text(order.totalAmount?.toString() ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+          DataCell(Text(order.mobileNo ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+          DataCell(Text(order.email ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain'))),
+        ],
+      );
+    }).toList();
+  }
+
+  void _viewOrderDialog(Order order) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(3)),
+        title: const Text("Order Details", style: TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Order No: ${order.id}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            Text("Date: ${DateFormat('dd/MM/yyyy').format(order.orderDate)}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            Text("Amount: ${order.totalAmount}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            Text("Customer Phone: ${order.mobileNo ?? ''}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            Text("Email: ${order.email ?? ''}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            Text("Payment Mode : ${order.paymentMethod ?? ''}", style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            const Text("Products:", style: TextStyle(fontWeight: FontWeight.bold)),
+            const Divider(),
+            ..._getProductList(order.productsJson),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Close", style: TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold, color: Colors.black)),
+          )
         ],
       ),
     );
   }
 
-  Column OrderStatusWidget(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Customer Details',
-            style:
-                TextStyle(fontWeight: FontWeight.bold, fontFamily: 'FontMain')),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            Expanded(
-              child: CustomDropdown(
-                ddName: 'Order No',
-                items: categoryTypes,
-                value: selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10), // Add some spacing between dropdowns
-            Expanded(
-              child: CustomDropdown(
-                ddName: 'From Date',
-                items: categoryTypes,
-                value: selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10), // Add some spacing between dropdowns
-            Expanded(
-              child: CustomDropdown(
-                ddName: 'To Date',
-                items: categoryTypes,
-                value: selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10), // Add some spacing between dropdowns
-            Expanded(
-              child: CustomDropdown(
-                ddName: 'Customer',
-                items: categoryTypes,
-                value: selectedCategory,
-                onChanged: (value) {
-                  setState(() {
-                    selectedCategory = value;
-                  });
-                },
-              ),
-            ),
-            const SizedBox(width: 10), // Add some spacing between dropdowns
-            Expanded(
-                child: CustomTextField(
-              controller: mobileNo,
-              ddName: 'Mobile No',
-            )),
-          ],
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: 170,
-          child: CustomTextField(
-            controller: mobileNo,
-            ddName: 'Reference No',
-          ),
-        ),
-        const SizedBox(height: 10),
-        Buttons(
-          onPressed: () {},
-          ddName: 'Load',
-          height: 45,
-          width: 120,
-          colors: const Color(0xff5793CE),
-        ),
-        const SizedBox(height: 15),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          child: DataTable(
-            border: TableBorder.all(width: 0.1),
-            columnSpacing: 20,
-            columns: _getColumns(),
-            rows: _getRows(),
-          ),
-        ),
-        const SizedBox(height: 20),
-        // const SizedBox(height: 20),
-        // // Sticky Footer
-        // FooterWidgetComp(),
-      ],
-    );
-  }
+  List<Widget> _getProductList(String? productsJson) {
+    if (productsJson == null || productsJson.isEmpty) return [];
+    final List products = jsonDecode(productsJson);
 
-  List<DataColumn> _getColumns() {
-    return data.first.keys.map<DataColumn>((String key) {
-      return DataColumn(
-        label: Center(
-          child: Text(key,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'FontMain',
-                  fontSize: 12)),
+    return products.map((p) {
+      return ListTile(
+        leading: Image.network(
+          'https://t4.ftcdn.net/jpg/01/85/66/11/360_F_185661189_vSiGMpAvWWw85S63k7kQbN0rzJOBemvQ.jpg',
+          fit: BoxFit.contain,
+          width: 40,
+          height: 40,
         ),
-      );
-    }).toList();
-  }
-
-  List<DataRow> _getRows() {
-    return data.map<DataRow>((Map<String, String> item) {
-      return DataRow(
-        cells: item.keys.map<DataCell>((String key) {
-          return DataCell(Center(
-            child: Text(item[key] ?? "",
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'FontMain',
-                    fontSize: 12)),
-          ));
-        }).toList(),
+        contentPadding: EdgeInsets.zero,
+        title: Text(
+          p['name'] ?? '',
+          style: const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(
+          "Qty: ${p['qty']}   Total: ${p['total']}",
+          style: const TextStyle(fontFamily: 'FontMain', fontSize: 12, fontWeight: FontWeight.bold),
+        ),
       );
     }).toList();
   }

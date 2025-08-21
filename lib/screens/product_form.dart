@@ -26,7 +26,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final _stockController = TextEditingController();
   final _discountPriceController = TextEditingController();
 
-  String? _selectedIgst;
+  String? _selectedgst;
   String? _selectedSgst;
   String? _selectedCgst;
   String? _selectedDiscount;
@@ -50,8 +50,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   final List<Map<String, String>> unitItems = [
     {'name': 'Piece'},
-    {'name': 'Box'},
-    {'name': 'Pair'},
   ];
 
   final List<Map<String, String>> categoryItems = [
@@ -97,7 +95,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _stockController.clear();
     _discountPriceController.clear();
 
-    _selectedIgst = null;
+    _selectedgst = null;
     _selectedCgst = null;
     _selectedSgst = null;
     _selectedDiscount = null;
@@ -113,8 +111,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       price: drift.Value(double.tryParse(_priceController.text.trim()) ?? 0.0),
       description: drift.Value(_descriptionController.text.trim()),
       stock: drift.Value(int.tryParse(_stockController.text.trim()) ?? 0),
-      igst: drift.Value(
-          double.tryParse((_selectedIgst ?? '0').replaceAll('%', '')) ?? 0.0),
+      gst: drift.Value(
+          double.tryParse((_selectedgst ?? '0').replaceAll('%', '')) ?? 0.0),
       cgst: drift.Value(
           double.tryParse((_selectedCgst ?? '0').replaceAll('%', '')) ?? 0.0),
       sgst: drift.Value(
@@ -141,13 +139,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         price: product.price.value,
         description: product.description.value,
         stock: product.stock.value,
-        igst: product.igst.value,
+        gst: product.gst.value,
         cgst: product.cgst.value,
         sgst: product.sgst.value,
         discount: product.discount.value,
         unit: product.unit.value,
         category: product.category.value,
         discountPrice: product.discountPrice.value,
+        createdDate: DateTime.now(),
       ));
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -166,7 +165,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _priceController.text = p.price.toString();
     _descriptionController.text = p.description ?? '';
     _stockController.text = p.stock.toString();
-    _selectedIgst = '${p.igst?.toStringAsFixed(0) ?? '0'}%';
+    _selectedgst = '${p.gst?.toStringAsFixed(0) ?? '0'}%';
     _selectedCgst = '${p.cgst?.toStringAsFixed(0) ?? '0'}%';
     _selectedSgst = '${p.sgst?.toStringAsFixed(0) ?? '0'}%';
     _selectedDiscount = '${p.discount?.toStringAsFixed(0) ?? '0'}%';
@@ -246,33 +245,33 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       SizedBox(
                         width: width / 4,
                         child: CustomDropdown(
-                          ddName: 'IGST',
+                          ddName: 'GST',
                           items: gstItems,
-                          value: _selectedIgst,
+                          value: _selectedgst,
                           onChanged: (val) =>
-                              setState(() => _selectedIgst = val),
+                              setState(() => _selectedgst = val),
                         ),
                       ),
-                      SizedBox(
-                        width: width / 4,
-                        child: CustomDropdown(
-                          ddName: 'CGST',
-                          items: gstItems,
-                          value: _selectedCgst,
-                          onChanged: (val) =>
-                              setState(() => _selectedCgst = val),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width / 4,
-                        child: CustomDropdown(
-                          ddName: 'SGST',
-                          items: gstItems,
-                          value: _selectedSgst,
-                          onChanged: (val) =>
-                              setState(() => _selectedSgst = val),
-                        ),
-                      ),
+                      // SizedBox(
+                      //   width: width / 4,
+                      //   child: CustomDropdown(
+                      //     ddName: 'CGST',
+                      //     items: gstItems,
+                      //     value: _selectedCgst,
+                      //     onChanged: (val) =>
+                      //         setState(() => _selectedCgst = val),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: width / 4,
+                      //   child: CustomDropdown(
+                      //     ddName: 'SGST',
+                      //     items: gstItems,
+                      //     value: _selectedSgst,
+                      //     onChanged: (val) =>
+                      //         setState(() => _selectedSgst = val),
+                      //   ),
+                      // ),
 
                       // 👇 Discount & Discount Price in same row
                       Row(

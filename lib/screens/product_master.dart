@@ -287,7 +287,7 @@ class _ProductMasterState extends State<ProductMaster> {
           ),
         ],
       ),
-      //  bottomNavigationBar: const BottomAppBar(child: FooterWidgetComp()),
+
     );
   }
 

@@ -1,4 +1,3 @@
-// lib/controllers/cart_controller.dart
 import 'package:get/get.dart';
 import 'package:optician_desktop_app/data/app_database.dart';
 import 'package:optician_desktop_app/model/product_model.dart';
@@ -39,11 +38,12 @@ class CartController extends GetxController {
     cartItems.clear();
   }
 
-  /// Total using effectivePrice (already accounts for discountPrice or percentage)
+  /// Total using effectivePrice + GST
   double get totalPrice {
     return cartItems.fold(
       0.0,
-      (sum, item) => sum + (item.effectivePrice * item.qty.value),
+      (sum, item) =>
+          sum + ((item.effectivePrice + (item.gst ?? 0)) * item.qty.value),
     );
   }
 

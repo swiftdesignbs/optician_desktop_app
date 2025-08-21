@@ -10,6 +10,7 @@ import 'package:optician_desktop_app/screens/delivery_slip.dart';
 import 'package:optician_desktop_app/screens/fitter.dart';
 import 'package:optician_desktop_app/screens/fitter_slip.dart';
 import 'package:optician_desktop_app/screens/order_status.dart';
+import 'package:optician_desktop_app/screens/pos_printing.dart';
 import 'package:optician_desktop_app/screens/pos_screen.dart';
 import 'package:optician_desktop_app/screens/product_form.dart';
 import 'package:optician_desktop_app/screens/product_screen.dart';
@@ -18,6 +19,7 @@ import 'package:optician_desktop_app/screens/puurchase_invoice.dart';
 import 'package:optician_desktop_app/screens/reports.dart';
 import 'package:optician_desktop_app/screens/retail_info.dart';
 import 'package:optician_desktop_app/screens/retail_invoice.dart';
+
 import 'package:optician_desktop_app/screens/sales_module.dart';
 import 'package:optician_desktop_app/screens/settings.dart';
 import 'package:optician_desktop_app/screens/supplier_screen.dart';
@@ -74,8 +76,12 @@ class ContentArea extends StatelessWidget {
         case "Retail Information":
           screen = RetailPage();
           break;
+
         case "Retail Invoice Slip":
           screen = RetailInvoicePage();
+          break;
+        case "Retail Invoice PDF":
+          screen = PosPrintingScreen();
           break;
         case "Category":
           screen = CategoryScreen();

@@ -42,9 +42,9 @@ class MainScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-      
+
                     const Spacer(),
-      
+
                     // // Center (Search + Dropdown)
                     // Expanded(
                     //   child: Container(
@@ -86,9 +86,9 @@ class MainScreen extends StatelessWidget {
                     //     ),
                     //   ),
                     // ),
-      
+
                     const Spacer(),
-      
+
                     // Icon Buttons (Right)
                     Row(
                       children: [
@@ -108,7 +108,7 @@ class MainScreen extends StatelessWidget {
                 ),
               );
             }),
-      
+
             // Sidebar + Content
             Expanded(
               child: Row(
@@ -129,13 +129,13 @@ class MainScreen extends StatelessWidget {
       "Master": [
         "Dashboard",
         "Customer",
-      "Product Form",
+        "Product Form",
         "Category",
         "Fitter",
         "Supplier",
         "Products",
       ],
-      "Sales": ["Sales","POS", "Tax"],
+      "Sales": ["Sales", "POS", "Tax"],
       "Purchase": [
         "Purchase Invoice Form",
         "Purchase Invoice",
@@ -143,6 +143,7 @@ class MainScreen extends StatelessWidget {
       "Accounts Invoice": [
         "Customer Delivery Slip",
         "Fitter Slip",
+        "Retail Invoice PDF",
         "Retail Invoice Slip",
         "Retail Information",
       ],
@@ -151,7 +152,7 @@ class MainScreen extends StatelessWidget {
         "Order Status",
         "Report Module",
       ],
-      //   "Petty": ["Petty Cash Entry", "Petty Cash Report"],
+      // "Petty": ["Petty Cash Entry", "Petty Cash Report"],
       // "Cash": ["Cash Book"],
       "Utility": ["Settings"],
     };
@@ -208,8 +209,7 @@ class MainScreen extends StatelessWidget {
             ),
           ),
 
-          // Footer section
-       //   const Divider(),
+          //   const Divider(),
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
@@ -219,12 +219,19 @@ class MainScreen extends StatelessWidget {
               children: [
                 Text(
                   'Version 1.0.0',
-                  style: TextStyle( fontFamily: 'FontMain',fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: 'FontMain',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
                   '© 2025 Optician App',
- style: TextStyle( fontFamily: 'FontMain',fontSize: 12, fontWeight: FontWeight.bold),                ),
+                  style: TextStyle(
+                      fontFamily: 'FontMain',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           ),

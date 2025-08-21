@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:optician_desktop_app/controllers/navigation_controller.dart';
 import 'package:optician_desktop_app/screens/product_screen.dart';
 import 'package:optician_desktop_app/widgets/buttons.dart';
 import 'package:optician_desktop_app/widgets/outline_btn.dart';
@@ -77,7 +78,28 @@ class DashboardScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = objects[index];
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  final navController = Get.find<NavigationController>();
+
+                  switch (item['name']) {
+                    case 'Order Status':
+                      navController.selectMenu("Master", "Order Status");
+                      break;
+                    case 'Add Product':
+                      navController.selectMenu("Master", "Product Form");
+                      break;
+                    case 'Sales Bill':
+                      navController.selectMenu("Sales", "POS");
+                      break;
+                    case 'Add Users':
+                      navController.selectMenu("Master", "Customer");
+                      break;
+
+                    // Add more cases for other grid items
+                    default:
+                      print('No action assigned for ${item['name']}');
+                  }
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,

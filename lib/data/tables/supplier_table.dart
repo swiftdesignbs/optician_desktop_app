@@ -1,25 +1,26 @@
+// lib/data/tables/suppliers.dart
 import 'package:drift/drift.dart';
 
 class Suppliers extends Table {
-  IntColumn get id => integer().autoIncrement()();         // Primary key
-  TextColumn get supplierCode => text()();                 // Supplier Code
-  TextColumn get supplierName => text()();                 // Supplier Name
-  TextColumn get email => text().nullable()();             // Email
-  TextColumn get address1 => text().nullable()();          // Address1
-  TextColumn get address2 => text().nullable()();          // Address2
-  TextColumn get cstNo => text().nullable()();             // CST No
-  TextColumn get tinNo => text().nullable()();             // TIN No
-  TextColumn get supplierType => text().nullable()();      // Supplier Type (Dropdown id)
-  TextColumn get paymentMode => text().nullable()();       // Payment Mode (Dropdown id)
-  TextColumn get state => text().nullable()();             // State (Dropdown id)
-  TextColumn get city => text().nullable()();              // City (Dropdown id)
-  TextColumn get pincode => text().nullable()();           // Pincode
-  TextColumn get telephone => text().nullable()();         // Telephone
-  TextColumn get fax => text().nullable()();               // Fax
-  TextColumn get contactPerson1 => text().nullable()();    // Contact Person 1
-  TextColumn get contactPerson2 => text().nullable()();    // Contact Person 2
-  TextColumn get createdBy => text().nullable()();         // Created By
-  DateTimeColumn get createdDate => dateTime().nullable()(); // Created Date
-  TextColumn get computeProductDate => text().nullable()();   // Dropdown selection
-  TextColumn get computeOverallDesc => text().nullable()();   // Dropdown selection
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get supplierCode => text()();
+  TextColumn get supplierName => text()();
+  TextColumn get email => text().nullable()();
+  TextColumn get address1 => text().nullable()();
+  TextColumn get address2 => text().nullable()();
+  TextColumn get cstNo => text().nullable()();
+  TextColumn get tinNo => text().nullable()();
+  TextColumn get supplierType => text().nullable()();
+  TextColumn get paymentMode => text().nullable()();
+  TextColumn get state => text().nullable()();
+  TextColumn get city => text().nullable()();
+  TextColumn get pincode => text().nullable()();
+  TextColumn get telephone => text().nullable()();
+  TextColumn get fax => text().nullable()();
+  TextColumn get contactPerson1 => text().nullable()();
+  TextColumn get contactPerson2 => text().nullable()();
+  TextColumn get createdBy => text().nullable()();
+  DateTimeColumn get createdDate => dateTime().nullable()();
+  TextColumn get computeProductDate => text().nullable()();
+  TextColumn get computeOverallDesc => text().nullable()();
 }

@@ -1,8 +1,16 @@
 // lib/screens/pos_screen.dart
+import 'dart:convert';
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:optician_desktop_app/data/app_database.dart';
+import 'package:optician_desktop_app/screens/order_success_screen.dart';
+import 'package:optician_desktop_app/widgets/buttons.dart';
+import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
+import 'package:optician_desktop_app/widgets/outline_btn.dart';
 import '../controllers/cart_controller.dart';
+import 'package:drift/drift.dart' as drift;
 
 class PosScreen extends StatefulWidget {
   @override
@@ -13,6 +21,9 @@ class _PosScreenState extends State<PosScreen> {
   final CartController cartController = Get.put(CartController());
   final AppDatabase db = AppDatabase();
   late Future<List<OpticProduct>> futureOpticProducts;
+  List<CustomerData> customers = [];
+
+  List<Map<String, String>> customerDropdownItems = [];
 
   String? selectedCategory;
   List<String> categories = [];
@@ -21,6 +32,22 @@ class _PosScreenState extends State<PosScreen> {
   void initState() {
     super.initState();
     futureOpticProducts = db.getAllOpticProducts();
+    _loadCustomers();
+  }
+
+  String? selectedCustomer; // String type because CustomDropdown expects String
+
+  Future<void> _loadCustomers() async {
+    final list = await db.select(db.customer).get();
+
+    setState(() {
+      customerDropdownItems = list.map((customer) {
+        return {
+          "id": customer.id.toString(),
+          "name": "${customer.firstName} ${customer.lastName ?? ''}".trim(),
+        };
+      }).toList();
+    });
   }
 
   double _getDiscountedPrice(OpticProduct product) {
@@ -313,11 +340,94 @@ class _PosScreenState extends State<PosScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("🛒 Cart",
-                      style: TextStyle(
+                  Row(
+                    children: [
+                      const Text(
+                        "🛒 Cart",
+                        style: TextStyle(
                           fontSize: 22,
                           fontFamily: 'FontMain',
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: DropdownButtonFormField<String>(
+                          decoration: InputDecoration(
+                            labelText: "Select Customer",
+                            labelStyle: TextStyle(
+                              fontFamily: 'FontMain',
+                              fontWeight: FontWeight.bold,
+                              color: selectedCustomer != null
+                                  ? const Color(0xff5793CE)
+                                  : Colors.black,
+                            ),
+                            border: const OutlineInputBorder(),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Color(0xff5793CE), width: 2),
+                            ),
+                          ),
+                          value: selectedCustomer,
+                          items: customerDropdownItems.map((customer) {
+                            return DropdownMenuItem<String>(
+                              value: customer['id'],
+                              child: Text(
+                                customer['name'] ?? '',
+                                style: const TextStyle(
+                                  fontFamily: 'FontMain',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCustomer = value;
+                            });
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+
+                  // ✅ Add Customer Button
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.person_add, size: 18),
+                      label: const Text(
+                        "Add Customer",
+                        style: TextStyle(
+                          fontFamily: 'FontMain',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        iconColor: Colors.white,
+                        shape: BeveledRectangleBorder(
+                            borderRadius: BorderRadius.circular(3)),
+                        backgroundColor: const Color(0xff5793CE),
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                      ),
+                      onPressed: () async {
+                        final result = await showDialog<bool>(
+                          context: context,
+                          builder: (_) => const AddCustomerDialog(),
+                        );
+
+                        if (result == true) {
+                          await _loadCustomers(); // Refresh dropdown
+                        }
+                      },
+                    ),
+                  ),
                   const SizedBox(height: 6),
                   Expanded(
                     child: Obx(() {
@@ -491,7 +601,188 @@ class _PosScreenState extends State<PosScreen> {
                               SizedBox(
                                 width: double.infinity,
                                 child: ElevatedButton.icon(
-                                  onPressed: cartController.clearCart,
+                                  onPressed: cartController.cartItems.isEmpty
+                                      ? null // Disable button if cart is empty
+                                      : () async {
+                                          // Step 0: Check if customer is selected
+                                          if (selectedCustomer == null) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  "Please select a customer before checkout.",
+                                                  style: TextStyle(
+                                                      fontFamily: 'FontMain',
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                backgroundColor: Colors.red,
+                                                duration: Duration(seconds: 2),
+                                              ),
+                                            );
+                                            return;
+                                          }
+                                          // Step 1: Open payment method dialog
+                                          String? selectedPayment =
+                                              await showDialog<String>(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                shape: BeveledRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            3)),
+                                                title: const Text(
+                                                  "Select Payment Method",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily: 'FontMain'),
+                                                ),
+                                                content: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    ListTile(
+                                                      leading: const Icon(
+                                                          Icons.money),
+                                                      title: const Text("Cash",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'FontMain')),
+                                                      onTap: () =>
+                                                          Navigator.pop(
+                                                              context, "Cash"),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Icon(
+                                                          Icons.credit_card),
+                                                      title: const Text("Card",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'FontMain')),
+                                                      onTap: () =>
+                                                          Navigator.pop(
+                                                              context, "Card"),
+                                                    ),
+                                                    ListTile(
+                                                      leading: const Icon(
+                                                          Icons.payments),
+                                                      title: const Text("UPI",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  'FontMain')),
+                                                      onTap: () =>
+                                                          Navigator.pop(
+                                                              context, "UPI"),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+
+                                          if (selectedPayment != null &&
+                                              selectedCustomer != null) {
+                                            final db =
+                                                AppDatabase(); // Or use your existing instance
+
+                                            // Fetch customer details
+                                            final customerData = await (db
+                                                    .select(db.customer)
+                                                  ..where((c) => c.id.equals(
+                                                      int.parse(
+                                                          selectedCustomer!))))
+                                                .getSingleOrNull();
+
+                                            if (customerData == null) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                    content: Text(
+                                                        "Customer not found")),
+                                              );
+                                              return;
+                                            }
+
+                                            // Prepare products list as JSON
+                                            final productsList = cartController
+                                                .cartItems
+                                                .map((item) {
+                                              return {
+                                                "productId": item.id,
+                                                "name": item.name,
+                                                "qty": item.qty.value,
+                                                "price": item.price,
+                                                "discount": item.discount ?? 0,
+                                                "gst": item.gst ?? 0,
+                                                "total": ((item.price -
+                                                            (item.discount ??
+                                                                0)) +
+                                                        (item.gst ?? 0)) *
+                                                    item.qty.value
+                                              };
+                                            }).toList();
+
+                                            // Calculate total amount
+                                            final totalAmount =
+                                                productsList.fold<double>(
+                                              0,
+                                              (sum, item) =>
+                                                  sum +
+                                                  (item["total"] as double),
+                                            );
+
+                                            // Insert single order with all products
+                                            await db.insertOrder(
+                                              OrdersCompanion(
+                                                customerId: drift.Value(
+                                                    int.parse(
+                                                        selectedCustomer!)),
+                                                orderDate:
+                                                    drift.Value(DateTime.now()),
+                                                totalAmount:
+                                                    drift.Value(totalAmount),
+                                                status: drift.Value('Pending'),
+                                                shippingAddress: drift.Value(
+                                                    customerData.address ?? ''),
+                                                billingAddress: drift.Value(
+                                                    customerData.address ?? ''),
+                                                paymentMethod: drift.Value(
+                                                    selectedPayment),
+                                                mobileNo: drift.Value(
+                                                    customerData.mobile ?? ''),
+                                                email: drift.Value(
+                                                    customerData.email ?? ''),
+
+                                                productsJson: drift.Value(
+                                                    jsonEncode(
+                                                        productsList)), // store JSON
+                                              ),
+                                            );
+
+                                            // Clear cart
+                                            cartController.clearCart();
+
+                                            // Go to success screen
+                                            Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const OrderSuccessScreen()),
+                                              (route) => false,
+                                            );
+                                          }
+                                        },
                                   icon: const Icon(
                                     Icons.check_circle_outline,
                                     size: 20,
@@ -518,6 +809,7 @@ class _PosScreenState extends State<PosScreen> {
                                   ),
                                 ),
                               ),
+                              const SizedBox(height: 16),
                             ],
                           ),
                         );
@@ -557,4 +849,177 @@ Widget _buildSummaryRow(String label, double amount, {bool isTotal = false}) {
       ],
     ),
   );
+}
+
+class AddCustomerDialog extends StatefulWidget {
+  const AddCustomerDialog({super.key});
+
+  @override
+  State<AddCustomerDialog> createState() => _AddCustomerDialogState();
+}
+
+class _AddCustomerDialogState extends State<AddCustomerDialog> {
+  final firstNameController = TextEditingController();
+  final middleNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final mobileController = TextEditingController();
+  final addressController = TextEditingController();
+
+  String? selectedGender;
+  String? selectedCustomerType;
+  final genderList = ["Male", "Female", "Other"];
+  final customerTypeList = ["Regular", "Premium"];
+
+  final db = AppDatabase();
+
+  Future<void> _submitForm() async {
+    final firstName = firstNameController.text.trim();
+    final middleName = middleNameController.text.trim();
+    final lastName = lastNameController.text.trim();
+    final email = emailController.text.trim();
+    final mobile = mobileController.text.trim();
+    final address = addressController.text.trim();
+
+    // Mobile validation
+    if (mobile.isEmpty || mobile.length != 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Mobile number must be exactly 10 digits")),
+      );
+      return;
+    }
+
+    // Check duplicate
+    final existingCustomer = await db.customSelect(
+      'SELECT * FROM customer WHERE mobile = ?',
+      variables: [drift.Variable<String>(mobile)],
+    ).get();
+
+    if (existingCustomer.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Mobile number already exists")),
+      );
+      return;
+    }
+
+    // Insert new customer
+    final customerCompanion = CustomerCompanion(
+      firstName: drift.Value(firstName),
+      middleName: drift.Value(middleName),
+      lastName: drift.Value(lastName),
+      mobile: drift.Value(mobile),
+      email: drift.Value(email),
+      address: drift.Value(address),
+      gender: selectedGender != null
+          ? drift.Value(selectedGender!)
+          : const drift.Value.absent(),
+      customerType: selectedCustomerType != null
+          ? drift.Value(selectedCustomerType!)
+          : const drift.Value.absent(),
+      createdDate: drift.Value(DateTime.now()),
+    );
+
+    await db.insertCustomer(customerCompanion);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Customer added successfully")),
+    );
+
+    if (mounted)
+      Navigator.pop(context, true); // return true so we can refresh dropdown
+  }
+
+  Widget buildTextField(TextEditingController controller, String label,
+      {int maxLines = 1}) {
+    return TextFormField(
+      controller: controller,
+      maxLines: maxLines,
+      style:
+          const TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: const TextStyle(
+            fontFamily: 'FontMain', fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      title: const Text("Add Customer",
+          style:
+              TextStyle(fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+      content: SizedBox(
+        width: 500,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildTextField(firstNameController, "First Name"),
+              buildTextField(middleNameController, "Middle Name"),
+              buildTextField(lastNameController, "Last Name"),
+              buildTextField(emailController, "Email"),
+              TextFormField(
+                controller: mobileController,
+                keyboardType: TextInputType.number,
+                maxLength: 10,
+                style: const TextStyle(
+                    fontFamily: 'FontMain', fontWeight: FontWeight.bold),
+                decoration: const InputDecoration(
+                  labelText: 'Mobile',
+                  labelStyle: TextStyle(
+                      fontFamily: 'FontMain', fontWeight: FontWeight.bold),
+                ),
+              ),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                    labelText: 'Gender',
+                    labelStyle: TextStyle(
+                        fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+                value: selectedGender,
+                items: genderList
+                    .map((value) =>
+                        DropdownMenuItem(value: value, child: Text(value)))
+                    .toList(),
+                onChanged: (value) => setState(() => selectedGender = value),
+              ),
+              DropdownButtonFormField<String>(
+                decoration: const InputDecoration(
+                    labelText: 'Customer Type',
+                    labelStyle: TextStyle(
+                        fontFamily: 'FontMain', fontWeight: FontWeight.bold)),
+                value: selectedCustomerType,
+                items: customerTypeList
+                    .map((value) =>
+                        DropdownMenuItem(value: value, child: Text(value)))
+                    .toList(),
+                onChanged: (value) =>
+                    setState(() => selectedCustomerType = value),
+              ),
+              buildTextField(addressController, "Address", maxLines: 2),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        OutLineBtn(
+          onPressed: () => Navigator.pop(context),
+          ddName: 'Cancel',
+          height: 50,
+          width: 70,
+          colors: const Color(0xff5793CE),
+        ),
+        Buttons(
+          onPressed: _submitForm,
+          ddName: 'Save',
+          height: 50,
+          width: 90,
+          colors: const Color(0xff5793CE),
+        )
+      ],
+    );
+  }
 }

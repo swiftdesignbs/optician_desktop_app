@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:optician_desktop_app/data/app_database.dart';
 import 'package:optician_desktop_app/widgets/buttons.dart';
 import 'package:optician_desktop_app/widgets/custom_dropdown.dart';
 import 'package:optician_desktop_app/widgets/custom_textField.dart';
@@ -14,21 +15,16 @@ class SupplierScreen extends StatefulWidget {
 }
 
 class _SupplierScreenState extends State<SupplierScreen> {
+  final AppDatabase db = AppDatabase();
+
   TextEditingController supplierCode = TextEditingController();
-
   TextEditingController supplierName = TextEditingController();
-
   TextEditingController address1 = TextEditingController();
-
   TextEditingController address2 = TextEditingController();
-
   TextEditingController pincode = TextEditingController();
-
   TextEditingController telephone = TextEditingController();
-
   TextEditingController fax = TextEditingController();
-
-  var selectedState;
+  String? selectedState;
 
   final List<Map<String, String>> cityType = [
     {"id": "", "name": "Select City"},
@@ -36,7 +32,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
     {"id": "2", "name": "New Delhi"},
   ];
 
-  var selectedCity;
+  String? selectedCity;
 
   final List<Map<String, String>> StateType = [
     {"id": "", "name": "Select Brand"},
@@ -44,66 +40,60 @@ class _SupplierScreenState extends State<SupplierScreen> {
     {"id": "2", "name": "Brand 2"},
   ];
   TextEditingController email = TextEditingController();
-
-  TextEditingController cstNo = TextEditingController();
-
+  TextEditingController gstNo = TextEditingController();
   TextEditingController tinNo = TextEditingController();
-
   TextEditingController contactPerson1 = TextEditingController();
-
   TextEditingController contactPerson2 = TextEditingController();
-
   TextEditingController createdBy = TextEditingController();
-
   TextEditingController dateinput = TextEditingController();
   final List<Map<String, String>> categoryTypes = [
     {"id": "", "name": "Select Category"},
     {"id": "1", "name": "Category 1"},
     {"id": "2", "name": "Category 2"},
   ];
-  var selectedCategory;
+  String? selectedCategory;
   final List<Map<String, String>> materialTypes = [
     {"id": "", "name": "Select Material"},
     {"id": "1", "name": "Material 1"},
     {"id": "2", "name": "Material 2"},
   ];
-  var selectedMaterial;
+  String? selectedMaterial;
   final List<Map<String, String>> size = [
     {"id": "", "name": "Select Size"},
     {"id": "1", "name": "Size 1"},
     {"id": "2", "name": "Size 2"},
   ];
-  var selectedSize;
+  String? selectedSize;
   final List<Map<String, String>> color = [
     {"id": "", "name": "Select Color"},
     {"id": "1", "name": "Color 1"},
     {"id": "2", "name": "Color 2"},
   ];
-  var selectedColor;
+  String? selectedColor;
 
   final List<Map<String, String>> lensTypes1 = [
     {"id": "", "name": "Select Lens Type 1"},
     {"id": "1", "name": "Lens Type 11"},
     {"id": "2", "name": "Lens Type 12"},
   ];
-  var selectedLens1;
+  String? selectedLens1;
   final List<Map<String, String>> lensTypes2 = [
     {"id": "", "name": "Select Lens Type 2"},
     {"id": "1", "name": "Lens Type 21"},
     {"id": "2", "name": "Lens Type 22"},
   ];
-  var selectedLens2;
+  String? selectedLens2;
   final List<Map<String, String>> shapeList = [
     {"id": "1", "name": "Shape 1"},
     {"id": "2", "name": "Shape 2"},
   ];
-  var selectedShape;
+  String? selectedShape;
   final List<Map<String, String>> genderList = [
     {"id": "1", "name": "Female"},
     {"id": "2", "name": "Male"},
     {"id": "2", "name": "Others"},
   ];
-  var selectedGender;
+  String? selectedGender;
   final List<Map<String, String>> negativeStock = [
     {"id": "1", "name": "Yes"},
     {"id": "2", "name": "No"},
@@ -115,7 +105,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
     {"prodCode": "PRODUCT_984994", "prodName": "Product"},
     {"prodCode": "PRODUCT_984994", "prodName": "Product "},
   ];
-  var selectedNegativeStock;
+  String? selectedNegativeStock;
   DateTime? pickedDate;
   @override
   void initState() {
@@ -252,8 +242,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                                   children: [
                                     Expanded(
                                       child: CustomTextField(
-                                        controller: cstNo,
-                                        ddName: 'CST No',
+                                        controller: gstNo,
+                                        ddName: 'GST No',
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -461,7 +451,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                             ),
                           ),
 
-                          const SizedBox(width: 30),
+                          const SizedBox(width: 10),
 
                           // Table Section
                           Expanded(
@@ -469,11 +459,62 @@ class _SupplierScreenState extends State<SupplierScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text("Product Table",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                const SizedBox(height: 10),
-                                buildProductTable(),
+                                const Text("Supplier Table",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'FontMain')),
+                                const SizedBox(height: 2),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
+                                    columnSpacing: 15,
+                                    border:
+                                        TableBorder.all(color: Colors.black45),
+                                    columns: const [
+                                      DataColumn(
+                                          label: Text("Edit",
+                                              style: TextStyle(fontSize: 10))),
+                                      DataColumn(
+                                          label: Text("Delete",
+                                              style: TextStyle(fontSize: 10))),
+                                      DataColumn(
+                                          label: Text("ProdCode",
+                                              style: TextStyle(fontSize: 10))),
+                                      DataColumn(
+                                          label: Text("ProdName",
+                                              style: TextStyle(fontSize: 10))),
+                                    ],
+                                    rows: data
+                                        .map(
+                                          (item) => DataRow(
+                                            cells: [
+                                              DataCell(IconButton(
+                                                icon: const FaIcon(
+                                                    FontAwesomeIcons.pen,
+                                                    size: 10),
+                                                onPressed: () {},
+                                              )),
+                                              DataCell(IconButton(
+                                                icon: const FaIcon(
+                                                    FontAwesomeIcons.xmark,
+                                                    size: 12),
+                                                onPressed: () {},
+                                              )),
+                                              DataCell(Text(
+                                                  item["prodCode"] ?? "",
+                                                  overflow: TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontSize: 10))),
+                                              DataCell(Text(
+                                                  item["prodName"] ?? "", overflow: TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontSize: 10))),
+                                            ],
+                                          ),
+                                        )
+                                        .toList(),
+                                  ),
+                                ),
                                 const SizedBox(height: 10),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -512,124 +553,6 @@ class _SupplierScreenState extends State<SupplierScreen> {
                 ],
               ));
         },
-      ),
-    );
-  }
-
-  // Widget buildTextField(String label, TextEditingController controller) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       TextFormField(
-  //         controller: controller,
-  //         style: const TextStyle(fontSize: 12),
-  //         decoration: const InputDecoration(
-  //           isDense: true,
-  //           contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDateField(BuildContext context) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const Text("Date",
-  //           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       SizedBox(
-  //         width: double.infinity,
-  //         child: TextFormField(
-  //           controller: dateinput,
-  //           readOnly: true,
-  //           onTap: () async {
-  //             DateTime? pickedDate = await showDatePicker(
-  //               context: context,
-  //               initialDate: DateTime.now(),
-  //               firstDate: DateTime(2000),
-  //               lastDate: DateTime(2101),
-  //             );
-  //             if (pickedDate != null) {
-  //               setState(() {
-  //                 dateinput.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-  //               });
-  //             }
-  //           },
-  //           style: const TextStyle(fontSize: 12),
-  //           decoration: const InputDecoration(
-  //             isDense: true,
-  //             contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-  //             border: OutlineInputBorder(),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Widget buildDropdown(String label, List<String> items, String? value,
-  //     void Function(String?) onChanged) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(label,
-  //           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-  //       const SizedBox(height: 4),
-  //       DropdownButtonFormField<String>(
-  //         value: value,
-  //         onChanged: onChanged,
-  //         isDense: true,
-  //         style: const TextStyle(fontSize: 12, color: Colors.black),
-  //         decoration: const InputDecoration(
-  //           contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-  //           border: OutlineInputBorder(),
-  //         ),
-  //         items: items
-  //             .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-  //             .toList(),
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Widget buildProductTable() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        columnSpacing: 15,
-        border: TableBorder.all(color: Colors.black45),
-        columns: const [
-          DataColumn(label: Text("Edit", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("Delete", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdCode", style: TextStyle(fontSize: 10))),
-          DataColumn(label: Text("ProdName", style: TextStyle(fontSize: 10))),
-        ],
-        rows: data
-            .map(
-              (item) => DataRow(
-                cells: [
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.pen, size: 10),
-                    onPressed: () {},
-                  )),
-                  DataCell(IconButton(
-                    icon: const FaIcon(FontAwesomeIcons.xmark, size: 12),
-                    onPressed: () {},
-                  )),
-                  DataCell(Text(item["prodCode"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                  DataCell(Text(item["prodName"] ?? "",
-                      style: const TextStyle(fontSize: 10))),
-                ],
-              ),
-            )
-            .toList(),
       ),
     );
   }
