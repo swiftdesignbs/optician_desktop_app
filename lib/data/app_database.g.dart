@@ -5335,6 +5335,4000 @@ class OrdersCompanion extends UpdateCompanion<Order> {
   }
 }
 
+class $RajyaTable extends Rajya with TableInfo<$RajyaTable, RajyaData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RajyaTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _stateNameMeta =
+      const VerificationMeta('stateName');
+  @override
+  late final GeneratedColumn<String> stateName = GeneratedColumn<String>(
+      'state_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [id, stateName, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'rajya';
+  @override
+  VerificationContext validateIntegrity(Insertable<RajyaData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('state_name')) {
+      context.handle(_stateNameMeta,
+          stateName.isAcceptableOrUnknown(data['state_name']!, _stateNameMeta));
+    } else if (isInserting) {
+      context.missing(_stateNameMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RajyaData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RajyaData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      stateName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}state_name'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $RajyaTable createAlias(String alias) {
+    return $RajyaTable(attachedDatabase, alias);
+  }
+}
+
+class RajyaData extends DataClass implements Insertable<RajyaData> {
+  final int id;
+  final String stateName;
+  final String? createdBy;
+  final DateTime createdDate;
+  const RajyaData(
+      {required this.id,
+      required this.stateName,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['state_name'] = Variable<String>(stateName);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  RajyaCompanion toCompanion(bool nullToAbsent) {
+    return RajyaCompanion(
+      id: Value(id),
+      stateName: Value(stateName),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory RajyaData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RajyaData(
+      id: serializer.fromJson<int>(json['id']),
+      stateName: serializer.fromJson<String>(json['stateName']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'stateName': serializer.toJson<String>(stateName),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  RajyaData copyWith(
+          {int? id,
+          String? stateName,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      RajyaData(
+        id: id ?? this.id,
+        stateName: stateName ?? this.stateName,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  RajyaData copyWithCompanion(RajyaCompanion data) {
+    return RajyaData(
+      id: data.id.present ? data.id.value : this.id,
+      stateName: data.stateName.present ? data.stateName.value : this.stateName,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RajyaData(')
+          ..write('id: $id, ')
+          ..write('stateName: $stateName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, stateName, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RajyaData &&
+          other.id == this.id &&
+          other.stateName == this.stateName &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class RajyaCompanion extends UpdateCompanion<RajyaData> {
+  final Value<int> id;
+  final Value<String> stateName;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const RajyaCompanion({
+    this.id = const Value.absent(),
+    this.stateName = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  RajyaCompanion.insert({
+    this.id = const Value.absent(),
+    required String stateName,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  }) : stateName = Value(stateName);
+  static Insertable<RajyaData> custom({
+    Expression<int>? id,
+    Expression<String>? stateName,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (stateName != null) 'state_name': stateName,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  RajyaCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? stateName,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return RajyaCompanion(
+      id: id ?? this.id,
+      stateName: stateName ?? this.stateName,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (stateName.present) {
+      map['state_name'] = Variable<String>(stateName.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RajyaCompanion(')
+          ..write('id: $id, ')
+          ..write('stateName: $stateName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CitiesTable extends Cities with TableInfo<$CitiesTable, City> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CitiesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _cityNameMeta =
+      const VerificationMeta('cityName');
+  @override
+  late final GeneratedColumn<String> cityName = GeneratedColumn<String>(
+      'city_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _stateIdMeta =
+      const VerificationMeta('stateId');
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
+      'state_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES rajya (id)'));
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, cityName, stateId, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cities';
+  @override
+  VerificationContext validateIntegrity(Insertable<City> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('city_name')) {
+      context.handle(_cityNameMeta,
+          cityName.isAcceptableOrUnknown(data['city_name']!, _cityNameMeta));
+    } else if (isInserting) {
+      context.missing(_cityNameMeta);
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id']!, _stateIdMeta));
+    } else if (isInserting) {
+      context.missing(_stateIdMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  City map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return City(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      cityName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}city_name'])!,
+      stateId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $CitiesTable createAlias(String alias) {
+    return $CitiesTable(attachedDatabase, alias);
+  }
+}
+
+class City extends DataClass implements Insertable<City> {
+  final int id;
+  final String cityName;
+  final int stateId;
+  final String? createdBy;
+  final DateTime createdDate;
+  const City(
+      {required this.id,
+      required this.cityName,
+      required this.stateId,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['city_name'] = Variable<String>(cityName);
+    map['state_id'] = Variable<int>(stateId);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  CitiesCompanion toCompanion(bool nullToAbsent) {
+    return CitiesCompanion(
+      id: Value(id),
+      cityName: Value(cityName),
+      stateId: Value(stateId),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory City.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return City(
+      id: serializer.fromJson<int>(json['id']),
+      cityName: serializer.fromJson<String>(json['cityName']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'cityName': serializer.toJson<String>(cityName),
+      'stateId': serializer.toJson<int>(stateId),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  City copyWith(
+          {int? id,
+          String? cityName,
+          int? stateId,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      City(
+        id: id ?? this.id,
+        cityName: cityName ?? this.cityName,
+        stateId: stateId ?? this.stateId,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  City copyWithCompanion(CitiesCompanion data) {
+    return City(
+      id: data.id.present ? data.id.value : this.id,
+      cityName: data.cityName.present ? data.cityName.value : this.cityName,
+      stateId: data.stateId.present ? data.stateId.value : this.stateId,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('City(')
+          ..write('id: $id, ')
+          ..write('cityName: $cityName, ')
+          ..write('stateId: $stateId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, cityName, stateId, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is City &&
+          other.id == this.id &&
+          other.cityName == this.cityName &&
+          other.stateId == this.stateId &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class CitiesCompanion extends UpdateCompanion<City> {
+  final Value<int> id;
+  final Value<String> cityName;
+  final Value<int> stateId;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const CitiesCompanion({
+    this.id = const Value.absent(),
+    this.cityName = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  CitiesCompanion.insert({
+    this.id = const Value.absent(),
+    required String cityName,
+    required int stateId,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : cityName = Value(cityName),
+        stateId = Value(stateId);
+  static Insertable<City> custom({
+    Expression<int>? id,
+    Expression<String>? cityName,
+    Expression<int>? stateId,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (cityName != null) 'city_name': cityName,
+      if (stateId != null) 'state_id': stateId,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  CitiesCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? cityName,
+      Value<int>? stateId,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return CitiesCompanion(
+      id: id ?? this.id,
+      cityName: cityName ?? this.cityName,
+      stateId: stateId ?? this.stateId,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (cityName.present) {
+      map['city_name'] = Variable<String>(cityName.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CitiesCompanion(')
+          ..write('id: $id, ')
+          ..write('cityName: $cityName, ')
+          ..write('stateId: $stateId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AreasTable extends Areas with TableInfo<$AreasTable, Area> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AreasTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _areaDescriptionMeta =
+      const VerificationMeta('areaDescription');
+  @override
+  late final GeneratedColumn<String> areaDescription = GeneratedColumn<String>(
+      'area_description', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _stateIdMeta =
+      const VerificationMeta('stateId');
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
+      'state_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES rajya (id)'));
+  static const VerificationMeta _cityIdMeta = const VerificationMeta('cityId');
+  @override
+  late final GeneratedColumn<int> cityId = GeneratedColumn<int>(
+      'city_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cities (id)'));
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, areaDescription, stateId, cityId, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'areas';
+  @override
+  VerificationContext validateIntegrity(Insertable<Area> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('area_description')) {
+      context.handle(
+          _areaDescriptionMeta,
+          areaDescription.isAcceptableOrUnknown(
+              data['area_description']!, _areaDescriptionMeta));
+    } else if (isInserting) {
+      context.missing(_areaDescriptionMeta);
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id']!, _stateIdMeta));
+    } else if (isInserting) {
+      context.missing(_stateIdMeta);
+    }
+    if (data.containsKey('city_id')) {
+      context.handle(_cityIdMeta,
+          cityId.isAcceptableOrUnknown(data['city_id']!, _cityIdMeta));
+    } else if (isInserting) {
+      context.missing(_cityIdMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Area map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Area(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      areaDescription: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}area_description'])!,
+      stateId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id'])!,
+      cityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}city_id'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $AreasTable createAlias(String alias) {
+    return $AreasTable(attachedDatabase, alias);
+  }
+}
+
+class Area extends DataClass implements Insertable<Area> {
+  final int id;
+  final String areaDescription;
+  final int stateId;
+  final int cityId;
+  final String? createdBy;
+  final DateTime createdDate;
+  const Area(
+      {required this.id,
+      required this.areaDescription,
+      required this.stateId,
+      required this.cityId,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['area_description'] = Variable<String>(areaDescription);
+    map['state_id'] = Variable<int>(stateId);
+    map['city_id'] = Variable<int>(cityId);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  AreasCompanion toCompanion(bool nullToAbsent) {
+    return AreasCompanion(
+      id: Value(id),
+      areaDescription: Value(areaDescription),
+      stateId: Value(stateId),
+      cityId: Value(cityId),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory Area.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Area(
+      id: serializer.fromJson<int>(json['id']),
+      areaDescription: serializer.fromJson<String>(json['areaDescription']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      cityId: serializer.fromJson<int>(json['cityId']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'areaDescription': serializer.toJson<String>(areaDescription),
+      'stateId': serializer.toJson<int>(stateId),
+      'cityId': serializer.toJson<int>(cityId),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  Area copyWith(
+          {int? id,
+          String? areaDescription,
+          int? stateId,
+          int? cityId,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      Area(
+        id: id ?? this.id,
+        areaDescription: areaDescription ?? this.areaDescription,
+        stateId: stateId ?? this.stateId,
+        cityId: cityId ?? this.cityId,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  Area copyWithCompanion(AreasCompanion data) {
+    return Area(
+      id: data.id.present ? data.id.value : this.id,
+      areaDescription: data.areaDescription.present
+          ? data.areaDescription.value
+          : this.areaDescription,
+      stateId: data.stateId.present ? data.stateId.value : this.stateId,
+      cityId: data.cityId.present ? data.cityId.value : this.cityId,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Area(')
+          ..write('id: $id, ')
+          ..write('areaDescription: $areaDescription, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, areaDescription, stateId, cityId, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Area &&
+          other.id == this.id &&
+          other.areaDescription == this.areaDescription &&
+          other.stateId == this.stateId &&
+          other.cityId == this.cityId &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class AreasCompanion extends UpdateCompanion<Area> {
+  final Value<int> id;
+  final Value<String> areaDescription;
+  final Value<int> stateId;
+  final Value<int> cityId;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const AreasCompanion({
+    this.id = const Value.absent(),
+    this.areaDescription = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.cityId = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  AreasCompanion.insert({
+    this.id = const Value.absent(),
+    required String areaDescription,
+    required int stateId,
+    required int cityId,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : areaDescription = Value(areaDescription),
+        stateId = Value(stateId),
+        cityId = Value(cityId);
+  static Insertable<Area> custom({
+    Expression<int>? id,
+    Expression<String>? areaDescription,
+    Expression<int>? stateId,
+    Expression<int>? cityId,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (areaDescription != null) 'area_description': areaDescription,
+      if (stateId != null) 'state_id': stateId,
+      if (cityId != null) 'city_id': cityId,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  AreasCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? areaDescription,
+      Value<int>? stateId,
+      Value<int>? cityId,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return AreasCompanion(
+      id: id ?? this.id,
+      areaDescription: areaDescription ?? this.areaDescription,
+      stateId: stateId ?? this.stateId,
+      cityId: cityId ?? this.cityId,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (areaDescription.present) {
+      map['area_description'] = Variable<String>(areaDescription.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (cityId.present) {
+      map['city_id'] = Variable<int>(cityId.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AreasCompanion(')
+          ..write('id: $id, ')
+          ..write('areaDescription: $areaDescription, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BanksTable extends Banks with TableInfo<$BanksTable, Bank> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BanksTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _bankNameMeta =
+      const VerificationMeta('bankName');
+  @override
+  late final GeneratedColumn<String> bankName = GeneratedColumn<String>(
+      'bank_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _accountNoMeta =
+      const VerificationMeta('accountNo');
+  @override
+  late final GeneratedColumn<String> accountNo = GeneratedColumn<String>(
+      'account_no', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _abbreviationMeta =
+      const VerificationMeta('abbreviation');
+  @override
+  late final GeneratedColumn<String> abbreviation = GeneratedColumn<String>(
+      'abbreviation', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _pincodeMeta =
+      const VerificationMeta('pincode');
+  @override
+  late final GeneratedColumn<String> pincode = GeneratedColumn<String>(
+      'pincode', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _stateIdMeta =
+      const VerificationMeta('stateId');
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
+      'state_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES rajya (id)'));
+  static const VerificationMeta _cityIdMeta = const VerificationMeta('cityId');
+  @override
+  late final GeneratedColumn<int> cityId = GeneratedColumn<int>(
+      'city_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cities (id)'));
+  static const VerificationMeta _mobileMeta = const VerificationMeta('mobile');
+  @override
+  late final GeneratedColumn<String> mobile = GeneratedColumn<String>(
+      'mobile', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _ifscMeta = const VerificationMeta('ifsc');
+  @override
+  late final GeneratedColumn<String> ifsc = GeneratedColumn<String>(
+      'ifsc', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _swiftCodeMeta =
+      const VerificationMeta('swiftCode');
+  @override
+  late final GeneratedColumn<String> swiftCode = GeneratedColumn<String>(
+      'swift_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _accountNameMeta =
+      const VerificationMeta('accountName');
+  @override
+  late final GeneratedColumn<String> accountName = GeneratedColumn<String>(
+      'account_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        bankName,
+        accountNo,
+        abbreviation,
+        address,
+        pincode,
+        stateId,
+        cityId,
+        mobile,
+        email,
+        ifsc,
+        swiftCode,
+        accountName,
+        createdBy,
+        createdDate
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'banks';
+  @override
+  VerificationContext validateIntegrity(Insertable<Bank> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('bank_name')) {
+      context.handle(_bankNameMeta,
+          bankName.isAcceptableOrUnknown(data['bank_name']!, _bankNameMeta));
+    } else if (isInserting) {
+      context.missing(_bankNameMeta);
+    }
+    if (data.containsKey('account_no')) {
+      context.handle(_accountNoMeta,
+          accountNo.isAcceptableOrUnknown(data['account_no']!, _accountNoMeta));
+    } else if (isInserting) {
+      context.missing(_accountNoMeta);
+    }
+    if (data.containsKey('abbreviation')) {
+      context.handle(
+          _abbreviationMeta,
+          abbreviation.isAcceptableOrUnknown(
+              data['abbreviation']!, _abbreviationMeta));
+    }
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    }
+    if (data.containsKey('pincode')) {
+      context.handle(_pincodeMeta,
+          pincode.isAcceptableOrUnknown(data['pincode']!, _pincodeMeta));
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id']!, _stateIdMeta));
+    } else if (isInserting) {
+      context.missing(_stateIdMeta);
+    }
+    if (data.containsKey('city_id')) {
+      context.handle(_cityIdMeta,
+          cityId.isAcceptableOrUnknown(data['city_id']!, _cityIdMeta));
+    } else if (isInserting) {
+      context.missing(_cityIdMeta);
+    }
+    if (data.containsKey('mobile')) {
+      context.handle(_mobileMeta,
+          mobile.isAcceptableOrUnknown(data['mobile']!, _mobileMeta));
+    }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    }
+    if (data.containsKey('ifsc')) {
+      context.handle(
+          _ifscMeta, ifsc.isAcceptableOrUnknown(data['ifsc']!, _ifscMeta));
+    }
+    if (data.containsKey('swift_code')) {
+      context.handle(_swiftCodeMeta,
+          swiftCode.isAcceptableOrUnknown(data['swift_code']!, _swiftCodeMeta));
+    }
+    if (data.containsKey('account_name')) {
+      context.handle(
+          _accountNameMeta,
+          accountName.isAcceptableOrUnknown(
+              data['account_name']!, _accountNameMeta));
+    } else if (isInserting) {
+      context.missing(_accountNameMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Bank map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Bank(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      bankName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}bank_name'])!,
+      accountNo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}account_no'])!,
+      abbreviation: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}abbreviation']),
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address']),
+      pincode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pincode']),
+      stateId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id'])!,
+      cityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}city_id'])!,
+      mobile: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mobile']),
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      ifsc: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ifsc']),
+      swiftCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}swift_code']),
+      accountName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}account_name'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $BanksTable createAlias(String alias) {
+    return $BanksTable(attachedDatabase, alias);
+  }
+}
+
+class Bank extends DataClass implements Insertable<Bank> {
+  final int id;
+  final String bankName;
+  final String accountNo;
+  final String? abbreviation;
+  final String? address;
+  final String? pincode;
+  final int stateId;
+  final int cityId;
+  final String? mobile;
+  final String? email;
+  final String? ifsc;
+  final String? swiftCode;
+  final String accountName;
+  final String? createdBy;
+  final DateTime createdDate;
+  const Bank(
+      {required this.id,
+      required this.bankName,
+      required this.accountNo,
+      this.abbreviation,
+      this.address,
+      this.pincode,
+      required this.stateId,
+      required this.cityId,
+      this.mobile,
+      this.email,
+      this.ifsc,
+      this.swiftCode,
+      required this.accountName,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['bank_name'] = Variable<String>(bankName);
+    map['account_no'] = Variable<String>(accountNo);
+    if (!nullToAbsent || abbreviation != null) {
+      map['abbreviation'] = Variable<String>(abbreviation);
+    }
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || pincode != null) {
+      map['pincode'] = Variable<String>(pincode);
+    }
+    map['state_id'] = Variable<int>(stateId);
+    map['city_id'] = Variable<int>(cityId);
+    if (!nullToAbsent || mobile != null) {
+      map['mobile'] = Variable<String>(mobile);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || ifsc != null) {
+      map['ifsc'] = Variable<String>(ifsc);
+    }
+    if (!nullToAbsent || swiftCode != null) {
+      map['swift_code'] = Variable<String>(swiftCode);
+    }
+    map['account_name'] = Variable<String>(accountName);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  BanksCompanion toCompanion(bool nullToAbsent) {
+    return BanksCompanion(
+      id: Value(id),
+      bankName: Value(bankName),
+      accountNo: Value(accountNo),
+      abbreviation: abbreviation == null && nullToAbsent
+          ? const Value.absent()
+          : Value(abbreviation),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      pincode: pincode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pincode),
+      stateId: Value(stateId),
+      cityId: Value(cityId),
+      mobile:
+          mobile == null && nullToAbsent ? const Value.absent() : Value(mobile),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      ifsc: ifsc == null && nullToAbsent ? const Value.absent() : Value(ifsc),
+      swiftCode: swiftCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(swiftCode),
+      accountName: Value(accountName),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory Bank.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Bank(
+      id: serializer.fromJson<int>(json['id']),
+      bankName: serializer.fromJson<String>(json['bankName']),
+      accountNo: serializer.fromJson<String>(json['accountNo']),
+      abbreviation: serializer.fromJson<String?>(json['abbreviation']),
+      address: serializer.fromJson<String?>(json['address']),
+      pincode: serializer.fromJson<String?>(json['pincode']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      cityId: serializer.fromJson<int>(json['cityId']),
+      mobile: serializer.fromJson<String?>(json['mobile']),
+      email: serializer.fromJson<String?>(json['email']),
+      ifsc: serializer.fromJson<String?>(json['ifsc']),
+      swiftCode: serializer.fromJson<String?>(json['swiftCode']),
+      accountName: serializer.fromJson<String>(json['accountName']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'bankName': serializer.toJson<String>(bankName),
+      'accountNo': serializer.toJson<String>(accountNo),
+      'abbreviation': serializer.toJson<String?>(abbreviation),
+      'address': serializer.toJson<String?>(address),
+      'pincode': serializer.toJson<String?>(pincode),
+      'stateId': serializer.toJson<int>(stateId),
+      'cityId': serializer.toJson<int>(cityId),
+      'mobile': serializer.toJson<String?>(mobile),
+      'email': serializer.toJson<String?>(email),
+      'ifsc': serializer.toJson<String?>(ifsc),
+      'swiftCode': serializer.toJson<String?>(swiftCode),
+      'accountName': serializer.toJson<String>(accountName),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  Bank copyWith(
+          {int? id,
+          String? bankName,
+          String? accountNo,
+          Value<String?> abbreviation = const Value.absent(),
+          Value<String?> address = const Value.absent(),
+          Value<String?> pincode = const Value.absent(),
+          int? stateId,
+          int? cityId,
+          Value<String?> mobile = const Value.absent(),
+          Value<String?> email = const Value.absent(),
+          Value<String?> ifsc = const Value.absent(),
+          Value<String?> swiftCode = const Value.absent(),
+          String? accountName,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      Bank(
+        id: id ?? this.id,
+        bankName: bankName ?? this.bankName,
+        accountNo: accountNo ?? this.accountNo,
+        abbreviation:
+            abbreviation.present ? abbreviation.value : this.abbreviation,
+        address: address.present ? address.value : this.address,
+        pincode: pincode.present ? pincode.value : this.pincode,
+        stateId: stateId ?? this.stateId,
+        cityId: cityId ?? this.cityId,
+        mobile: mobile.present ? mobile.value : this.mobile,
+        email: email.present ? email.value : this.email,
+        ifsc: ifsc.present ? ifsc.value : this.ifsc,
+        swiftCode: swiftCode.present ? swiftCode.value : this.swiftCode,
+        accountName: accountName ?? this.accountName,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  Bank copyWithCompanion(BanksCompanion data) {
+    return Bank(
+      id: data.id.present ? data.id.value : this.id,
+      bankName: data.bankName.present ? data.bankName.value : this.bankName,
+      accountNo: data.accountNo.present ? data.accountNo.value : this.accountNo,
+      abbreviation: data.abbreviation.present
+          ? data.abbreviation.value
+          : this.abbreviation,
+      address: data.address.present ? data.address.value : this.address,
+      pincode: data.pincode.present ? data.pincode.value : this.pincode,
+      stateId: data.stateId.present ? data.stateId.value : this.stateId,
+      cityId: data.cityId.present ? data.cityId.value : this.cityId,
+      mobile: data.mobile.present ? data.mobile.value : this.mobile,
+      email: data.email.present ? data.email.value : this.email,
+      ifsc: data.ifsc.present ? data.ifsc.value : this.ifsc,
+      swiftCode: data.swiftCode.present ? data.swiftCode.value : this.swiftCode,
+      accountName:
+          data.accountName.present ? data.accountName.value : this.accountName,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Bank(')
+          ..write('id: $id, ')
+          ..write('bankName: $bankName, ')
+          ..write('accountNo: $accountNo, ')
+          ..write('abbreviation: $abbreviation, ')
+          ..write('address: $address, ')
+          ..write('pincode: $pincode, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('mobile: $mobile, ')
+          ..write('email: $email, ')
+          ..write('ifsc: $ifsc, ')
+          ..write('swiftCode: $swiftCode, ')
+          ..write('accountName: $accountName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      bankName,
+      accountNo,
+      abbreviation,
+      address,
+      pincode,
+      stateId,
+      cityId,
+      mobile,
+      email,
+      ifsc,
+      swiftCode,
+      accountName,
+      createdBy,
+      createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Bank &&
+          other.id == this.id &&
+          other.bankName == this.bankName &&
+          other.accountNo == this.accountNo &&
+          other.abbreviation == this.abbreviation &&
+          other.address == this.address &&
+          other.pincode == this.pincode &&
+          other.stateId == this.stateId &&
+          other.cityId == this.cityId &&
+          other.mobile == this.mobile &&
+          other.email == this.email &&
+          other.ifsc == this.ifsc &&
+          other.swiftCode == this.swiftCode &&
+          other.accountName == this.accountName &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class BanksCompanion extends UpdateCompanion<Bank> {
+  final Value<int> id;
+  final Value<String> bankName;
+  final Value<String> accountNo;
+  final Value<String?> abbreviation;
+  final Value<String?> address;
+  final Value<String?> pincode;
+  final Value<int> stateId;
+  final Value<int> cityId;
+  final Value<String?> mobile;
+  final Value<String?> email;
+  final Value<String?> ifsc;
+  final Value<String?> swiftCode;
+  final Value<String> accountName;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const BanksCompanion({
+    this.id = const Value.absent(),
+    this.bankName = const Value.absent(),
+    this.accountNo = const Value.absent(),
+    this.abbreviation = const Value.absent(),
+    this.address = const Value.absent(),
+    this.pincode = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.cityId = const Value.absent(),
+    this.mobile = const Value.absent(),
+    this.email = const Value.absent(),
+    this.ifsc = const Value.absent(),
+    this.swiftCode = const Value.absent(),
+    this.accountName = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  BanksCompanion.insert({
+    this.id = const Value.absent(),
+    required String bankName,
+    required String accountNo,
+    this.abbreviation = const Value.absent(),
+    this.address = const Value.absent(),
+    this.pincode = const Value.absent(),
+    required int stateId,
+    required int cityId,
+    this.mobile = const Value.absent(),
+    this.email = const Value.absent(),
+    this.ifsc = const Value.absent(),
+    this.swiftCode = const Value.absent(),
+    required String accountName,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : bankName = Value(bankName),
+        accountNo = Value(accountNo),
+        stateId = Value(stateId),
+        cityId = Value(cityId),
+        accountName = Value(accountName);
+  static Insertable<Bank> custom({
+    Expression<int>? id,
+    Expression<String>? bankName,
+    Expression<String>? accountNo,
+    Expression<String>? abbreviation,
+    Expression<String>? address,
+    Expression<String>? pincode,
+    Expression<int>? stateId,
+    Expression<int>? cityId,
+    Expression<String>? mobile,
+    Expression<String>? email,
+    Expression<String>? ifsc,
+    Expression<String>? swiftCode,
+    Expression<String>? accountName,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (bankName != null) 'bank_name': bankName,
+      if (accountNo != null) 'account_no': accountNo,
+      if (abbreviation != null) 'abbreviation': abbreviation,
+      if (address != null) 'address': address,
+      if (pincode != null) 'pincode': pincode,
+      if (stateId != null) 'state_id': stateId,
+      if (cityId != null) 'city_id': cityId,
+      if (mobile != null) 'mobile': mobile,
+      if (email != null) 'email': email,
+      if (ifsc != null) 'ifsc': ifsc,
+      if (swiftCode != null) 'swift_code': swiftCode,
+      if (accountName != null) 'account_name': accountName,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  BanksCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? bankName,
+      Value<String>? accountNo,
+      Value<String?>? abbreviation,
+      Value<String?>? address,
+      Value<String?>? pincode,
+      Value<int>? stateId,
+      Value<int>? cityId,
+      Value<String?>? mobile,
+      Value<String?>? email,
+      Value<String?>? ifsc,
+      Value<String?>? swiftCode,
+      Value<String>? accountName,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return BanksCompanion(
+      id: id ?? this.id,
+      bankName: bankName ?? this.bankName,
+      accountNo: accountNo ?? this.accountNo,
+      abbreviation: abbreviation ?? this.abbreviation,
+      address: address ?? this.address,
+      pincode: pincode ?? this.pincode,
+      stateId: stateId ?? this.stateId,
+      cityId: cityId ?? this.cityId,
+      mobile: mobile ?? this.mobile,
+      email: email ?? this.email,
+      ifsc: ifsc ?? this.ifsc,
+      swiftCode: swiftCode ?? this.swiftCode,
+      accountName: accountName ?? this.accountName,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (bankName.present) {
+      map['bank_name'] = Variable<String>(bankName.value);
+    }
+    if (accountNo.present) {
+      map['account_no'] = Variable<String>(accountNo.value);
+    }
+    if (abbreviation.present) {
+      map['abbreviation'] = Variable<String>(abbreviation.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (pincode.present) {
+      map['pincode'] = Variable<String>(pincode.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (cityId.present) {
+      map['city_id'] = Variable<int>(cityId.value);
+    }
+    if (mobile.present) {
+      map['mobile'] = Variable<String>(mobile.value);
+    }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (ifsc.present) {
+      map['ifsc'] = Variable<String>(ifsc.value);
+    }
+    if (swiftCode.present) {
+      map['swift_code'] = Variable<String>(swiftCode.value);
+    }
+    if (accountName.present) {
+      map['account_name'] = Variable<String>(accountName.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BanksCompanion(')
+          ..write('id: $id, ')
+          ..write('bankName: $bankName, ')
+          ..write('accountNo: $accountNo, ')
+          ..write('abbreviation: $abbreviation, ')
+          ..write('address: $address, ')
+          ..write('pincode: $pincode, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('mobile: $mobile, ')
+          ..write('email: $email, ')
+          ..write('ifsc: $ifsc, ')
+          ..write('swiftCode: $swiftCode, ')
+          ..write('accountName: $accountName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $BrandsTable extends Brands with TableInfo<$BrandsTable, Brand> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $BrandsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _stateNameMeta =
+      const VerificationMeta('stateName');
+  @override
+  late final GeneratedColumn<String> stateName = GeneratedColumn<String>(
+      'state_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [id, stateName, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'brands';
+  @override
+  VerificationContext validateIntegrity(Insertable<Brand> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('state_name')) {
+      context.handle(_stateNameMeta,
+          stateName.isAcceptableOrUnknown(data['state_name']!, _stateNameMeta));
+    } else if (isInserting) {
+      context.missing(_stateNameMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Brand map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Brand(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      stateName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}state_name'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $BrandsTable createAlias(String alias) {
+    return $BrandsTable(attachedDatabase, alias);
+  }
+}
+
+class Brand extends DataClass implements Insertable<Brand> {
+  final int id;
+  final String stateName;
+  final String? createdBy;
+  final DateTime createdDate;
+  const Brand(
+      {required this.id,
+      required this.stateName,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['state_name'] = Variable<String>(stateName);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  BrandsCompanion toCompanion(bool nullToAbsent) {
+    return BrandsCompanion(
+      id: Value(id),
+      stateName: Value(stateName),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory Brand.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Brand(
+      id: serializer.fromJson<int>(json['id']),
+      stateName: serializer.fromJson<String>(json['stateName']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'stateName': serializer.toJson<String>(stateName),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  Brand copyWith(
+          {int? id,
+          String? stateName,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      Brand(
+        id: id ?? this.id,
+        stateName: stateName ?? this.stateName,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  Brand copyWithCompanion(BrandsCompanion data) {
+    return Brand(
+      id: data.id.present ? data.id.value : this.id,
+      stateName: data.stateName.present ? data.stateName.value : this.stateName,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Brand(')
+          ..write('id: $id, ')
+          ..write('stateName: $stateName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, stateName, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Brand &&
+          other.id == this.id &&
+          other.stateName == this.stateName &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class BrandsCompanion extends UpdateCompanion<Brand> {
+  final Value<int> id;
+  final Value<String> stateName;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const BrandsCompanion({
+    this.id = const Value.absent(),
+    this.stateName = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  BrandsCompanion.insert({
+    this.id = const Value.absent(),
+    required String stateName,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  }) : stateName = Value(stateName);
+  static Insertable<Brand> custom({
+    Expression<int>? id,
+    Expression<String>? stateName,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (stateName != null) 'state_name': stateName,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  BrandsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? stateName,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return BrandsCompanion(
+      id: id ?? this.id,
+      stateName: stateName ?? this.stateName,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (stateName.present) {
+      map['state_name'] = Variable<String>(stateName.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('BrandsCompanion(')
+          ..write('id: $id, ')
+          ..write('stateName: $stateName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CustomerCategoryTable extends CustomerCategory
+    with TableInfo<$CustomerCategoryTable, CustomerCategoryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CustomerCategoryTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _customerCatNameMeta =
+      const VerificationMeta('customerCatName');
+  @override
+  late final GeneratedColumn<String> customerCatName = GeneratedColumn<String>(
+      'customer_cat_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, customerCatName, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'customer_category';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<CustomerCategoryData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('customer_cat_name')) {
+      context.handle(
+          _customerCatNameMeta,
+          customerCatName.isAcceptableOrUnknown(
+              data['customer_cat_name']!, _customerCatNameMeta));
+    } else if (isInserting) {
+      context.missing(_customerCatNameMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CustomerCategoryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CustomerCategoryData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      customerCatName: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}customer_cat_name'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $CustomerCategoryTable createAlias(String alias) {
+    return $CustomerCategoryTable(attachedDatabase, alias);
+  }
+}
+
+class CustomerCategoryData extends DataClass
+    implements Insertable<CustomerCategoryData> {
+  final int id;
+  final String customerCatName;
+  final String? createdBy;
+  final DateTime createdDate;
+  const CustomerCategoryData(
+      {required this.id,
+      required this.customerCatName,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['customer_cat_name'] = Variable<String>(customerCatName);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  CustomerCategoryCompanion toCompanion(bool nullToAbsent) {
+    return CustomerCategoryCompanion(
+      id: Value(id),
+      customerCatName: Value(customerCatName),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory CustomerCategoryData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CustomerCategoryData(
+      id: serializer.fromJson<int>(json['id']),
+      customerCatName: serializer.fromJson<String>(json['customerCatName']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'customerCatName': serializer.toJson<String>(customerCatName),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  CustomerCategoryData copyWith(
+          {int? id,
+          String? customerCatName,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      CustomerCategoryData(
+        id: id ?? this.id,
+        customerCatName: customerCatName ?? this.customerCatName,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  CustomerCategoryData copyWithCompanion(CustomerCategoryCompanion data) {
+    return CustomerCategoryData(
+      id: data.id.present ? data.id.value : this.id,
+      customerCatName: data.customerCatName.present
+          ? data.customerCatName.value
+          : this.customerCatName,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CustomerCategoryData(')
+          ..write('id: $id, ')
+          ..write('customerCatName: $customerCatName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, customerCatName, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CustomerCategoryData &&
+          other.id == this.id &&
+          other.customerCatName == this.customerCatName &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class CustomerCategoryCompanion extends UpdateCompanion<CustomerCategoryData> {
+  final Value<int> id;
+  final Value<String> customerCatName;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const CustomerCategoryCompanion({
+    this.id = const Value.absent(),
+    this.customerCatName = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  CustomerCategoryCompanion.insert({
+    this.id = const Value.absent(),
+    required String customerCatName,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  }) : customerCatName = Value(customerCatName);
+  static Insertable<CustomerCategoryData> custom({
+    Expression<int>? id,
+    Expression<String>? customerCatName,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (customerCatName != null) 'customer_cat_name': customerCatName,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  CustomerCategoryCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? customerCatName,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return CustomerCategoryCompanion(
+      id: id ?? this.id,
+      customerCatName: customerCatName ?? this.customerCatName,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (customerCatName.present) {
+      map['customer_cat_name'] = Variable<String>(customerCatName.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CustomerCategoryCompanion(')
+          ..write('id: $id, ')
+          ..write('customerCatName: $customerCatName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $DoctorReferenceTable extends DoctorReference
+    with TableInfo<$DoctorReferenceTable, DoctorReferenceData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $DoctorReferenceTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _doctorNameMeta =
+      const VerificationMeta('doctorName');
+  @override
+  late final GeneratedColumn<String> doctorName = GeneratedColumn<String>(
+      'doctor_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _stateIdMeta =
+      const VerificationMeta('stateId');
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
+      'state_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES rajya (id)'));
+  static const VerificationMeta _cityIdMeta = const VerificationMeta('cityId');
+  @override
+  late final GeneratedColumn<int> cityId = GeneratedColumn<int>(
+      'city_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cities (id)'));
+  static const VerificationMeta _commisionMeta =
+      const VerificationMeta('commision');
+  @override
+  late final GeneratedColumn<String> commision = GeneratedColumn<String>(
+      'commision', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _pincodeMeta =
+      const VerificationMeta('pincode');
+  @override
+  late final GeneratedColumn<String> pincode = GeneratedColumn<String>(
+      'pincode', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        doctorName,
+        address,
+        stateId,
+        cityId,
+        commision,
+        pincode,
+        createdBy,
+        createdDate
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'doctor_reference';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<DoctorReferenceData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('doctor_name')) {
+      context.handle(
+          _doctorNameMeta,
+          doctorName.isAcceptableOrUnknown(
+              data['doctor_name']!, _doctorNameMeta));
+    } else if (isInserting) {
+      context.missing(_doctorNameMeta);
+    }
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    } else if (isInserting) {
+      context.missing(_addressMeta);
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id']!, _stateIdMeta));
+    } else if (isInserting) {
+      context.missing(_stateIdMeta);
+    }
+    if (data.containsKey('city_id')) {
+      context.handle(_cityIdMeta,
+          cityId.isAcceptableOrUnknown(data['city_id']!, _cityIdMeta));
+    } else if (isInserting) {
+      context.missing(_cityIdMeta);
+    }
+    if (data.containsKey('commision')) {
+      context.handle(_commisionMeta,
+          commision.isAcceptableOrUnknown(data['commision']!, _commisionMeta));
+    } else if (isInserting) {
+      context.missing(_commisionMeta);
+    }
+    if (data.containsKey('pincode')) {
+      context.handle(_pincodeMeta,
+          pincode.isAcceptableOrUnknown(data['pincode']!, _pincodeMeta));
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  DoctorReferenceData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return DoctorReferenceData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      doctorName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}doctor_name'])!,
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      stateId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id'])!,
+      cityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}city_id'])!,
+      commision: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}commision'])!,
+      pincode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pincode']),
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $DoctorReferenceTable createAlias(String alias) {
+    return $DoctorReferenceTable(attachedDatabase, alias);
+  }
+}
+
+class DoctorReferenceData extends DataClass
+    implements Insertable<DoctorReferenceData> {
+  final int id;
+  final String doctorName;
+  final String address;
+  final int stateId;
+  final int cityId;
+  final String commision;
+  final String? pincode;
+  final String? createdBy;
+  final DateTime createdDate;
+  const DoctorReferenceData(
+      {required this.id,
+      required this.doctorName,
+      required this.address,
+      required this.stateId,
+      required this.cityId,
+      required this.commision,
+      this.pincode,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['doctor_name'] = Variable<String>(doctorName);
+    map['address'] = Variable<String>(address);
+    map['state_id'] = Variable<int>(stateId);
+    map['city_id'] = Variable<int>(cityId);
+    map['commision'] = Variable<String>(commision);
+    if (!nullToAbsent || pincode != null) {
+      map['pincode'] = Variable<String>(pincode);
+    }
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  DoctorReferenceCompanion toCompanion(bool nullToAbsent) {
+    return DoctorReferenceCompanion(
+      id: Value(id),
+      doctorName: Value(doctorName),
+      address: Value(address),
+      stateId: Value(stateId),
+      cityId: Value(cityId),
+      commision: Value(commision),
+      pincode: pincode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pincode),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory DoctorReferenceData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return DoctorReferenceData(
+      id: serializer.fromJson<int>(json['id']),
+      doctorName: serializer.fromJson<String>(json['doctorName']),
+      address: serializer.fromJson<String>(json['address']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      cityId: serializer.fromJson<int>(json['cityId']),
+      commision: serializer.fromJson<String>(json['commision']),
+      pincode: serializer.fromJson<String?>(json['pincode']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'doctorName': serializer.toJson<String>(doctorName),
+      'address': serializer.toJson<String>(address),
+      'stateId': serializer.toJson<int>(stateId),
+      'cityId': serializer.toJson<int>(cityId),
+      'commision': serializer.toJson<String>(commision),
+      'pincode': serializer.toJson<String?>(pincode),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  DoctorReferenceData copyWith(
+          {int? id,
+          String? doctorName,
+          String? address,
+          int? stateId,
+          int? cityId,
+          String? commision,
+          Value<String?> pincode = const Value.absent(),
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      DoctorReferenceData(
+        id: id ?? this.id,
+        doctorName: doctorName ?? this.doctorName,
+        address: address ?? this.address,
+        stateId: stateId ?? this.stateId,
+        cityId: cityId ?? this.cityId,
+        commision: commision ?? this.commision,
+        pincode: pincode.present ? pincode.value : this.pincode,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  DoctorReferenceData copyWithCompanion(DoctorReferenceCompanion data) {
+    return DoctorReferenceData(
+      id: data.id.present ? data.id.value : this.id,
+      doctorName:
+          data.doctorName.present ? data.doctorName.value : this.doctorName,
+      address: data.address.present ? data.address.value : this.address,
+      stateId: data.stateId.present ? data.stateId.value : this.stateId,
+      cityId: data.cityId.present ? data.cityId.value : this.cityId,
+      commision: data.commision.present ? data.commision.value : this.commision,
+      pincode: data.pincode.present ? data.pincode.value : this.pincode,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DoctorReferenceData(')
+          ..write('id: $id, ')
+          ..write('doctorName: $doctorName, ')
+          ..write('address: $address, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('commision: $commision, ')
+          ..write('pincode: $pincode, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, doctorName, address, stateId, cityId,
+      commision, pincode, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is DoctorReferenceData &&
+          other.id == this.id &&
+          other.doctorName == this.doctorName &&
+          other.address == this.address &&
+          other.stateId == this.stateId &&
+          other.cityId == this.cityId &&
+          other.commision == this.commision &&
+          other.pincode == this.pincode &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class DoctorReferenceCompanion extends UpdateCompanion<DoctorReferenceData> {
+  final Value<int> id;
+  final Value<String> doctorName;
+  final Value<String> address;
+  final Value<int> stateId;
+  final Value<int> cityId;
+  final Value<String> commision;
+  final Value<String?> pincode;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const DoctorReferenceCompanion({
+    this.id = const Value.absent(),
+    this.doctorName = const Value.absent(),
+    this.address = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.cityId = const Value.absent(),
+    this.commision = const Value.absent(),
+    this.pincode = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  DoctorReferenceCompanion.insert({
+    this.id = const Value.absent(),
+    required String doctorName,
+    required String address,
+    required int stateId,
+    required int cityId,
+    required String commision,
+    this.pincode = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : doctorName = Value(doctorName),
+        address = Value(address),
+        stateId = Value(stateId),
+        cityId = Value(cityId),
+        commision = Value(commision);
+  static Insertable<DoctorReferenceData> custom({
+    Expression<int>? id,
+    Expression<String>? doctorName,
+    Expression<String>? address,
+    Expression<int>? stateId,
+    Expression<int>? cityId,
+    Expression<String>? commision,
+    Expression<String>? pincode,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (doctorName != null) 'doctor_name': doctorName,
+      if (address != null) 'address': address,
+      if (stateId != null) 'state_id': stateId,
+      if (cityId != null) 'city_id': cityId,
+      if (commision != null) 'commision': commision,
+      if (pincode != null) 'pincode': pincode,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  DoctorReferenceCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? doctorName,
+      Value<String>? address,
+      Value<int>? stateId,
+      Value<int>? cityId,
+      Value<String>? commision,
+      Value<String?>? pincode,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return DoctorReferenceCompanion(
+      id: id ?? this.id,
+      doctorName: doctorName ?? this.doctorName,
+      address: address ?? this.address,
+      stateId: stateId ?? this.stateId,
+      cityId: cityId ?? this.cityId,
+      commision: commision ?? this.commision,
+      pincode: pincode ?? this.pincode,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (doctorName.present) {
+      map['doctor_name'] = Variable<String>(doctorName.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (cityId.present) {
+      map['city_id'] = Variable<int>(cityId.value);
+    }
+    if (commision.present) {
+      map['commision'] = Variable<String>(commision.value);
+    }
+    if (pincode.present) {
+      map['pincode'] = Variable<String>(pincode.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('DoctorReferenceCompanion(')
+          ..write('id: $id, ')
+          ..write('doctorName: $doctorName, ')
+          ..write('address: $address, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('commision: $commision, ')
+          ..write('pincode: $pincode, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $EmailBookTable extends EmailBook
+    with TableInfo<$EmailBookTable, EmailBookData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $EmailBookTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _firstNameMeta =
+      const VerificationMeta('firstName');
+  @override
+  late final GeneratedColumn<String> firstName = GeneratedColumn<String>(
+      'first_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _lastNameMeta =
+      const VerificationMeta('lastName');
+  @override
+  late final GeneratedColumn<String> lastName = GeneratedColumn<String>(
+      'last_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _emailIdMeta =
+      const VerificationMeta('emailId');
+  @override
+  late final GeneratedColumn<String> emailId = GeneratedColumn<String>(
+      'email_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, firstName, lastName, emailId, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'email_book';
+  @override
+  VerificationContext validateIntegrity(Insertable<EmailBookData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('first_name')) {
+      context.handle(_firstNameMeta,
+          firstName.isAcceptableOrUnknown(data['first_name']!, _firstNameMeta));
+    } else if (isInserting) {
+      context.missing(_firstNameMeta);
+    }
+    if (data.containsKey('last_name')) {
+      context.handle(_lastNameMeta,
+          lastName.isAcceptableOrUnknown(data['last_name']!, _lastNameMeta));
+    } else if (isInserting) {
+      context.missing(_lastNameMeta);
+    }
+    if (data.containsKey('email_id')) {
+      context.handle(_emailIdMeta,
+          emailId.isAcceptableOrUnknown(data['email_id']!, _emailIdMeta));
+    } else if (isInserting) {
+      context.missing(_emailIdMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  EmailBookData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return EmailBookData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      firstName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}first_name'])!,
+      lastName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}last_name'])!,
+      emailId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email_id'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $EmailBookTable createAlias(String alias) {
+    return $EmailBookTable(attachedDatabase, alias);
+  }
+}
+
+class EmailBookData extends DataClass implements Insertable<EmailBookData> {
+  final int id;
+  final String firstName;
+  final String lastName;
+  final String emailId;
+  final String? createdBy;
+  final DateTime createdDate;
+  const EmailBookData(
+      {required this.id,
+      required this.firstName,
+      required this.lastName,
+      required this.emailId,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['first_name'] = Variable<String>(firstName);
+    map['last_name'] = Variable<String>(lastName);
+    map['email_id'] = Variable<String>(emailId);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  EmailBookCompanion toCompanion(bool nullToAbsent) {
+    return EmailBookCompanion(
+      id: Value(id),
+      firstName: Value(firstName),
+      lastName: Value(lastName),
+      emailId: Value(emailId),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory EmailBookData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return EmailBookData(
+      id: serializer.fromJson<int>(json['id']),
+      firstName: serializer.fromJson<String>(json['firstName']),
+      lastName: serializer.fromJson<String>(json['lastName']),
+      emailId: serializer.fromJson<String>(json['emailId']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'firstName': serializer.toJson<String>(firstName),
+      'lastName': serializer.toJson<String>(lastName),
+      'emailId': serializer.toJson<String>(emailId),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  EmailBookData copyWith(
+          {int? id,
+          String? firstName,
+          String? lastName,
+          String? emailId,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      EmailBookData(
+        id: id ?? this.id,
+        firstName: firstName ?? this.firstName,
+        lastName: lastName ?? this.lastName,
+        emailId: emailId ?? this.emailId,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  EmailBookData copyWithCompanion(EmailBookCompanion data) {
+    return EmailBookData(
+      id: data.id.present ? data.id.value : this.id,
+      firstName: data.firstName.present ? data.firstName.value : this.firstName,
+      lastName: data.lastName.present ? data.lastName.value : this.lastName,
+      emailId: data.emailId.present ? data.emailId.value : this.emailId,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EmailBookData(')
+          ..write('id: $id, ')
+          ..write('firstName: $firstName, ')
+          ..write('lastName: $lastName, ')
+          ..write('emailId: $emailId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, firstName, lastName, emailId, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is EmailBookData &&
+          other.id == this.id &&
+          other.firstName == this.firstName &&
+          other.lastName == this.lastName &&
+          other.emailId == this.emailId &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class EmailBookCompanion extends UpdateCompanion<EmailBookData> {
+  final Value<int> id;
+  final Value<String> firstName;
+  final Value<String> lastName;
+  final Value<String> emailId;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const EmailBookCompanion({
+    this.id = const Value.absent(),
+    this.firstName = const Value.absent(),
+    this.lastName = const Value.absent(),
+    this.emailId = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  EmailBookCompanion.insert({
+    this.id = const Value.absent(),
+    required String firstName,
+    required String lastName,
+    required String emailId,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : firstName = Value(firstName),
+        lastName = Value(lastName),
+        emailId = Value(emailId);
+  static Insertable<EmailBookData> custom({
+    Expression<int>? id,
+    Expression<String>? firstName,
+    Expression<String>? lastName,
+    Expression<String>? emailId,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (firstName != null) 'first_name': firstName,
+      if (lastName != null) 'last_name': lastName,
+      if (emailId != null) 'email_id': emailId,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  EmailBookCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? firstName,
+      Value<String>? lastName,
+      Value<String>? emailId,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return EmailBookCompanion(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      emailId: emailId ?? this.emailId,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (firstName.present) {
+      map['first_name'] = Variable<String>(firstName.value);
+    }
+    if (lastName.present) {
+      map['last_name'] = Variable<String>(lastName.value);
+    }
+    if (emailId.present) {
+      map['email_id'] = Variable<String>(emailId.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('EmailBookCompanion(')
+          ..write('id: $id, ')
+          ..write('firstName: $firstName, ')
+          ..write('lastName: $lastName, ')
+          ..write('emailId: $emailId, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $GendersTable extends Genders with TableInfo<$GendersTable, Gender> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GendersTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _genderNameMeta =
+      const VerificationMeta('genderName');
+  @override
+  late final GeneratedColumn<String> genderName = GeneratedColumn<String>(
+      'gender_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, genderName, createdBy, createdDate];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'genders';
+  @override
+  VerificationContext validateIntegrity(Insertable<Gender> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('gender_name')) {
+      context.handle(
+          _genderNameMeta,
+          genderName.isAcceptableOrUnknown(
+              data['gender_name']!, _genderNameMeta));
+    } else if (isInserting) {
+      context.missing(_genderNameMeta);
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Gender map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Gender(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      genderName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}gender_name'])!,
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $GendersTable createAlias(String alias) {
+    return $GendersTable(attachedDatabase, alias);
+  }
+}
+
+class Gender extends DataClass implements Insertable<Gender> {
+  final int id;
+  final String genderName;
+  final String? createdBy;
+  final DateTime createdDate;
+  const Gender(
+      {required this.id,
+      required this.genderName,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['gender_name'] = Variable<String>(genderName);
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  GendersCompanion toCompanion(bool nullToAbsent) {
+    return GendersCompanion(
+      id: Value(id),
+      genderName: Value(genderName),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory Gender.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Gender(
+      id: serializer.fromJson<int>(json['id']),
+      genderName: serializer.fromJson<String>(json['genderName']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'genderName': serializer.toJson<String>(genderName),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  Gender copyWith(
+          {int? id,
+          String? genderName,
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      Gender(
+        id: id ?? this.id,
+        genderName: genderName ?? this.genderName,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  Gender copyWithCompanion(GendersCompanion data) {
+    return Gender(
+      id: data.id.present ? data.id.value : this.id,
+      genderName:
+          data.genderName.present ? data.genderName.value : this.genderName,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Gender(')
+          ..write('id: $id, ')
+          ..write('genderName: $genderName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, genderName, createdBy, createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Gender &&
+          other.id == this.id &&
+          other.genderName == this.genderName &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class GendersCompanion extends UpdateCompanion<Gender> {
+  final Value<int> id;
+  final Value<String> genderName;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const GendersCompanion({
+    this.id = const Value.absent(),
+    this.genderName = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  GendersCompanion.insert({
+    this.id = const Value.absent(),
+    required String genderName,
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  }) : genderName = Value(genderName);
+  static Insertable<Gender> custom({
+    Expression<int>? id,
+    Expression<String>? genderName,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (genderName != null) 'gender_name': genderName,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  GendersCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? genderName,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return GendersCompanion(
+      id: id ?? this.id,
+      genderName: genderName ?? this.genderName,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (genderName.present) {
+      map['gender_name'] = Variable<String>(genderName.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GendersCompanion(')
+          ..write('id: $id, ')
+          ..write('genderName: $genderName, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $StoresTable extends Stores with TableInfo<$StoresTable, Store> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StoresTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _siteNameMeta =
+      const VerificationMeta('siteName');
+  @override
+  late final GeneratedColumn<String> siteName = GeneratedColumn<String>(
+      'site_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _addressMeta =
+      const VerificationMeta('address');
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _dlNumberMeta =
+      const VerificationMeta('dlNumber');
+  @override
+  late final GeneratedColumn<String> dlNumber = GeneratedColumn<String>(
+      'dl_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _cstNumberMeta =
+      const VerificationMeta('cstNumber');
+  @override
+  late final GeneratedColumn<String> cstNumber = GeneratedColumn<String>(
+      'cst_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _tinNumberMeta =
+      const VerificationMeta('tinNumber');
+  @override
+  late final GeneratedColumn<String> tinNumber = GeneratedColumn<String>(
+      'tin_number', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _stateIdMeta =
+      const VerificationMeta('stateId');
+  @override
+  late final GeneratedColumn<int> stateId = GeneratedColumn<int>(
+      'state_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES rajya (id)'));
+  static const VerificationMeta _cityIdMeta = const VerificationMeta('cityId');
+  @override
+  late final GeneratedColumn<int> cityId = GeneratedColumn<int>(
+      'city_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('REFERENCES cities (id)'));
+  static const VerificationMeta _gstinMeta = const VerificationMeta('gstin');
+  @override
+  late final GeneratedColumn<String> gstin = GeneratedColumn<String>(
+      'gstin', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _pincodeMeta =
+      const VerificationMeta('pincode');
+  @override
+  late final GeneratedColumn<String> pincode = GeneratedColumn<String>(
+      'pincode', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _mobileMeta = const VerificationMeta('mobile');
+  @override
+  late final GeneratedColumn<String> mobile = GeneratedColumn<String>(
+      'mobile', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _additionalInfoMeta =
+      const VerificationMeta('additionalInfo');
+  @override
+  late final GeneratedColumn<String> additionalInfo = GeneratedColumn<String>(
+      'additional_info', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _imageMeta = const VerificationMeta('image');
+  @override
+  late final GeneratedColumn<Uint8List> image = GeneratedColumn<Uint8List>(
+      'image', aliasedName, true,
+      type: DriftSqlType.blob, requiredDuringInsert: false);
+  static const VerificationMeta _createdByMeta =
+      const VerificationMeta('createdBy');
+  @override
+  late final GeneratedColumn<String> createdBy = GeneratedColumn<String>(
+      'created_by', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _createdDateMeta =
+      const VerificationMeta('createdDate');
+  @override
+  late final GeneratedColumn<DateTime> createdDate = GeneratedColumn<DateTime>(
+      'created_date', aliasedName, false,
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        siteName,
+        email,
+        address,
+        dlNumber,
+        cstNumber,
+        tinNumber,
+        stateId,
+        cityId,
+        gstin,
+        pincode,
+        mobile,
+        additionalInfo,
+        image,
+        createdBy,
+        createdDate
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'stores';
+  @override
+  VerificationContext validateIntegrity(Insertable<Store> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('site_name')) {
+      context.handle(_siteNameMeta,
+          siteName.isAcceptableOrUnknown(data['site_name']!, _siteNameMeta));
+    } else if (isInserting) {
+      context.missing(_siteNameMeta);
+    }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    }
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+    }
+    if (data.containsKey('dl_number')) {
+      context.handle(_dlNumberMeta,
+          dlNumber.isAcceptableOrUnknown(data['dl_number']!, _dlNumberMeta));
+    }
+    if (data.containsKey('cst_number')) {
+      context.handle(_cstNumberMeta,
+          cstNumber.isAcceptableOrUnknown(data['cst_number']!, _cstNumberMeta));
+    }
+    if (data.containsKey('tin_number')) {
+      context.handle(_tinNumberMeta,
+          tinNumber.isAcceptableOrUnknown(data['tin_number']!, _tinNumberMeta));
+    }
+    if (data.containsKey('state_id')) {
+      context.handle(_stateIdMeta,
+          stateId.isAcceptableOrUnknown(data['state_id']!, _stateIdMeta));
+    } else if (isInserting) {
+      context.missing(_stateIdMeta);
+    }
+    if (data.containsKey('city_id')) {
+      context.handle(_cityIdMeta,
+          cityId.isAcceptableOrUnknown(data['city_id']!, _cityIdMeta));
+    } else if (isInserting) {
+      context.missing(_cityIdMeta);
+    }
+    if (data.containsKey('gstin')) {
+      context.handle(
+          _gstinMeta, gstin.isAcceptableOrUnknown(data['gstin']!, _gstinMeta));
+    }
+    if (data.containsKey('pincode')) {
+      context.handle(_pincodeMeta,
+          pincode.isAcceptableOrUnknown(data['pincode']!, _pincodeMeta));
+    }
+    if (data.containsKey('mobile')) {
+      context.handle(_mobileMeta,
+          mobile.isAcceptableOrUnknown(data['mobile']!, _mobileMeta));
+    }
+    if (data.containsKey('additional_info')) {
+      context.handle(
+          _additionalInfoMeta,
+          additionalInfo.isAcceptableOrUnknown(
+              data['additional_info']!, _additionalInfoMeta));
+    }
+    if (data.containsKey('image')) {
+      context.handle(
+          _imageMeta, image.isAcceptableOrUnknown(data['image']!, _imageMeta));
+    }
+    if (data.containsKey('created_by')) {
+      context.handle(_createdByMeta,
+          createdBy.isAcceptableOrUnknown(data['created_by']!, _createdByMeta));
+    }
+    if (data.containsKey('created_date')) {
+      context.handle(
+          _createdDateMeta,
+          createdDate.isAcceptableOrUnknown(
+              data['created_date']!, _createdDateMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Store map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Store(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      siteName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}site_name'])!,
+      email: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      address: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}address']),
+      dlNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}dl_number']),
+      cstNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cst_number']),
+      tinNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}tin_number']),
+      stateId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}state_id'])!,
+      cityId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}city_id'])!,
+      gstin: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}gstin']),
+      pincode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pincode']),
+      mobile: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}mobile']),
+      additionalInfo: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}additional_info']),
+      image: attachedDatabase.typeMapping
+          .read(DriftSqlType.blob, data['${effectivePrefix}image']),
+      createdBy: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}created_by']),
+      createdDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_date'])!,
+    );
+  }
+
+  @override
+  $StoresTable createAlias(String alias) {
+    return $StoresTable(attachedDatabase, alias);
+  }
+}
+
+class Store extends DataClass implements Insertable<Store> {
+  final int id;
+  final String siteName;
+  final String? email;
+  final String? address;
+  final String? dlNumber;
+  final String? cstNumber;
+  final String? tinNumber;
+  final int stateId;
+  final int cityId;
+  final String? gstin;
+  final String? pincode;
+  final String? mobile;
+  final String? additionalInfo;
+  final Uint8List? image;
+  final String? createdBy;
+  final DateTime createdDate;
+  const Store(
+      {required this.id,
+      required this.siteName,
+      this.email,
+      this.address,
+      this.dlNumber,
+      this.cstNumber,
+      this.tinNumber,
+      required this.stateId,
+      required this.cityId,
+      this.gstin,
+      this.pincode,
+      this.mobile,
+      this.additionalInfo,
+      this.image,
+      this.createdBy,
+      required this.createdDate});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['site_name'] = Variable<String>(siteName);
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || dlNumber != null) {
+      map['dl_number'] = Variable<String>(dlNumber);
+    }
+    if (!nullToAbsent || cstNumber != null) {
+      map['cst_number'] = Variable<String>(cstNumber);
+    }
+    if (!nullToAbsent || tinNumber != null) {
+      map['tin_number'] = Variable<String>(tinNumber);
+    }
+    map['state_id'] = Variable<int>(stateId);
+    map['city_id'] = Variable<int>(cityId);
+    if (!nullToAbsent || gstin != null) {
+      map['gstin'] = Variable<String>(gstin);
+    }
+    if (!nullToAbsent || pincode != null) {
+      map['pincode'] = Variable<String>(pincode);
+    }
+    if (!nullToAbsent || mobile != null) {
+      map['mobile'] = Variable<String>(mobile);
+    }
+    if (!nullToAbsent || additionalInfo != null) {
+      map['additional_info'] = Variable<String>(additionalInfo);
+    }
+    if (!nullToAbsent || image != null) {
+      map['image'] = Variable<Uint8List>(image);
+    }
+    if (!nullToAbsent || createdBy != null) {
+      map['created_by'] = Variable<String>(createdBy);
+    }
+    map['created_date'] = Variable<DateTime>(createdDate);
+    return map;
+  }
+
+  StoresCompanion toCompanion(bool nullToAbsent) {
+    return StoresCompanion(
+      id: Value(id),
+      siteName: Value(siteName),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      dlNumber: dlNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dlNumber),
+      cstNumber: cstNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(cstNumber),
+      tinNumber: tinNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(tinNumber),
+      stateId: Value(stateId),
+      cityId: Value(cityId),
+      gstin:
+          gstin == null && nullToAbsent ? const Value.absent() : Value(gstin),
+      pincode: pincode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(pincode),
+      mobile:
+          mobile == null && nullToAbsent ? const Value.absent() : Value(mobile),
+      additionalInfo: additionalInfo == null && nullToAbsent
+          ? const Value.absent()
+          : Value(additionalInfo),
+      image:
+          image == null && nullToAbsent ? const Value.absent() : Value(image),
+      createdBy: createdBy == null && nullToAbsent
+          ? const Value.absent()
+          : Value(createdBy),
+      createdDate: Value(createdDate),
+    );
+  }
+
+  factory Store.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Store(
+      id: serializer.fromJson<int>(json['id']),
+      siteName: serializer.fromJson<String>(json['siteName']),
+      email: serializer.fromJson<String?>(json['email']),
+      address: serializer.fromJson<String?>(json['address']),
+      dlNumber: serializer.fromJson<String?>(json['dlNumber']),
+      cstNumber: serializer.fromJson<String?>(json['cstNumber']),
+      tinNumber: serializer.fromJson<String?>(json['tinNumber']),
+      stateId: serializer.fromJson<int>(json['stateId']),
+      cityId: serializer.fromJson<int>(json['cityId']),
+      gstin: serializer.fromJson<String?>(json['gstin']),
+      pincode: serializer.fromJson<String?>(json['pincode']),
+      mobile: serializer.fromJson<String?>(json['mobile']),
+      additionalInfo: serializer.fromJson<String?>(json['additionalInfo']),
+      image: serializer.fromJson<Uint8List?>(json['image']),
+      createdBy: serializer.fromJson<String?>(json['createdBy']),
+      createdDate: serializer.fromJson<DateTime>(json['createdDate']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'siteName': serializer.toJson<String>(siteName),
+      'email': serializer.toJson<String?>(email),
+      'address': serializer.toJson<String?>(address),
+      'dlNumber': serializer.toJson<String?>(dlNumber),
+      'cstNumber': serializer.toJson<String?>(cstNumber),
+      'tinNumber': serializer.toJson<String?>(tinNumber),
+      'stateId': serializer.toJson<int>(stateId),
+      'cityId': serializer.toJson<int>(cityId),
+      'gstin': serializer.toJson<String?>(gstin),
+      'pincode': serializer.toJson<String?>(pincode),
+      'mobile': serializer.toJson<String?>(mobile),
+      'additionalInfo': serializer.toJson<String?>(additionalInfo),
+      'image': serializer.toJson<Uint8List?>(image),
+      'createdBy': serializer.toJson<String?>(createdBy),
+      'createdDate': serializer.toJson<DateTime>(createdDate),
+    };
+  }
+
+  Store copyWith(
+          {int? id,
+          String? siteName,
+          Value<String?> email = const Value.absent(),
+          Value<String?> address = const Value.absent(),
+          Value<String?> dlNumber = const Value.absent(),
+          Value<String?> cstNumber = const Value.absent(),
+          Value<String?> tinNumber = const Value.absent(),
+          int? stateId,
+          int? cityId,
+          Value<String?> gstin = const Value.absent(),
+          Value<String?> pincode = const Value.absent(),
+          Value<String?> mobile = const Value.absent(),
+          Value<String?> additionalInfo = const Value.absent(),
+          Value<Uint8List?> image = const Value.absent(),
+          Value<String?> createdBy = const Value.absent(),
+          DateTime? createdDate}) =>
+      Store(
+        id: id ?? this.id,
+        siteName: siteName ?? this.siteName,
+        email: email.present ? email.value : this.email,
+        address: address.present ? address.value : this.address,
+        dlNumber: dlNumber.present ? dlNumber.value : this.dlNumber,
+        cstNumber: cstNumber.present ? cstNumber.value : this.cstNumber,
+        tinNumber: tinNumber.present ? tinNumber.value : this.tinNumber,
+        stateId: stateId ?? this.stateId,
+        cityId: cityId ?? this.cityId,
+        gstin: gstin.present ? gstin.value : this.gstin,
+        pincode: pincode.present ? pincode.value : this.pincode,
+        mobile: mobile.present ? mobile.value : this.mobile,
+        additionalInfo:
+            additionalInfo.present ? additionalInfo.value : this.additionalInfo,
+        image: image.present ? image.value : this.image,
+        createdBy: createdBy.present ? createdBy.value : this.createdBy,
+        createdDate: createdDate ?? this.createdDate,
+      );
+  Store copyWithCompanion(StoresCompanion data) {
+    return Store(
+      id: data.id.present ? data.id.value : this.id,
+      siteName: data.siteName.present ? data.siteName.value : this.siteName,
+      email: data.email.present ? data.email.value : this.email,
+      address: data.address.present ? data.address.value : this.address,
+      dlNumber: data.dlNumber.present ? data.dlNumber.value : this.dlNumber,
+      cstNumber: data.cstNumber.present ? data.cstNumber.value : this.cstNumber,
+      tinNumber: data.tinNumber.present ? data.tinNumber.value : this.tinNumber,
+      stateId: data.stateId.present ? data.stateId.value : this.stateId,
+      cityId: data.cityId.present ? data.cityId.value : this.cityId,
+      gstin: data.gstin.present ? data.gstin.value : this.gstin,
+      pincode: data.pincode.present ? data.pincode.value : this.pincode,
+      mobile: data.mobile.present ? data.mobile.value : this.mobile,
+      additionalInfo: data.additionalInfo.present
+          ? data.additionalInfo.value
+          : this.additionalInfo,
+      image: data.image.present ? data.image.value : this.image,
+      createdBy: data.createdBy.present ? data.createdBy.value : this.createdBy,
+      createdDate:
+          data.createdDate.present ? data.createdDate.value : this.createdDate,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Store(')
+          ..write('id: $id, ')
+          ..write('siteName: $siteName, ')
+          ..write('email: $email, ')
+          ..write('address: $address, ')
+          ..write('dlNumber: $dlNumber, ')
+          ..write('cstNumber: $cstNumber, ')
+          ..write('tinNumber: $tinNumber, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('gstin: $gstin, ')
+          ..write('pincode: $pincode, ')
+          ..write('mobile: $mobile, ')
+          ..write('additionalInfo: $additionalInfo, ')
+          ..write('image: $image, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      siteName,
+      email,
+      address,
+      dlNumber,
+      cstNumber,
+      tinNumber,
+      stateId,
+      cityId,
+      gstin,
+      pincode,
+      mobile,
+      additionalInfo,
+      $driftBlobEquality.hash(image),
+      createdBy,
+      createdDate);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Store &&
+          other.id == this.id &&
+          other.siteName == this.siteName &&
+          other.email == this.email &&
+          other.address == this.address &&
+          other.dlNumber == this.dlNumber &&
+          other.cstNumber == this.cstNumber &&
+          other.tinNumber == this.tinNumber &&
+          other.stateId == this.stateId &&
+          other.cityId == this.cityId &&
+          other.gstin == this.gstin &&
+          other.pincode == this.pincode &&
+          other.mobile == this.mobile &&
+          other.additionalInfo == this.additionalInfo &&
+          $driftBlobEquality.equals(other.image, this.image) &&
+          other.createdBy == this.createdBy &&
+          other.createdDate == this.createdDate);
+}
+
+class StoresCompanion extends UpdateCompanion<Store> {
+  final Value<int> id;
+  final Value<String> siteName;
+  final Value<String?> email;
+  final Value<String?> address;
+  final Value<String?> dlNumber;
+  final Value<String?> cstNumber;
+  final Value<String?> tinNumber;
+  final Value<int> stateId;
+  final Value<int> cityId;
+  final Value<String?> gstin;
+  final Value<String?> pincode;
+  final Value<String?> mobile;
+  final Value<String?> additionalInfo;
+  final Value<Uint8List?> image;
+  final Value<String?> createdBy;
+  final Value<DateTime> createdDate;
+  const StoresCompanion({
+    this.id = const Value.absent(),
+    this.siteName = const Value.absent(),
+    this.email = const Value.absent(),
+    this.address = const Value.absent(),
+    this.dlNumber = const Value.absent(),
+    this.cstNumber = const Value.absent(),
+    this.tinNumber = const Value.absent(),
+    this.stateId = const Value.absent(),
+    this.cityId = const Value.absent(),
+    this.gstin = const Value.absent(),
+    this.pincode = const Value.absent(),
+    this.mobile = const Value.absent(),
+    this.additionalInfo = const Value.absent(),
+    this.image = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  });
+  StoresCompanion.insert({
+    this.id = const Value.absent(),
+    required String siteName,
+    this.email = const Value.absent(),
+    this.address = const Value.absent(),
+    this.dlNumber = const Value.absent(),
+    this.cstNumber = const Value.absent(),
+    this.tinNumber = const Value.absent(),
+    required int stateId,
+    required int cityId,
+    this.gstin = const Value.absent(),
+    this.pincode = const Value.absent(),
+    this.mobile = const Value.absent(),
+    this.additionalInfo = const Value.absent(),
+    this.image = const Value.absent(),
+    this.createdBy = const Value.absent(),
+    this.createdDate = const Value.absent(),
+  })  : siteName = Value(siteName),
+        stateId = Value(stateId),
+        cityId = Value(cityId);
+  static Insertable<Store> custom({
+    Expression<int>? id,
+    Expression<String>? siteName,
+    Expression<String>? email,
+    Expression<String>? address,
+    Expression<String>? dlNumber,
+    Expression<String>? cstNumber,
+    Expression<String>? tinNumber,
+    Expression<int>? stateId,
+    Expression<int>? cityId,
+    Expression<String>? gstin,
+    Expression<String>? pincode,
+    Expression<String>? mobile,
+    Expression<String>? additionalInfo,
+    Expression<Uint8List>? image,
+    Expression<String>? createdBy,
+    Expression<DateTime>? createdDate,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (siteName != null) 'site_name': siteName,
+      if (email != null) 'email': email,
+      if (address != null) 'address': address,
+      if (dlNumber != null) 'dl_number': dlNumber,
+      if (cstNumber != null) 'cst_number': cstNumber,
+      if (tinNumber != null) 'tin_number': tinNumber,
+      if (stateId != null) 'state_id': stateId,
+      if (cityId != null) 'city_id': cityId,
+      if (gstin != null) 'gstin': gstin,
+      if (pincode != null) 'pincode': pincode,
+      if (mobile != null) 'mobile': mobile,
+      if (additionalInfo != null) 'additional_info': additionalInfo,
+      if (image != null) 'image': image,
+      if (createdBy != null) 'created_by': createdBy,
+      if (createdDate != null) 'created_date': createdDate,
+    });
+  }
+
+  StoresCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? siteName,
+      Value<String?>? email,
+      Value<String?>? address,
+      Value<String?>? dlNumber,
+      Value<String?>? cstNumber,
+      Value<String?>? tinNumber,
+      Value<int>? stateId,
+      Value<int>? cityId,
+      Value<String?>? gstin,
+      Value<String?>? pincode,
+      Value<String?>? mobile,
+      Value<String?>? additionalInfo,
+      Value<Uint8List?>? image,
+      Value<String?>? createdBy,
+      Value<DateTime>? createdDate}) {
+    return StoresCompanion(
+      id: id ?? this.id,
+      siteName: siteName ?? this.siteName,
+      email: email ?? this.email,
+      address: address ?? this.address,
+      dlNumber: dlNumber ?? this.dlNumber,
+      cstNumber: cstNumber ?? this.cstNumber,
+      tinNumber: tinNumber ?? this.tinNumber,
+      stateId: stateId ?? this.stateId,
+      cityId: cityId ?? this.cityId,
+      gstin: gstin ?? this.gstin,
+      pincode: pincode ?? this.pincode,
+      mobile: mobile ?? this.mobile,
+      additionalInfo: additionalInfo ?? this.additionalInfo,
+      image: image ?? this.image,
+      createdBy: createdBy ?? this.createdBy,
+      createdDate: createdDate ?? this.createdDate,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (siteName.present) {
+      map['site_name'] = Variable<String>(siteName.value);
+    }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (dlNumber.present) {
+      map['dl_number'] = Variable<String>(dlNumber.value);
+    }
+    if (cstNumber.present) {
+      map['cst_number'] = Variable<String>(cstNumber.value);
+    }
+    if (tinNumber.present) {
+      map['tin_number'] = Variable<String>(tinNumber.value);
+    }
+    if (stateId.present) {
+      map['state_id'] = Variable<int>(stateId.value);
+    }
+    if (cityId.present) {
+      map['city_id'] = Variable<int>(cityId.value);
+    }
+    if (gstin.present) {
+      map['gstin'] = Variable<String>(gstin.value);
+    }
+    if (pincode.present) {
+      map['pincode'] = Variable<String>(pincode.value);
+    }
+    if (mobile.present) {
+      map['mobile'] = Variable<String>(mobile.value);
+    }
+    if (additionalInfo.present) {
+      map['additional_info'] = Variable<String>(additionalInfo.value);
+    }
+    if (image.present) {
+      map['image'] = Variable<Uint8List>(image.value);
+    }
+    if (createdBy.present) {
+      map['created_by'] = Variable<String>(createdBy.value);
+    }
+    if (createdDate.present) {
+      map['created_date'] = Variable<DateTime>(createdDate.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StoresCompanion(')
+          ..write('id: $id, ')
+          ..write('siteName: $siteName, ')
+          ..write('email: $email, ')
+          ..write('address: $address, ')
+          ..write('dlNumber: $dlNumber, ')
+          ..write('cstNumber: $cstNumber, ')
+          ..write('tinNumber: $tinNumber, ')
+          ..write('stateId: $stateId, ')
+          ..write('cityId: $cityId, ')
+          ..write('gstin: $gstin, ')
+          ..write('pincode: $pincode, ')
+          ..write('mobile: $mobile, ')
+          ..write('additionalInfo: $additionalInfo, ')
+          ..write('image: $image, ')
+          ..write('createdBy: $createdBy, ')
+          ..write('createdDate: $createdDate')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   _$AppDatabase.connect(DatabaseConnection c) : super.connect(c);
@@ -5346,6 +9340,18 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoriesTable categories = $CategoriesTable(this);
   late final $FittersTable fitters = $FittersTable(this);
   late final $OrdersTable orders = $OrdersTable(this);
+  late final $RajyaTable rajya = $RajyaTable(this);
+  late final $CitiesTable cities = $CitiesTable(this);
+  late final $AreasTable areas = $AreasTable(this);
+  late final $BanksTable banks = $BanksTable(this);
+  late final $BrandsTable brands = $BrandsTable(this);
+  late final $CustomerCategoryTable customerCategory =
+      $CustomerCategoryTable(this);
+  late final $DoctorReferenceTable doctorReference =
+      $DoctorReferenceTable(this);
+  late final $EmailBookTable emailBook = $EmailBookTable(this);
+  late final $GendersTable genders = $GendersTable(this);
+  late final $StoresTable stores = $StoresTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -5357,7 +9363,17 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         opticProducts,
         categories,
         fitters,
-        orders
+        orders,
+        rajya,
+        cities,
+        areas,
+        banks,
+        brands,
+        customerCategory,
+        doctorReference,
+        emailBook,
+        genders,
+        stores
       ];
   @override
   DriftDatabaseOptions get options =>
@@ -8194,6 +12210,3457 @@ typedef $$OrdersTableProcessedTableManager = ProcessedTableManager<
     (Order, $$OrdersTableReferences),
     Order,
     PrefetchHooks Function({bool customerId, bool productId})>;
+typedef $$RajyaTableCreateCompanionBuilder = RajyaCompanion Function({
+  Value<int> id,
+  required String stateName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$RajyaTableUpdateCompanionBuilder = RajyaCompanion Function({
+  Value<int> id,
+  Value<String> stateName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$RajyaTableReferences
+    extends BaseReferences<_$AppDatabase, $RajyaTable, RajyaData> {
+  $$RajyaTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$CitiesTable, List<City>> _citiesRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.cities,
+          aliasName: $_aliasNameGenerator(db.rajya.id, db.cities.stateId));
+
+  $$CitiesTableProcessedTableManager get citiesRefs {
+    final manager = $$CitiesTableTableManager($_db, $_db.cities)
+        .filter((f) => f.stateId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_citiesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$AreasTable, List<Area>> _areasRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.areas,
+          aliasName: $_aliasNameGenerator(db.rajya.id, db.areas.stateId));
+
+  $$AreasTableProcessedTableManager get areasRefs {
+    final manager = $$AreasTableTableManager($_db, $_db.areas)
+        .filter((f) => f.stateId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_areasRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$BanksTable, List<Bank>> _banksRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.banks,
+          aliasName: $_aliasNameGenerator(db.rajya.id, db.banks.stateId));
+
+  $$BanksTableProcessedTableManager get banksRefs {
+    final manager = $$BanksTableTableManager($_db, $_db.banks)
+        .filter((f) => f.stateId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_banksRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$DoctorReferenceTable, List<DoctorReferenceData>>
+      _doctorReferenceRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.doctorReference,
+              aliasName: $_aliasNameGenerator(
+                  db.rajya.id, db.doctorReference.stateId));
+
+  $$DoctorReferenceTableProcessedTableManager get doctorReferenceRefs {
+    final manager =
+        $$DoctorReferenceTableTableManager($_db, $_db.doctorReference)
+            .filter((f) => f.stateId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_doctorReferenceRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$StoresTable, List<Store>> _storesRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.stores,
+          aliasName: $_aliasNameGenerator(db.rajya.id, db.stores.stateId));
+
+  $$StoresTableProcessedTableManager get storesRefs {
+    final manager = $$StoresTableTableManager($_db, $_db.stores)
+        .filter((f) => f.stateId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_storesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$RajyaTableFilterComposer extends Composer<_$AppDatabase, $RajyaTable> {
+  $$RajyaTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get stateName => $composableBuilder(
+      column: $table.stateName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  Expression<bool> citiesRefs(
+      Expression<bool> Function($$CitiesTableFilterComposer f) f) {
+    final $$CitiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableFilterComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> areasRefs(
+      Expression<bool> Function($$AreasTableFilterComposer f) f) {
+    final $$AreasTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.areas,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AreasTableFilterComposer(
+              $db: $db,
+              $table: $db.areas,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> banksRefs(
+      Expression<bool> Function($$BanksTableFilterComposer f) f) {
+    final $$BanksTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.banks,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BanksTableFilterComposer(
+              $db: $db,
+              $table: $db.banks,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> doctorReferenceRefs(
+      Expression<bool> Function($$DoctorReferenceTableFilterComposer f) f) {
+    final $$DoctorReferenceTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.doctorReference,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DoctorReferenceTableFilterComposer(
+              $db: $db,
+              $table: $db.doctorReference,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> storesRefs(
+      Expression<bool> Function($$StoresTableFilterComposer f) f) {
+    final $$StoresTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stores,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StoresTableFilterComposer(
+              $db: $db,
+              $table: $db.stores,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$RajyaTableOrderingComposer
+    extends Composer<_$AppDatabase, $RajyaTable> {
+  $$RajyaTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get stateName => $composableBuilder(
+      column: $table.stateName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+}
+
+class $$RajyaTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RajyaTable> {
+  $$RajyaTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get stateName =>
+      $composableBuilder(column: $table.stateName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  Expression<T> citiesRefs<T extends Object>(
+      Expression<T> Function($$CitiesTableAnnotationComposer a) f) {
+    final $$CitiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> areasRefs<T extends Object>(
+      Expression<T> Function($$AreasTableAnnotationComposer a) f) {
+    final $$AreasTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.areas,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AreasTableAnnotationComposer(
+              $db: $db,
+              $table: $db.areas,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> banksRefs<T extends Object>(
+      Expression<T> Function($$BanksTableAnnotationComposer a) f) {
+    final $$BanksTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.banks,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BanksTableAnnotationComposer(
+              $db: $db,
+              $table: $db.banks,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> doctorReferenceRefs<T extends Object>(
+      Expression<T> Function($$DoctorReferenceTableAnnotationComposer a) f) {
+    final $$DoctorReferenceTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.doctorReference,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DoctorReferenceTableAnnotationComposer(
+              $db: $db,
+              $table: $db.doctorReference,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> storesRefs<T extends Object>(
+      Expression<T> Function($$StoresTableAnnotationComposer a) f) {
+    final $$StoresTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stores,
+        getReferencedColumn: (t) => t.stateId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StoresTableAnnotationComposer(
+              $db: $db,
+              $table: $db.stores,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$RajyaTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $RajyaTable,
+    RajyaData,
+    $$RajyaTableFilterComposer,
+    $$RajyaTableOrderingComposer,
+    $$RajyaTableAnnotationComposer,
+    $$RajyaTableCreateCompanionBuilder,
+    $$RajyaTableUpdateCompanionBuilder,
+    (RajyaData, $$RajyaTableReferences),
+    RajyaData,
+    PrefetchHooks Function(
+        {bool citiesRefs,
+        bool areasRefs,
+        bool banksRefs,
+        bool doctorReferenceRefs,
+        bool storesRefs})> {
+  $$RajyaTableTableManager(_$AppDatabase db, $RajyaTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RajyaTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RajyaTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RajyaTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> stateName = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              RajyaCompanion(
+            id: id,
+            stateName: stateName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String stateName,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              RajyaCompanion.insert(
+            id: id,
+            stateName: stateName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$RajyaTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {citiesRefs = false,
+              areasRefs = false,
+              banksRefs = false,
+              doctorReferenceRefs = false,
+              storesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (citiesRefs) db.cities,
+                if (areasRefs) db.areas,
+                if (banksRefs) db.banks,
+                if (doctorReferenceRefs) db.doctorReference,
+                if (storesRefs) db.stores
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (citiesRefs)
+                    await $_getPrefetchedData<RajyaData, $RajyaTable, City>(
+                        currentTable: table,
+                        referencedTable:
+                            $$RajyaTableReferences._citiesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RajyaTableReferences(db, table, p0).citiesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.stateId == item.id),
+                        typedResults: items),
+                  if (areasRefs)
+                    await $_getPrefetchedData<RajyaData, $RajyaTable, Area>(
+                        currentTable: table,
+                        referencedTable:
+                            $$RajyaTableReferences._areasRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RajyaTableReferences(db, table, p0).areasRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.stateId == item.id),
+                        typedResults: items),
+                  if (banksRefs)
+                    await $_getPrefetchedData<RajyaData, $RajyaTable, Bank>(
+                        currentTable: table,
+                        referencedTable:
+                            $$RajyaTableReferences._banksRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RajyaTableReferences(db, table, p0).banksRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.stateId == item.id),
+                        typedResults: items),
+                  if (doctorReferenceRefs)
+                    await $_getPrefetchedData<RajyaData, $RajyaTable,
+                            DoctorReferenceData>(
+                        currentTable: table,
+                        referencedTable: $$RajyaTableReferences
+                            ._doctorReferenceRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RajyaTableReferences(db, table, p0)
+                                .doctorReferenceRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.stateId == item.id),
+                        typedResults: items),
+                  if (storesRefs)
+                    await $_getPrefetchedData<RajyaData, $RajyaTable, Store>(
+                        currentTable: table,
+                        referencedTable:
+                            $$RajyaTableReferences._storesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$RajyaTableReferences(db, table, p0).storesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.stateId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$RajyaTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $RajyaTable,
+    RajyaData,
+    $$RajyaTableFilterComposer,
+    $$RajyaTableOrderingComposer,
+    $$RajyaTableAnnotationComposer,
+    $$RajyaTableCreateCompanionBuilder,
+    $$RajyaTableUpdateCompanionBuilder,
+    (RajyaData, $$RajyaTableReferences),
+    RajyaData,
+    PrefetchHooks Function(
+        {bool citiesRefs,
+        bool areasRefs,
+        bool banksRefs,
+        bool doctorReferenceRefs,
+        bool storesRefs})>;
+typedef $$CitiesTableCreateCompanionBuilder = CitiesCompanion Function({
+  Value<int> id,
+  required String cityName,
+  required int stateId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$CitiesTableUpdateCompanionBuilder = CitiesCompanion Function({
+  Value<int> id,
+  Value<String> cityName,
+  Value<int> stateId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$CitiesTableReferences
+    extends BaseReferences<_$AppDatabase, $CitiesTable, City> {
+  $$CitiesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RajyaTable _stateIdTable(_$AppDatabase db) => db.rajya
+      .createAlias($_aliasNameGenerator(db.cities.stateId, db.rajya.id));
+
+  $$RajyaTableProcessedTableManager get stateId {
+    final $_column = $_itemColumn<int>('state_id')!;
+
+    final manager = $$RajyaTableTableManager($_db, $_db.rajya)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_stateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static MultiTypedResultKey<$AreasTable, List<Area>> _areasRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.areas,
+          aliasName: $_aliasNameGenerator(db.cities.id, db.areas.cityId));
+
+  $$AreasTableProcessedTableManager get areasRefs {
+    final manager = $$AreasTableTableManager($_db, $_db.areas)
+        .filter((f) => f.cityId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_areasRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$BanksTable, List<Bank>> _banksRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.banks,
+          aliasName: $_aliasNameGenerator(db.cities.id, db.banks.cityId));
+
+  $$BanksTableProcessedTableManager get banksRefs {
+    final manager = $$BanksTableTableManager($_db, $_db.banks)
+        .filter((f) => f.cityId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_banksRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$DoctorReferenceTable, List<DoctorReferenceData>>
+      _doctorReferenceRefsTable(_$AppDatabase db) =>
+          MultiTypedResultKey.fromTable(db.doctorReference,
+              aliasName: $_aliasNameGenerator(
+                  db.cities.id, db.doctorReference.cityId));
+
+  $$DoctorReferenceTableProcessedTableManager get doctorReferenceRefs {
+    final manager =
+        $$DoctorReferenceTableTableManager($_db, $_db.doctorReference)
+            .filter((f) => f.cityId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache =
+        $_typedResult.readTableOrNull(_doctorReferenceRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+
+  static MultiTypedResultKey<$StoresTable, List<Store>> _storesRefsTable(
+          _$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(db.stores,
+          aliasName: $_aliasNameGenerator(db.cities.id, db.stores.cityId));
+
+  $$StoresTableProcessedTableManager get storesRefs {
+    final manager = $$StoresTableTableManager($_db, $_db.stores)
+        .filter((f) => f.cityId.id.sqlEquals($_itemColumn<int>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_storesRefsTable($_db));
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: cache));
+  }
+}
+
+class $$CitiesTableFilterComposer
+    extends Composer<_$AppDatabase, $CitiesTable> {
+  $$CitiesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cityName => $composableBuilder(
+      column: $table.cityName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  $$RajyaTableFilterComposer get stateId {
+    final $$RajyaTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableFilterComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<bool> areasRefs(
+      Expression<bool> Function($$AreasTableFilterComposer f) f) {
+    final $$AreasTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.areas,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AreasTableFilterComposer(
+              $db: $db,
+              $table: $db.areas,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> banksRefs(
+      Expression<bool> Function($$BanksTableFilterComposer f) f) {
+    final $$BanksTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.banks,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BanksTableFilterComposer(
+              $db: $db,
+              $table: $db.banks,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> doctorReferenceRefs(
+      Expression<bool> Function($$DoctorReferenceTableFilterComposer f) f) {
+    final $$DoctorReferenceTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.doctorReference,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DoctorReferenceTableFilterComposer(
+              $db: $db,
+              $table: $db.doctorReference,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<bool> storesRefs(
+      Expression<bool> Function($$StoresTableFilterComposer f) f) {
+    final $$StoresTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stores,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StoresTableFilterComposer(
+              $db: $db,
+              $table: $db.stores,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$CitiesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CitiesTable> {
+  $$CitiesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cityName => $composableBuilder(
+      column: $table.cityName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+
+  $$RajyaTableOrderingComposer get stateId {
+    final $$RajyaTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableOrderingComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$CitiesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CitiesTable> {
+  $$CitiesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get cityName =>
+      $composableBuilder(column: $table.cityName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  $$RajyaTableAnnotationComposer get stateId {
+    final $$RajyaTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableAnnotationComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  Expression<T> areasRefs<T extends Object>(
+      Expression<T> Function($$AreasTableAnnotationComposer a) f) {
+    final $$AreasTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.areas,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$AreasTableAnnotationComposer(
+              $db: $db,
+              $table: $db.areas,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> banksRefs<T extends Object>(
+      Expression<T> Function($$BanksTableAnnotationComposer a) f) {
+    final $$BanksTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.banks,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$BanksTableAnnotationComposer(
+              $db: $db,
+              $table: $db.banks,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> doctorReferenceRefs<T extends Object>(
+      Expression<T> Function($$DoctorReferenceTableAnnotationComposer a) f) {
+    final $$DoctorReferenceTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.doctorReference,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$DoctorReferenceTableAnnotationComposer(
+              $db: $db,
+              $table: $db.doctorReference,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+
+  Expression<T> storesRefs<T extends Object>(
+      Expression<T> Function($$StoresTableAnnotationComposer a) f) {
+    final $$StoresTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.stores,
+        getReferencedColumn: (t) => t.cityId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$StoresTableAnnotationComposer(
+              $db: $db,
+              $table: $db.stores,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return f(composer);
+  }
+}
+
+class $$CitiesTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CitiesTable,
+    City,
+    $$CitiesTableFilterComposer,
+    $$CitiesTableOrderingComposer,
+    $$CitiesTableAnnotationComposer,
+    $$CitiesTableCreateCompanionBuilder,
+    $$CitiesTableUpdateCompanionBuilder,
+    (City, $$CitiesTableReferences),
+    City,
+    PrefetchHooks Function(
+        {bool stateId,
+        bool areasRefs,
+        bool banksRefs,
+        bool doctorReferenceRefs,
+        bool storesRefs})> {
+  $$CitiesTableTableManager(_$AppDatabase db, $CitiesTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CitiesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CitiesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CitiesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> cityName = const Value.absent(),
+            Value<int> stateId = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              CitiesCompanion(
+            id: id,
+            cityName: cityName,
+            stateId: stateId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String cityName,
+            required int stateId,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              CitiesCompanion.insert(
+            id: id,
+            cityName: cityName,
+            stateId: stateId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$CitiesTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: (
+              {stateId = false,
+              areasRefs = false,
+              banksRefs = false,
+              doctorReferenceRefs = false,
+              storesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (areasRefs) db.areas,
+                if (banksRefs) db.banks,
+                if (doctorReferenceRefs) db.doctorReference,
+                if (storesRefs) db.stores
+              ],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (stateId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.stateId,
+                    referencedTable: $$CitiesTableReferences._stateIdTable(db),
+                    referencedColumn:
+                        $$CitiesTableReferences._stateIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (areasRefs)
+                    await $_getPrefetchedData<City, $CitiesTable, Area>(
+                        currentTable: table,
+                        referencedTable:
+                            $$CitiesTableReferences._areasRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CitiesTableReferences(db, table, p0).areasRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.cityId == item.id),
+                        typedResults: items),
+                  if (banksRefs)
+                    await $_getPrefetchedData<City, $CitiesTable, Bank>(
+                        currentTable: table,
+                        referencedTable:
+                            $$CitiesTableReferences._banksRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CitiesTableReferences(db, table, p0).banksRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.cityId == item.id),
+                        typedResults: items),
+                  if (doctorReferenceRefs)
+                    await $_getPrefetchedData<City, $CitiesTable,
+                            DoctorReferenceData>(
+                        currentTable: table,
+                        referencedTable: $$CitiesTableReferences
+                            ._doctorReferenceRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CitiesTableReferences(db, table, p0)
+                                .doctorReferenceRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.cityId == item.id),
+                        typedResults: items),
+                  if (storesRefs)
+                    await $_getPrefetchedData<City, $CitiesTable, Store>(
+                        currentTable: table,
+                        referencedTable:
+                            $$CitiesTableReferences._storesRefsTable(db),
+                        managerFromTypedResult: (p0) =>
+                            $$CitiesTableReferences(db, table, p0).storesRefs,
+                        referencedItemsForCurrentItem: (item,
+                                referencedItems) =>
+                            referencedItems.where((e) => e.cityId == item.id),
+                        typedResults: items)
+                ];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$CitiesTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CitiesTable,
+    City,
+    $$CitiesTableFilterComposer,
+    $$CitiesTableOrderingComposer,
+    $$CitiesTableAnnotationComposer,
+    $$CitiesTableCreateCompanionBuilder,
+    $$CitiesTableUpdateCompanionBuilder,
+    (City, $$CitiesTableReferences),
+    City,
+    PrefetchHooks Function(
+        {bool stateId,
+        bool areasRefs,
+        bool banksRefs,
+        bool doctorReferenceRefs,
+        bool storesRefs})>;
+typedef $$AreasTableCreateCompanionBuilder = AreasCompanion Function({
+  Value<int> id,
+  required String areaDescription,
+  required int stateId,
+  required int cityId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$AreasTableUpdateCompanionBuilder = AreasCompanion Function({
+  Value<int> id,
+  Value<String> areaDescription,
+  Value<int> stateId,
+  Value<int> cityId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$AreasTableReferences
+    extends BaseReferences<_$AppDatabase, $AreasTable, Area> {
+  $$AreasTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RajyaTable _stateIdTable(_$AppDatabase db) =>
+      db.rajya.createAlias($_aliasNameGenerator(db.areas.stateId, db.rajya.id));
+
+  $$RajyaTableProcessedTableManager get stateId {
+    final $_column = $_itemColumn<int>('state_id')!;
+
+    final manager = $$RajyaTableTableManager($_db, $_db.rajya)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_stateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CitiesTable _cityIdTable(_$AppDatabase db) => db.cities
+      .createAlias($_aliasNameGenerator(db.areas.cityId, db.cities.id));
+
+  $$CitiesTableProcessedTableManager get cityId {
+    final $_column = $_itemColumn<int>('city_id')!;
+
+    final manager = $$CitiesTableTableManager($_db, $_db.cities)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_cityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$AreasTableFilterComposer extends Composer<_$AppDatabase, $AreasTable> {
+  $$AreasTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get areaDescription => $composableBuilder(
+      column: $table.areaDescription,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  $$RajyaTableFilterComposer get stateId {
+    final $$RajyaTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableFilterComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableFilterComposer get cityId {
+    final $$CitiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableFilterComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AreasTableOrderingComposer
+    extends Composer<_$AppDatabase, $AreasTable> {
+  $$AreasTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get areaDescription => $composableBuilder(
+      column: $table.areaDescription,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+
+  $$RajyaTableOrderingComposer get stateId {
+    final $$RajyaTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableOrderingComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableOrderingComposer get cityId {
+    final $$CitiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AreasTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AreasTable> {
+  $$AreasTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get areaDescription => $composableBuilder(
+      column: $table.areaDescription, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  $$RajyaTableAnnotationComposer get stateId {
+    final $$RajyaTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableAnnotationComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableAnnotationComposer get cityId {
+    final $$CitiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$AreasTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AreasTable,
+    Area,
+    $$AreasTableFilterComposer,
+    $$AreasTableOrderingComposer,
+    $$AreasTableAnnotationComposer,
+    $$AreasTableCreateCompanionBuilder,
+    $$AreasTableUpdateCompanionBuilder,
+    (Area, $$AreasTableReferences),
+    Area,
+    PrefetchHooks Function({bool stateId, bool cityId})> {
+  $$AreasTableTableManager(_$AppDatabase db, $AreasTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AreasTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AreasTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AreasTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> areaDescription = const Value.absent(),
+            Value<int> stateId = const Value.absent(),
+            Value<int> cityId = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              AreasCompanion(
+            id: id,
+            areaDescription: areaDescription,
+            stateId: stateId,
+            cityId: cityId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String areaDescription,
+            required int stateId,
+            required int cityId,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              AreasCompanion.insert(
+            id: id,
+            areaDescription: areaDescription,
+            stateId: stateId,
+            cityId: cityId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$AreasTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({stateId = false, cityId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (stateId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.stateId,
+                    referencedTable: $$AreasTableReferences._stateIdTable(db),
+                    referencedColumn:
+                        $$AreasTableReferences._stateIdTable(db).id,
+                  ) as T;
+                }
+                if (cityId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.cityId,
+                    referencedTable: $$AreasTableReferences._cityIdTable(db),
+                    referencedColumn:
+                        $$AreasTableReferences._cityIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$AreasTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $AreasTable,
+    Area,
+    $$AreasTableFilterComposer,
+    $$AreasTableOrderingComposer,
+    $$AreasTableAnnotationComposer,
+    $$AreasTableCreateCompanionBuilder,
+    $$AreasTableUpdateCompanionBuilder,
+    (Area, $$AreasTableReferences),
+    Area,
+    PrefetchHooks Function({bool stateId, bool cityId})>;
+typedef $$BanksTableCreateCompanionBuilder = BanksCompanion Function({
+  Value<int> id,
+  required String bankName,
+  required String accountNo,
+  Value<String?> abbreviation,
+  Value<String?> address,
+  Value<String?> pincode,
+  required int stateId,
+  required int cityId,
+  Value<String?> mobile,
+  Value<String?> email,
+  Value<String?> ifsc,
+  Value<String?> swiftCode,
+  required String accountName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$BanksTableUpdateCompanionBuilder = BanksCompanion Function({
+  Value<int> id,
+  Value<String> bankName,
+  Value<String> accountNo,
+  Value<String?> abbreviation,
+  Value<String?> address,
+  Value<String?> pincode,
+  Value<int> stateId,
+  Value<int> cityId,
+  Value<String?> mobile,
+  Value<String?> email,
+  Value<String?> ifsc,
+  Value<String?> swiftCode,
+  Value<String> accountName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$BanksTableReferences
+    extends BaseReferences<_$AppDatabase, $BanksTable, Bank> {
+  $$BanksTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RajyaTable _stateIdTable(_$AppDatabase db) =>
+      db.rajya.createAlias($_aliasNameGenerator(db.banks.stateId, db.rajya.id));
+
+  $$RajyaTableProcessedTableManager get stateId {
+    final $_column = $_itemColumn<int>('state_id')!;
+
+    final manager = $$RajyaTableTableManager($_db, $_db.rajya)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_stateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CitiesTable _cityIdTable(_$AppDatabase db) => db.cities
+      .createAlias($_aliasNameGenerator(db.banks.cityId, db.cities.id));
+
+  $$CitiesTableProcessedTableManager get cityId {
+    final $_column = $_itemColumn<int>('city_id')!;
+
+    final manager = $$CitiesTableTableManager($_db, $_db.cities)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_cityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$BanksTableFilterComposer extends Composer<_$AppDatabase, $BanksTable> {
+  $$BanksTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get bankName => $composableBuilder(
+      column: $table.bankName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get accountNo => $composableBuilder(
+      column: $table.accountNo, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mobile => $composableBuilder(
+      column: $table.mobile, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get ifsc => $composableBuilder(
+      column: $table.ifsc, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get swiftCode => $composableBuilder(
+      column: $table.swiftCode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get accountName => $composableBuilder(
+      column: $table.accountName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  $$RajyaTableFilterComposer get stateId {
+    final $$RajyaTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableFilterComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableFilterComposer get cityId {
+    final $$CitiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableFilterComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BanksTableOrderingComposer
+    extends Composer<_$AppDatabase, $BanksTable> {
+  $$BanksTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get bankName => $composableBuilder(
+      column: $table.bankName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get accountNo => $composableBuilder(
+      column: $table.accountNo, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mobile => $composableBuilder(
+      column: $table.mobile, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get ifsc => $composableBuilder(
+      column: $table.ifsc, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get swiftCode => $composableBuilder(
+      column: $table.swiftCode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get accountName => $composableBuilder(
+      column: $table.accountName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+
+  $$RajyaTableOrderingComposer get stateId {
+    final $$RajyaTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableOrderingComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableOrderingComposer get cityId {
+    final $$CitiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BanksTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BanksTable> {
+  $$BanksTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get bankName =>
+      $composableBuilder(column: $table.bankName, builder: (column) => column);
+
+  GeneratedColumn<String> get accountNo =>
+      $composableBuilder(column: $table.accountNo, builder: (column) => column);
+
+  GeneratedColumn<String> get abbreviation => $composableBuilder(
+      column: $table.abbreviation, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get pincode =>
+      $composableBuilder(column: $table.pincode, builder: (column) => column);
+
+  GeneratedColumn<String> get mobile =>
+      $composableBuilder(column: $table.mobile, builder: (column) => column);
+
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumn<String> get ifsc =>
+      $composableBuilder(column: $table.ifsc, builder: (column) => column);
+
+  GeneratedColumn<String> get swiftCode =>
+      $composableBuilder(column: $table.swiftCode, builder: (column) => column);
+
+  GeneratedColumn<String> get accountName => $composableBuilder(
+      column: $table.accountName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  $$RajyaTableAnnotationComposer get stateId {
+    final $$RajyaTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableAnnotationComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableAnnotationComposer get cityId {
+    final $$CitiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$BanksTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BanksTable,
+    Bank,
+    $$BanksTableFilterComposer,
+    $$BanksTableOrderingComposer,
+    $$BanksTableAnnotationComposer,
+    $$BanksTableCreateCompanionBuilder,
+    $$BanksTableUpdateCompanionBuilder,
+    (Bank, $$BanksTableReferences),
+    Bank,
+    PrefetchHooks Function({bool stateId, bool cityId})> {
+  $$BanksTableTableManager(_$AppDatabase db, $BanksTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BanksTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BanksTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BanksTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> bankName = const Value.absent(),
+            Value<String> accountNo = const Value.absent(),
+            Value<String?> abbreviation = const Value.absent(),
+            Value<String?> address = const Value.absent(),
+            Value<String?> pincode = const Value.absent(),
+            Value<int> stateId = const Value.absent(),
+            Value<int> cityId = const Value.absent(),
+            Value<String?> mobile = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> ifsc = const Value.absent(),
+            Value<String?> swiftCode = const Value.absent(),
+            Value<String> accountName = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              BanksCompanion(
+            id: id,
+            bankName: bankName,
+            accountNo: accountNo,
+            abbreviation: abbreviation,
+            address: address,
+            pincode: pincode,
+            stateId: stateId,
+            cityId: cityId,
+            mobile: mobile,
+            email: email,
+            ifsc: ifsc,
+            swiftCode: swiftCode,
+            accountName: accountName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String bankName,
+            required String accountNo,
+            Value<String?> abbreviation = const Value.absent(),
+            Value<String?> address = const Value.absent(),
+            Value<String?> pincode = const Value.absent(),
+            required int stateId,
+            required int cityId,
+            Value<String?> mobile = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> ifsc = const Value.absent(),
+            Value<String?> swiftCode = const Value.absent(),
+            required String accountName,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              BanksCompanion.insert(
+            id: id,
+            bankName: bankName,
+            accountNo: accountNo,
+            abbreviation: abbreviation,
+            address: address,
+            pincode: pincode,
+            stateId: stateId,
+            cityId: cityId,
+            mobile: mobile,
+            email: email,
+            ifsc: ifsc,
+            swiftCode: swiftCode,
+            accountName: accountName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$BanksTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({stateId = false, cityId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (stateId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.stateId,
+                    referencedTable: $$BanksTableReferences._stateIdTable(db),
+                    referencedColumn:
+                        $$BanksTableReferences._stateIdTable(db).id,
+                  ) as T;
+                }
+                if (cityId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.cityId,
+                    referencedTable: $$BanksTableReferences._cityIdTable(db),
+                    referencedColumn:
+                        $$BanksTableReferences._cityIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$BanksTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BanksTable,
+    Bank,
+    $$BanksTableFilterComposer,
+    $$BanksTableOrderingComposer,
+    $$BanksTableAnnotationComposer,
+    $$BanksTableCreateCompanionBuilder,
+    $$BanksTableUpdateCompanionBuilder,
+    (Bank, $$BanksTableReferences),
+    Bank,
+    PrefetchHooks Function({bool stateId, bool cityId})>;
+typedef $$BrandsTableCreateCompanionBuilder = BrandsCompanion Function({
+  Value<int> id,
+  required String stateName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$BrandsTableUpdateCompanionBuilder = BrandsCompanion Function({
+  Value<int> id,
+  Value<String> stateName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+class $$BrandsTableFilterComposer
+    extends Composer<_$AppDatabase, $BrandsTable> {
+  $$BrandsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get stateName => $composableBuilder(
+      column: $table.stateName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+}
+
+class $$BrandsTableOrderingComposer
+    extends Composer<_$AppDatabase, $BrandsTable> {
+  $$BrandsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get stateName => $composableBuilder(
+      column: $table.stateName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BrandsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $BrandsTable> {
+  $$BrandsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get stateName =>
+      $composableBuilder(column: $table.stateName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+}
+
+class $$BrandsTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $BrandsTable,
+    Brand,
+    $$BrandsTableFilterComposer,
+    $$BrandsTableOrderingComposer,
+    $$BrandsTableAnnotationComposer,
+    $$BrandsTableCreateCompanionBuilder,
+    $$BrandsTableUpdateCompanionBuilder,
+    (Brand, BaseReferences<_$AppDatabase, $BrandsTable, Brand>),
+    Brand,
+    PrefetchHooks Function()> {
+  $$BrandsTableTableManager(_$AppDatabase db, $BrandsTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$BrandsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BrandsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BrandsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> stateName = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              BrandsCompanion(
+            id: id,
+            stateName: stateName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String stateName,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              BrandsCompanion.insert(
+            id: id,
+            stateName: stateName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$BrandsTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $BrandsTable,
+    Brand,
+    $$BrandsTableFilterComposer,
+    $$BrandsTableOrderingComposer,
+    $$BrandsTableAnnotationComposer,
+    $$BrandsTableCreateCompanionBuilder,
+    $$BrandsTableUpdateCompanionBuilder,
+    (Brand, BaseReferences<_$AppDatabase, $BrandsTable, Brand>),
+    Brand,
+    PrefetchHooks Function()>;
+typedef $$CustomerCategoryTableCreateCompanionBuilder
+    = CustomerCategoryCompanion Function({
+  Value<int> id,
+  required String customerCatName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$CustomerCategoryTableUpdateCompanionBuilder
+    = CustomerCategoryCompanion Function({
+  Value<int> id,
+  Value<String> customerCatName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+class $$CustomerCategoryTableFilterComposer
+    extends Composer<_$AppDatabase, $CustomerCategoryTable> {
+  $$CustomerCategoryTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get customerCatName => $composableBuilder(
+      column: $table.customerCatName,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+}
+
+class $$CustomerCategoryTableOrderingComposer
+    extends Composer<_$AppDatabase, $CustomerCategoryTable> {
+  $$CustomerCategoryTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get customerCatName => $composableBuilder(
+      column: $table.customerCatName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CustomerCategoryTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CustomerCategoryTable> {
+  $$CustomerCategoryTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get customerCatName => $composableBuilder(
+      column: $table.customerCatName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+}
+
+class $$CustomerCategoryTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $CustomerCategoryTable,
+    CustomerCategoryData,
+    $$CustomerCategoryTableFilterComposer,
+    $$CustomerCategoryTableOrderingComposer,
+    $$CustomerCategoryTableAnnotationComposer,
+    $$CustomerCategoryTableCreateCompanionBuilder,
+    $$CustomerCategoryTableUpdateCompanionBuilder,
+    (
+      CustomerCategoryData,
+      BaseReferences<_$AppDatabase, $CustomerCategoryTable,
+          CustomerCategoryData>
+    ),
+    CustomerCategoryData,
+    PrefetchHooks Function()> {
+  $$CustomerCategoryTableTableManager(
+      _$AppDatabase db, $CustomerCategoryTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CustomerCategoryTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CustomerCategoryTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CustomerCategoryTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> customerCatName = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              CustomerCategoryCompanion(
+            id: id,
+            customerCatName: customerCatName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String customerCatName,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              CustomerCategoryCompanion.insert(
+            id: id,
+            customerCatName: customerCatName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$CustomerCategoryTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $CustomerCategoryTable,
+    CustomerCategoryData,
+    $$CustomerCategoryTableFilterComposer,
+    $$CustomerCategoryTableOrderingComposer,
+    $$CustomerCategoryTableAnnotationComposer,
+    $$CustomerCategoryTableCreateCompanionBuilder,
+    $$CustomerCategoryTableUpdateCompanionBuilder,
+    (
+      CustomerCategoryData,
+      BaseReferences<_$AppDatabase, $CustomerCategoryTable,
+          CustomerCategoryData>
+    ),
+    CustomerCategoryData,
+    PrefetchHooks Function()>;
+typedef $$DoctorReferenceTableCreateCompanionBuilder = DoctorReferenceCompanion
+    Function({
+  Value<int> id,
+  required String doctorName,
+  required String address,
+  required int stateId,
+  required int cityId,
+  required String commision,
+  Value<String?> pincode,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$DoctorReferenceTableUpdateCompanionBuilder = DoctorReferenceCompanion
+    Function({
+  Value<int> id,
+  Value<String> doctorName,
+  Value<String> address,
+  Value<int> stateId,
+  Value<int> cityId,
+  Value<String> commision,
+  Value<String?> pincode,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$DoctorReferenceTableReferences extends BaseReferences<
+    _$AppDatabase, $DoctorReferenceTable, DoctorReferenceData> {
+  $$DoctorReferenceTableReferences(
+      super.$_db, super.$_table, super.$_typedResult);
+
+  static $RajyaTable _stateIdTable(_$AppDatabase db) => db.rajya.createAlias(
+      $_aliasNameGenerator(db.doctorReference.stateId, db.rajya.id));
+
+  $$RajyaTableProcessedTableManager get stateId {
+    final $_column = $_itemColumn<int>('state_id')!;
+
+    final manager = $$RajyaTableTableManager($_db, $_db.rajya)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_stateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CitiesTable _cityIdTable(_$AppDatabase db) => db.cities.createAlias(
+      $_aliasNameGenerator(db.doctorReference.cityId, db.cities.id));
+
+  $$CitiesTableProcessedTableManager get cityId {
+    final $_column = $_itemColumn<int>('city_id')!;
+
+    final manager = $$CitiesTableTableManager($_db, $_db.cities)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_cityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$DoctorReferenceTableFilterComposer
+    extends Composer<_$AppDatabase, $DoctorReferenceTable> {
+  $$DoctorReferenceTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get doctorName => $composableBuilder(
+      column: $table.doctorName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get commision => $composableBuilder(
+      column: $table.commision, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  $$RajyaTableFilterComposer get stateId {
+    final $$RajyaTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableFilterComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableFilterComposer get cityId {
+    final $$CitiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableFilterComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$DoctorReferenceTableOrderingComposer
+    extends Composer<_$AppDatabase, $DoctorReferenceTable> {
+  $$DoctorReferenceTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get doctorName => $composableBuilder(
+      column: $table.doctorName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get commision => $composableBuilder(
+      column: $table.commision, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+
+  $$RajyaTableOrderingComposer get stateId {
+    final $$RajyaTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableOrderingComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableOrderingComposer get cityId {
+    final $$CitiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$DoctorReferenceTableAnnotationComposer
+    extends Composer<_$AppDatabase, $DoctorReferenceTable> {
+  $$DoctorReferenceTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get doctorName => $composableBuilder(
+      column: $table.doctorName, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get commision =>
+      $composableBuilder(column: $table.commision, builder: (column) => column);
+
+  GeneratedColumn<String> get pincode =>
+      $composableBuilder(column: $table.pincode, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  $$RajyaTableAnnotationComposer get stateId {
+    final $$RajyaTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableAnnotationComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableAnnotationComposer get cityId {
+    final $$CitiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$DoctorReferenceTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $DoctorReferenceTable,
+    DoctorReferenceData,
+    $$DoctorReferenceTableFilterComposer,
+    $$DoctorReferenceTableOrderingComposer,
+    $$DoctorReferenceTableAnnotationComposer,
+    $$DoctorReferenceTableCreateCompanionBuilder,
+    $$DoctorReferenceTableUpdateCompanionBuilder,
+    (DoctorReferenceData, $$DoctorReferenceTableReferences),
+    DoctorReferenceData,
+    PrefetchHooks Function({bool stateId, bool cityId})> {
+  $$DoctorReferenceTableTableManager(
+      _$AppDatabase db, $DoctorReferenceTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$DoctorReferenceTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DoctorReferenceTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DoctorReferenceTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> doctorName = const Value.absent(),
+            Value<String> address = const Value.absent(),
+            Value<int> stateId = const Value.absent(),
+            Value<int> cityId = const Value.absent(),
+            Value<String> commision = const Value.absent(),
+            Value<String?> pincode = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              DoctorReferenceCompanion(
+            id: id,
+            doctorName: doctorName,
+            address: address,
+            stateId: stateId,
+            cityId: cityId,
+            commision: commision,
+            pincode: pincode,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String doctorName,
+            required String address,
+            required int stateId,
+            required int cityId,
+            required String commision,
+            Value<String?> pincode = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              DoctorReferenceCompanion.insert(
+            id: id,
+            doctorName: doctorName,
+            address: address,
+            stateId: stateId,
+            cityId: cityId,
+            commision: commision,
+            pincode: pincode,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (
+                    e.readTable(table),
+                    $$DoctorReferenceTableReferences(db, table, e)
+                  ))
+              .toList(),
+          prefetchHooksCallback: ({stateId = false, cityId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (stateId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.stateId,
+                    referencedTable:
+                        $$DoctorReferenceTableReferences._stateIdTable(db),
+                    referencedColumn:
+                        $$DoctorReferenceTableReferences._stateIdTable(db).id,
+                  ) as T;
+                }
+                if (cityId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.cityId,
+                    referencedTable:
+                        $$DoctorReferenceTableReferences._cityIdTable(db),
+                    referencedColumn:
+                        $$DoctorReferenceTableReferences._cityIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$DoctorReferenceTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $DoctorReferenceTable,
+    DoctorReferenceData,
+    $$DoctorReferenceTableFilterComposer,
+    $$DoctorReferenceTableOrderingComposer,
+    $$DoctorReferenceTableAnnotationComposer,
+    $$DoctorReferenceTableCreateCompanionBuilder,
+    $$DoctorReferenceTableUpdateCompanionBuilder,
+    (DoctorReferenceData, $$DoctorReferenceTableReferences),
+    DoctorReferenceData,
+    PrefetchHooks Function({bool stateId, bool cityId})>;
+typedef $$EmailBookTableCreateCompanionBuilder = EmailBookCompanion Function({
+  Value<int> id,
+  required String firstName,
+  required String lastName,
+  required String emailId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$EmailBookTableUpdateCompanionBuilder = EmailBookCompanion Function({
+  Value<int> id,
+  Value<String> firstName,
+  Value<String> lastName,
+  Value<String> emailId,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+class $$EmailBookTableFilterComposer
+    extends Composer<_$AppDatabase, $EmailBookTable> {
+  $$EmailBookTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get firstName => $composableBuilder(
+      column: $table.firstName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get lastName => $composableBuilder(
+      column: $table.lastName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get emailId => $composableBuilder(
+      column: $table.emailId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+}
+
+class $$EmailBookTableOrderingComposer
+    extends Composer<_$AppDatabase, $EmailBookTable> {
+  $$EmailBookTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get firstName => $composableBuilder(
+      column: $table.firstName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get lastName => $composableBuilder(
+      column: $table.lastName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get emailId => $composableBuilder(
+      column: $table.emailId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EmailBookTableAnnotationComposer
+    extends Composer<_$AppDatabase, $EmailBookTable> {
+  $$EmailBookTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get firstName =>
+      $composableBuilder(column: $table.firstName, builder: (column) => column);
+
+  GeneratedColumn<String> get lastName =>
+      $composableBuilder(column: $table.lastName, builder: (column) => column);
+
+  GeneratedColumn<String> get emailId =>
+      $composableBuilder(column: $table.emailId, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+}
+
+class $$EmailBookTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $EmailBookTable,
+    EmailBookData,
+    $$EmailBookTableFilterComposer,
+    $$EmailBookTableOrderingComposer,
+    $$EmailBookTableAnnotationComposer,
+    $$EmailBookTableCreateCompanionBuilder,
+    $$EmailBookTableUpdateCompanionBuilder,
+    (
+      EmailBookData,
+      BaseReferences<_$AppDatabase, $EmailBookTable, EmailBookData>
+    ),
+    EmailBookData,
+    PrefetchHooks Function()> {
+  $$EmailBookTableTableManager(_$AppDatabase db, $EmailBookTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$EmailBookTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EmailBookTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EmailBookTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> firstName = const Value.absent(),
+            Value<String> lastName = const Value.absent(),
+            Value<String> emailId = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              EmailBookCompanion(
+            id: id,
+            firstName: firstName,
+            lastName: lastName,
+            emailId: emailId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String firstName,
+            required String lastName,
+            required String emailId,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              EmailBookCompanion.insert(
+            id: id,
+            firstName: firstName,
+            lastName: lastName,
+            emailId: emailId,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$EmailBookTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $EmailBookTable,
+    EmailBookData,
+    $$EmailBookTableFilterComposer,
+    $$EmailBookTableOrderingComposer,
+    $$EmailBookTableAnnotationComposer,
+    $$EmailBookTableCreateCompanionBuilder,
+    $$EmailBookTableUpdateCompanionBuilder,
+    (
+      EmailBookData,
+      BaseReferences<_$AppDatabase, $EmailBookTable, EmailBookData>
+    ),
+    EmailBookData,
+    PrefetchHooks Function()>;
+typedef $$GendersTableCreateCompanionBuilder = GendersCompanion Function({
+  Value<int> id,
+  required String genderName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$GendersTableUpdateCompanionBuilder = GendersCompanion Function({
+  Value<int> id,
+  Value<String> genderName,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+class $$GendersTableFilterComposer
+    extends Composer<_$AppDatabase, $GendersTable> {
+  $$GendersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get genderName => $composableBuilder(
+      column: $table.genderName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+}
+
+class $$GendersTableOrderingComposer
+    extends Composer<_$AppDatabase, $GendersTable> {
+  $$GendersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get genderName => $composableBuilder(
+      column: $table.genderName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+}
+
+class $$GendersTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GendersTable> {
+  $$GendersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get genderName => $composableBuilder(
+      column: $table.genderName, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+}
+
+class $$GendersTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $GendersTable,
+    Gender,
+    $$GendersTableFilterComposer,
+    $$GendersTableOrderingComposer,
+    $$GendersTableAnnotationComposer,
+    $$GendersTableCreateCompanionBuilder,
+    $$GendersTableUpdateCompanionBuilder,
+    (Gender, BaseReferences<_$AppDatabase, $GendersTable, Gender>),
+    Gender,
+    PrefetchHooks Function()> {
+  $$GendersTableTableManager(_$AppDatabase db, $GendersTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GendersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GendersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GendersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> genderName = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              GendersCompanion(
+            id: id,
+            genderName: genderName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String genderName,
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              GendersCompanion.insert(
+            id: id,
+            genderName: genderName,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$GendersTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $GendersTable,
+    Gender,
+    $$GendersTableFilterComposer,
+    $$GendersTableOrderingComposer,
+    $$GendersTableAnnotationComposer,
+    $$GendersTableCreateCompanionBuilder,
+    $$GendersTableUpdateCompanionBuilder,
+    (Gender, BaseReferences<_$AppDatabase, $GendersTable, Gender>),
+    Gender,
+    PrefetchHooks Function()>;
+typedef $$StoresTableCreateCompanionBuilder = StoresCompanion Function({
+  Value<int> id,
+  required String siteName,
+  Value<String?> email,
+  Value<String?> address,
+  Value<String?> dlNumber,
+  Value<String?> cstNumber,
+  Value<String?> tinNumber,
+  required int stateId,
+  required int cityId,
+  Value<String?> gstin,
+  Value<String?> pincode,
+  Value<String?> mobile,
+  Value<String?> additionalInfo,
+  Value<Uint8List?> image,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+typedef $$StoresTableUpdateCompanionBuilder = StoresCompanion Function({
+  Value<int> id,
+  Value<String> siteName,
+  Value<String?> email,
+  Value<String?> address,
+  Value<String?> dlNumber,
+  Value<String?> cstNumber,
+  Value<String?> tinNumber,
+  Value<int> stateId,
+  Value<int> cityId,
+  Value<String?> gstin,
+  Value<String?> pincode,
+  Value<String?> mobile,
+  Value<String?> additionalInfo,
+  Value<Uint8List?> image,
+  Value<String?> createdBy,
+  Value<DateTime> createdDate,
+});
+
+final class $$StoresTableReferences
+    extends BaseReferences<_$AppDatabase, $StoresTable, Store> {
+  $$StoresTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $RajyaTable _stateIdTable(_$AppDatabase db) => db.rajya
+      .createAlias($_aliasNameGenerator(db.stores.stateId, db.rajya.id));
+
+  $$RajyaTableProcessedTableManager get stateId {
+    final $_column = $_itemColumn<int>('state_id')!;
+
+    final manager = $$RajyaTableTableManager($_db, $_db.rajya)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_stateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+
+  static $CitiesTable _cityIdTable(_$AppDatabase db) => db.cities
+      .createAlias($_aliasNameGenerator(db.stores.cityId, db.cities.id));
+
+  $$CitiesTableProcessedTableManager get cityId {
+    final $_column = $_itemColumn<int>('city_id')!;
+
+    final manager = $$CitiesTableTableManager($_db, $_db.cities)
+        .filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_cityIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+        manager.$state.copyWith(prefetchedData: [item]));
+  }
+}
+
+class $$StoresTableFilterComposer
+    extends Composer<_$AppDatabase, $StoresTable> {
+  $$StoresTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get siteName => $composableBuilder(
+      column: $table.siteName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get dlNumber => $composableBuilder(
+      column: $table.dlNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cstNumber => $composableBuilder(
+      column: $table.cstNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get tinNumber => $composableBuilder(
+      column: $table.tinNumber, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get gstin => $composableBuilder(
+      column: $table.gstin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get mobile => $composableBuilder(
+      column: $table.mobile, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get additionalInfo => $composableBuilder(
+      column: $table.additionalInfo,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<Uint8List> get image => $composableBuilder(
+      column: $table.image, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnFilters(column));
+
+  $$RajyaTableFilterComposer get stateId {
+    final $$RajyaTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableFilterComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableFilterComposer get cityId {
+    final $$CitiesTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableFilterComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StoresTableOrderingComposer
+    extends Composer<_$AppDatabase, $StoresTable> {
+  $$StoresTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get siteName => $composableBuilder(
+      column: $table.siteName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get email => $composableBuilder(
+      column: $table.email, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get address => $composableBuilder(
+      column: $table.address, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get dlNumber => $composableBuilder(
+      column: $table.dlNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cstNumber => $composableBuilder(
+      column: $table.cstNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get tinNumber => $composableBuilder(
+      column: $table.tinNumber, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get gstin => $composableBuilder(
+      column: $table.gstin, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get pincode => $composableBuilder(
+      column: $table.pincode, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get mobile => $composableBuilder(
+      column: $table.mobile, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get additionalInfo => $composableBuilder(
+      column: $table.additionalInfo,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<Uint8List> get image => $composableBuilder(
+      column: $table.image, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get createdBy => $composableBuilder(
+      column: $table.createdBy, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => ColumnOrderings(column));
+
+  $$RajyaTableOrderingComposer get stateId {
+    final $$RajyaTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableOrderingComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableOrderingComposer get cityId {
+    final $$CitiesTableOrderingComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableOrderingComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StoresTableAnnotationComposer
+    extends Composer<_$AppDatabase, $StoresTable> {
+  $$StoresTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get siteName =>
+      $composableBuilder(column: $table.siteName, builder: (column) => column);
+
+  GeneratedColumn<String> get email =>
+      $composableBuilder(column: $table.email, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get dlNumber =>
+      $composableBuilder(column: $table.dlNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get cstNumber =>
+      $composableBuilder(column: $table.cstNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get tinNumber =>
+      $composableBuilder(column: $table.tinNumber, builder: (column) => column);
+
+  GeneratedColumn<String> get gstin =>
+      $composableBuilder(column: $table.gstin, builder: (column) => column);
+
+  GeneratedColumn<String> get pincode =>
+      $composableBuilder(column: $table.pincode, builder: (column) => column);
+
+  GeneratedColumn<String> get mobile =>
+      $composableBuilder(column: $table.mobile, builder: (column) => column);
+
+  GeneratedColumn<String> get additionalInfo => $composableBuilder(
+      column: $table.additionalInfo, builder: (column) => column);
+
+  GeneratedColumn<Uint8List> get image =>
+      $composableBuilder(column: $table.image, builder: (column) => column);
+
+  GeneratedColumn<String> get createdBy =>
+      $composableBuilder(column: $table.createdBy, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdDate => $composableBuilder(
+      column: $table.createdDate, builder: (column) => column);
+
+  $$RajyaTableAnnotationComposer get stateId {
+    final $$RajyaTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.stateId,
+        referencedTable: $db.rajya,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$RajyaTableAnnotationComposer(
+              $db: $db,
+              $table: $db.rajya,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+
+  $$CitiesTableAnnotationComposer get cityId {
+    final $$CitiesTableAnnotationComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.cityId,
+        referencedTable: $db.cities,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CitiesTableAnnotationComposer(
+              $db: $db,
+              $table: $db.cities,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
+    return composer;
+  }
+}
+
+class $$StoresTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $StoresTable,
+    Store,
+    $$StoresTableFilterComposer,
+    $$StoresTableOrderingComposer,
+    $$StoresTableAnnotationComposer,
+    $$StoresTableCreateCompanionBuilder,
+    $$StoresTableUpdateCompanionBuilder,
+    (Store, $$StoresTableReferences),
+    Store,
+    PrefetchHooks Function({bool stateId, bool cityId})> {
+  $$StoresTableTableManager(_$AppDatabase db, $StoresTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StoresTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StoresTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StoresTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> siteName = const Value.absent(),
+            Value<String?> email = const Value.absent(),
+            Value<String?> address = const Value.absent(),
+            Value<String?> dlNumber = const Value.absent(),
+            Value<String?> cstNumber = const Value.absent(),
+            Value<String?> tinNumber = const Value.absent(),
+            Value<int> stateId = const Value.absent(),
+            Value<int> cityId = const Value.absent(),
+            Value<String?> gstin = const Value.absent(),
+            Value<String?> pincode = const Value.absent(),
+            Value<String?> mobile = const Value.absent(),
+            Value<String?> additionalInfo = const Value.absent(),
+            Value<Uint8List?> image = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              StoresCompanion(
+            id: id,
+            siteName: siteName,
+            email: email,
+            address: address,
+            dlNumber: dlNumber,
+            cstNumber: cstNumber,
+            tinNumber: tinNumber,
+            stateId: stateId,
+            cityId: cityId,
+            gstin: gstin,
+            pincode: pincode,
+            mobile: mobile,
+            additionalInfo: additionalInfo,
+            image: image,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String siteName,
+            Value<String?> email = const Value.absent(),
+            Value<String?> address = const Value.absent(),
+            Value<String?> dlNumber = const Value.absent(),
+            Value<String?> cstNumber = const Value.absent(),
+            Value<String?> tinNumber = const Value.absent(),
+            required int stateId,
+            required int cityId,
+            Value<String?> gstin = const Value.absent(),
+            Value<String?> pincode = const Value.absent(),
+            Value<String?> mobile = const Value.absent(),
+            Value<String?> additionalInfo = const Value.absent(),
+            Value<Uint8List?> image = const Value.absent(),
+            Value<String?> createdBy = const Value.absent(),
+            Value<DateTime> createdDate = const Value.absent(),
+          }) =>
+              StoresCompanion.insert(
+            id: id,
+            siteName: siteName,
+            email: email,
+            address: address,
+            dlNumber: dlNumber,
+            cstNumber: cstNumber,
+            tinNumber: tinNumber,
+            stateId: stateId,
+            cityId: cityId,
+            gstin: gstin,
+            pincode: pincode,
+            mobile: mobile,
+            additionalInfo: additionalInfo,
+            image: image,
+            createdBy: createdBy,
+            createdDate: createdDate,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) =>
+                  (e.readTable(table), $$StoresTableReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: ({stateId = false, cityId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                  T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic>>(state) {
+                if (stateId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.stateId,
+                    referencedTable: $$StoresTableReferences._stateIdTable(db),
+                    referencedColumn:
+                        $$StoresTableReferences._stateIdTable(db).id,
+                  ) as T;
+                }
+                if (cityId) {
+                  state = state.withJoin(
+                    currentTable: table,
+                    currentColumn: table.cityId,
+                    referencedTable: $$StoresTableReferences._cityIdTable(db),
+                    referencedColumn:
+                        $$StoresTableReferences._cityIdTable(db).id,
+                  ) as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ));
+}
+
+typedef $$StoresTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $StoresTable,
+    Store,
+    $$StoresTableFilterComposer,
+    $$StoresTableOrderingComposer,
+    $$StoresTableAnnotationComposer,
+    $$StoresTableCreateCompanionBuilder,
+    $$StoresTableUpdateCompanionBuilder,
+    (Store, $$StoresTableReferences),
+    Store,
+    PrefetchHooks Function({bool stateId, bool cityId})>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -8212,4 +15679,24 @@ class $AppDatabaseManager {
       $$FittersTableTableManager(_db, _db.fitters);
   $$OrdersTableTableManager get orders =>
       $$OrdersTableTableManager(_db, _db.orders);
+  $$RajyaTableTableManager get rajya =>
+      $$RajyaTableTableManager(_db, _db.rajya);
+  $$CitiesTableTableManager get cities =>
+      $$CitiesTableTableManager(_db, _db.cities);
+  $$AreasTableTableManager get areas =>
+      $$AreasTableTableManager(_db, _db.areas);
+  $$BanksTableTableManager get banks =>
+      $$BanksTableTableManager(_db, _db.banks);
+  $$BrandsTableTableManager get brands =>
+      $$BrandsTableTableManager(_db, _db.brands);
+  $$CustomerCategoryTableTableManager get customerCategory =>
+      $$CustomerCategoryTableTableManager(_db, _db.customerCategory);
+  $$DoctorReferenceTableTableManager get doctorReference =>
+      $$DoctorReferenceTableTableManager(_db, _db.doctorReference);
+  $$EmailBookTableTableManager get emailBook =>
+      $$EmailBookTableTableManager(_db, _db.emailBook);
+  $$GendersTableTableManager get genders =>
+      $$GendersTableTableManager(_db, _db.genders);
+  $$StoresTableTableManager get stores =>
+      $$StoresTableTableManager(_db, _db.stores);
 }

@@ -263,57 +263,86 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
   }
 
   void _submitForm() async {
-    // Check for empty fields
+    print("=== SUBMIT FORM STARTED ===");
+
+    // Validate empty fields
+    print("First Name: ${_firstNameController.text.trim()}");
+    print("Middle Name: ${_middleNameController.text.trim()}");
+    print("Last Name: ${_lastNameController.text.trim()}");
+    print("Phone: ${_phoneController.text.trim()}");
+    print("Email: ${_emailController.text.trim()}");
+    print("Address: ${_addressController.text.trim()}");
+    print("Gender: $selectedGender");
+    print("Customer Type: $selectedCustomerType");
+
     if (_firstNameController.text.trim().isEmpty ||
-        _middleNameController.text.trim().isEmpty ||
         _lastNameController.text.trim().isEmpty ||
         _phoneController.text.trim().isEmpty ||
         _emailController.text.trim().isEmpty ||
         _addressController.text.trim().isEmpty ||
-        selectedGender?.trim().isEmpty == true ||
-        selectedCustomerType?.trim().isEmpty == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill in all fields")),
-      );
+        selectedGender == null ||
+        selectedCustomerType == null) {
+      print("❌ Validation failed: Missing fields");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Please fill in all required fields")),
+        );
+      }
       return;
     }
 
-    // Check for duplicate mobile number
+    // Check duplicate phone
+    print("Checking if mobile exists: ${_phoneController.text.trim()}");
+
     final existingCustomer = await db.customSelect(
       'SELECT * FROM customer WHERE mobile = ?',
-      variables: [drift.Variable<String>(_phoneController.text.trim())],
+      variables: [drift.Variable(_phoneController.text.trim())],
     ).get();
 
+    print("Existing customer rows: ${existingCustomer.length}");
+
     if (existingCustomer.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Mobile number already exists")),
-      );
+      print("❌ Duplicate mobile found");
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Mobile number already exists")),
+        );
+      }
       return;
     }
 
+    // Build customer companion
     final customer = CustomerCompanion(
       firstName: drift.Value(_firstNameController.text.trim()),
-      middleName: drift.Value(_middleNameController.text.trim()),
+      middleName: drift.Value(_middleNameController.text.trim().isEmpty
+          ? ""
+          : _middleNameController.text.trim()),
       lastName: drift.Value(_lastNameController.text.trim()),
       mobile: drift.Value(_phoneController.text.trim()),
       email: drift.Value(_emailController.text.trim()),
       address: drift.Value(_addressController.text.trim()),
-      gender: drift.Value(selectedGender!.trim()),
-      customerType: drift.Value(selectedCustomerType!.trim()),
+      gender: drift.Value(selectedGender!), // safe now
+      customerType: drift.Value(selectedCustomerType!),
       createdDate: drift.Value(DateTime.now()),
     );
 
-    await db.insertCustomer(customer);
+    print("Customer object prepared: $customer");
 
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Customer saved successfully")),
-      );
+    await db.insertCustomer(customer);
+    print("✅ Customer inserted successfully");
+
+    if (!mounted) {
+      print("Widget not mounted, returning early");
+      return;
     }
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CustomerListScreen()));
-    // Clear the form
+    // Show success first
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Customer saved successfully")),
+    );
+
+    // Clear form before navigation
+    print("Clearing form fields...");
     _firstNameController.clear();
     _middleNameController.clear();
     _lastNameController.clear();
@@ -325,5 +354,14 @@ class _CustomerCreateScreenState extends State<CustomerCreateScreen> {
       selectedGender = null;
       selectedCustomerType = null;
     });
+
+    print("Navigating to CustomerListScreen...");
+    // Navigate after reset
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const CustomerListScreen()),
+    );
+
+    print("=== SUBMIT FORM COMPLETED ===");
   }
 }

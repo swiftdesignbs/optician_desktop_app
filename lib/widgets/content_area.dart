@@ -9,6 +9,16 @@ import 'package:optician_desktop_app/screens/dashboard.dart';
 import 'package:optician_desktop_app/screens/delivery_slip.dart';
 import 'package:optician_desktop_app/screens/fitter.dart';
 import 'package:optician_desktop_app/screens/fitter_slip.dart';
+import 'package:optician_desktop_app/screens/master_screen/area_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/bank_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/brands_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/city_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/customer_category_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/doctor_reference_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/email_book_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/gender_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/state_screen.dart';
+import 'package:optician_desktop_app/screens/master_screen/stores_screen.dart';
 import 'package:optician_desktop_app/screens/order_status.dart';
 import 'package:optician_desktop_app/screens/pos_printing.dart';
 import 'package:optician_desktop_app/screens/pos_screen.dart';
@@ -40,10 +50,10 @@ class ContentArea extends StatelessWidget {
           screen = DashboardScreen();
           break;
         case "Customer":
-          screen = CustomerListScreen();
+          screen = const CustomerListScreen();
           break;
         case "Product Form":
-          screen = ProductFormScreen();
+          screen = const ProductFormScreen();
           break;
         case "Supplier":
           screen = const SupplierScreen();
@@ -59,40 +69,70 @@ class ContentArea extends StatelessWidget {
           screen = SettingsScreen();
           break;
         case "Purchase Invoice":
-          screen = PurchaseInvoicePage();
+          screen = const PurchaseInvoicePage();
           break;
         case "Purchase Invoice Form":
-          screen = PurchaseInvoices();
+          screen = const PurchaseInvoices();
           break;
         case "Tax":
-          screen = TaxScreen();
+          screen = const TaxScreen();
           break;
         case "Customer Delivery Slip":
-          screen = CustomerDeliverySlip();
+          screen = const CustomerDeliverySlip();
           break;
         case "Fitter Slip":
-          screen = FitterSlip();
+          screen = const FitterSlip();
           break;
         case "Retail Information":
-          screen = RetailPage();
+          screen = const RetailPage();
+          break;
+        case "State":
+          screen = const RajyaScreen();
+          break;
+        case "City":
+          screen = const CityScreen();
+          break;
+        case "Area":
+          screen = const AreaScreen();
+          break;
+        case "Bank":
+          screen = const BankScreen();
+          break;
+        case "Brands":
+          screen = const BrandsScreen();
+          break;
+        case "Customer Category":
+          screen = const CustomerCategoryScreen();
+          break;
+        case "Doctor Reference":
+          screen = const DoctorReferenceScreen();
+          break;
+        case "Email Book":
+          screen = const EmailBookScreen();
           break;
 
         case "Retail Invoice Slip":
           screen = RetailInvoicePage();
           break;
         case "Retail Invoice PDF":
-          screen = PosPrintingScreen();
+          screen = const PosPrintingScreen();
           break;
         case "Category":
-          screen = CategoryScreen();
+          screen = const CategoryScreen();
+          break;
+        case "Gender":
+          screen = const GenderScreen();
+          break;
+        case "Stores":
+          screen = const StoreScreen();
           break;
         case "Sales":
-          screen = SalesScreen();
+          screen = const SalesScreen();
           break;
         case "Reports":
         case "Daily Report":
         case "Report Module":
-          screen = ReportModule();
+          screen = const ReportModule();
           break;
         default:
           screen = Center(

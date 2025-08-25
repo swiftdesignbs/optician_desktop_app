@@ -59,7 +59,7 @@ void main() async {
     await requestBluetoothPermissions(); // Request Bluetooth permissions for mobile
   }
 
-  // await deleteDatabaseFile();
+  //await deleteDatabaseFile();
   await initializeSQLite();
 
   runApp(const MyApp());
@@ -70,10 +70,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    return GetMaterialApp(
       title: 'Optician Desktop App',
-      home: LoginPage(),
+      home: const LoginPage(),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: const Color(0xff5793CE),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xff5793CE),
+          primary: const Color(0xff5793CE),
+        ),
+      ),
     );
   }
 }
